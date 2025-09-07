@@ -4,7 +4,8 @@ const TelegramBot = require('node-telegram-bot-api');
 require('dotenv').config();
 
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const WEBHOOK_URL = process.env.NEXT_PUBLIC_APP_URL + '/api/telegram/webhook';
+const APP_URL_BASE = (process.env.NEXT_PUBLIC_APP_URL || '').replace(/\/+$/, '');
+const WEBHOOK_URL = `${APP_URL_BASE}/api/telegram/webhook`;
 
 if (!BOT_TOKEN) {
   console.error('❌ TELEGRAM_BOT_TOKEN is required in .env file');
