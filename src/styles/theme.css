@@ -54,7 +54,7 @@ html[data-theme="dark"] .cloud-bg {
 .container {
   max-width: 720px;
   margin: 0 auto;
-  padding: 24px 16px 40px;
+  padding: 24px 16px 88px; /* extra space for sticky footer */
 }
 
 .stack-8 { display: grid; gap: 8px; }
@@ -182,7 +182,7 @@ html[data-theme="dark"] .button-ghost:hover {
 }
 
 /* Bottom nav */
-.bottom-nav { position: sticky; bottom: 0; z-index: 30; background: transparent; }
+.bottom-nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; background: transparent; }
 .bottom-nav__container { max-width: 720px; margin: 8px auto calc(8px + env(safe-area-inset-bottom)); padding: 0 12px; }
 .hide-bottom-nav .bottom-nav { display: none; }
 .bottom-nav__wrap {

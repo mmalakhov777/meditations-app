@@ -107,13 +107,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="card stack-8" style={{ padding: 16 }}>
-        <strong>{t("debug.title")}</strong>
-        <div className="muted small">{t("debug.telegramData")}</div>
-        <pre style={{ margin: 0, whiteSpace: "pre-wrap", wordBreak: "break-word", fontSize: 12 }}>
-{JSON.stringify(webApp?.initDataUnsafe ?? null, null, 2)}
-        </pre>
-      </div>
+      {null}
     </div>
   );
 }
