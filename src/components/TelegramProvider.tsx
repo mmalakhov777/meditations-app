@@ -23,6 +23,10 @@ type TelegramWebApp = {
   ready: () => void;
   expand: () => void;
   close: () => void;
+  // Fullscreen controls (availability depends on Telegram client version)
+  requestFullscreen?: () => void;
+  exitFullscreen?: () => void;
+  isFullscreen?: boolean;
   BackButton: { show: () => void; hide: () => void; onClick: (cb: () => void) => void };
   MainButton: { setText: (t: string) => void; show: () => void; hide: () => void; onClick: (cb: () => void) => void };
 };
@@ -54,6 +58,10 @@ export function TelegramProvider({ children }: { children: React.ReactNode }) {
     try {
       app.ready();
       app.expand();
+      // Try to enter fullscreen when available
+      try {
+        app.requestFullscreen && app.requestFullscreen();
+      } catch {}
     } catch {}
     setWebApp(app);
 
