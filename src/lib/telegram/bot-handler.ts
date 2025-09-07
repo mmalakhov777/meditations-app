@@ -32,11 +32,12 @@ export async function handleBotMessage(bot: TelegramBot, message: TelegramBot.Me
     } else if (text.startsWith('/profile')) {
       await handleProfileCommand(bot, chatId, user.id);
     } else {
-      // Default response for unknown commands
-      await bot.sendMessage(chatId, 
-        "🤔 I didn't understand that command. Try /help to see available options.",
-        { reply_markup: getMainKeyboard() }
-      );
+      // Echo any non-command text back to the user
+      if (text && text.trim().length > 0) {
+        await bot.sendMessage(chatId, text);
+      } else {
+        await bot.sendMessage(chatId, "Send me a message and I'll echo it back. Try /help for options.");
+      }
     }
   } catch (error) {
     console.error('❌ Bot message handler error:', error);
