@@ -15,5 +15,8 @@
   "theme.light": "Light",
   "theme.dark": "Dark",
   "theme.toggle": "Toggle"
+  ,
+  "debug.title": "Debug",
+  "debug.telegramData": "Telegram initDataUnsafe"
 }
 

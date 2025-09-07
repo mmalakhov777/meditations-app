@@ -12,15 +12,6 @@ export default function Home() {
   const [todayMorning, setTodayMorning] = useState<MeditationItem | null>(null);
   const [todayEvening, setTodayEvening] = useState<MeditationItem | null>(null);
 
-  useEffect(() => {
-    if (!webApp) return;
-    try {
-      webApp.MainButton.setText("Start Session");
-      webApp.MainButton.show();
-      webApp.MainButton.onClick(() => webApp.close());
-    } catch {}
-  }, [webApp]);
-
   const user = webApp?.initDataUnsafe.user;
 
   useEffect(() => {
@@ -96,6 +87,14 @@ export default function Home() {
             <Link href="/meditation/s1" className="button-secondary">Start</Link>
           </div>
         </div>
+      </div>
+
+      <div className="card stack-8" style={{ padding: 16 }}>
+        <strong>{t("debug.title")}</strong>
+        <div className="muted small">{t("debug.telegramData")}</div>
+        <pre style={{ margin: 0, whiteSpace: "pre-wrap", wordBreak: "break-word", fontSize: 12 }}>
+{JSON.stringify(webApp?.initDataUnsafe ?? null, null, 2)}
+        </pre>
       </div>
     </div>
   );
