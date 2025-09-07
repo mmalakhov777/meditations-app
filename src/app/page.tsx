@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useTelegram } from "@/components/TelegramProvider";
 import { t } from "@/lib/i18n";
 import { useTheme } from "@/components/ThemeProvider";
@@ -12,12 +12,14 @@ export default function Home() {
   const [todayMorning, setTodayMorning] = useState<MeditationItem | null>(null);
   const [todayEvening, setTodayEvening] = useState<MeditationItem | null>(null);
   const [authLoading, setAuthLoading] = useState(false);
+  const didAuthRef = useRef(false);
 
   const user = webApp?.initDataUnsafe.user;
 
+  // Authorize/upsert user once per app load when Telegram data is available
   useEffect(() => {
-    // Authorize/upsert user in DB if inside Telegram
-    if (isTelegram && webApp?.initDataUnsafe?.user?.id) {
+    if (!didAuthRef.current && isTelegram && webApp?.initDataUnsafe?.user?.id) {
+      didAuthRef.current = true;
       setAuthLoading(true);
       fetch("/api/auth/telegram", {
         method: "POST",
@@ -25,7 +27,9 @@ export default function Home() {
         body: JSON.stringify({ initDataUnsafe: webApp.initDataUnsafe })
       }).finally(() => setAuthLoading(false));
     }
+  }, [isTelegram, webApp]);
 
+  useEffect(() => {
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth() + 1;
