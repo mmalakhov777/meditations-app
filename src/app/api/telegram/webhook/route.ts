@@ -15,7 +15,14 @@ export async function POST(request: NextRequest) {
   try {
     const update = await request.json();
     
-    console.log('📨 Received Telegram update:', JSON.stringify(update, null, 2));
+    console.log('📨 Received Telegram update type:', Object.keys(update));
+    if (update.message) {
+      console.log('🧾 Message:', {
+        chatId: update.message.chat?.id,
+        from: update.message.from?.username,
+        text: update.message.text
+      });
+    }
 
     // Handle the update
     if (update.message) {

@@ -6,10 +6,17 @@ export async function handleBotMessage(bot: TelegramBot, message: TelegramBot.Me
   const text = message.text || '';
   const user = message.from;
 
+  console.log('📝 handleBotMessage()', {
+    chatId,
+    text,
+    from: user ? { id: user.id, username: user.username, first_name: user.first_name } : null,
+  });
+
   if (!user) return;
 
   try {
     // Ensure user exists in database
+    console.log('👤 Upserting user in DB');
     const isPremium = (user as unknown as { is_premium?: boolean }).is_premium === true;
     await createOrGetUser({
       id: user.id,
@@ -19,21 +26,28 @@ export async function handleBotMessage(bot: TelegramBot, message: TelegramBot.Me
       language_code: user.language_code,
       is_premium: isPremium,
     });
+    console.log('✅ User upserted');
 
     // Handle different commands
     if (text.startsWith('/start')) {
+      console.log('⚡ Command: /start');
       await handleStartCommand(bot, chatId, user);
     } else if (text.startsWith('/help')) {
+      console.log('⚡ Command: /help');
       await handleHelpCommand(bot, chatId);
     } else if (text.startsWith('/meditate')) {
+      console.log('⚡ Command: /meditate');
       await handleMeditateCommand(bot, chatId);
     } else if (text.startsWith('/favorites')) {
+      console.log('⚡ Command: /favorites');
       await handleFavoritesCommand(bot, chatId, user.id);
     } else if (text.startsWith('/profile')) {
+      console.log('⚡ Command: /profile');
       await handleProfileCommand(bot, chatId, user.id);
     } else {
       // Echo any non-command text back to the user
       if (text && text.trim().length > 0) {
+        console.log('🔁 Echo message');
         await bot.sendMessage(chatId, text);
       } else {
         await bot.sendMessage(chatId, "Send me a message and I'll echo it back. Try /help for options.");
