@@ -31,12 +31,8 @@ body {
 html[data-theme="light"] { color-scheme: light; }
 html[data-theme="dark"] { color-scheme: dark; }
 
-.app-shell {
-  min-height: 100dvh;
-  display: grid;
-  grid-template-rows: 1fr auto;
-  position: relative;
-}
+.app-shell { position: fixed; inset: 0; display: flex; flex-direction: column; }
+.app-content { flex: 1 1 auto; overflow: auto; -webkit-overflow-scrolling: touch; }
 
 .cloud-bg {
   position: fixed;
@@ -54,7 +50,7 @@ html[data-theme="dark"] .cloud-bg {
 .container {
   max-width: 720px;
   margin: 0 auto;
-  padding: 24px 16px 88px; /* extra space for sticky footer */
+  padding: calc(64px + env(safe-area-inset-top)) 16px 88px; /* extra space for sticky footer and safe area */
 }
 
 .stack-8 { display: grid; gap: 8px; }
