@@ -10,13 +10,14 @@ export async function handleBotMessage(bot: TelegramBot, message: TelegramBot.Me
 
   try {
     // Ensure user exists in database
+    const isPremium = (user as unknown as { is_premium?: boolean }).is_premium === true;
     await createOrGetUser({
       id: user.id,
       first_name: user.first_name,
       last_name: user.last_name,
       username: user.username,
       language_code: user.language_code,
-      is_premium: user.is_premium,
+      is_premium: isPremium,
     });
 
     // Handle different commands
