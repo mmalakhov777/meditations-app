@@ -128,7 +128,7 @@ export async function updateUserSubscription(
 }
 
 // Helper function to convert database row to User type
-function dbRowToUser(row: any): User {
+function dbRowToUser(row: Record<string, any>): User {
   return {
     id: row.id,
     telegramId: row.telegram_id,

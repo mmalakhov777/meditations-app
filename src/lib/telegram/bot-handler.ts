@@ -1,6 +1,5 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { createOrGetUser, getUserByTelegramId } from '@/lib/services/user-service';
-import { t } from '@/lib/i18n';
 
 export async function handleBotMessage(bot: TelegramBot, message: TelegramBot.Message) {
   const chatId = message.chat.id;
