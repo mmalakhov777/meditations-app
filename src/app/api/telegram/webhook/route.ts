@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 import TelegramBot from 'node-telegram-bot-api';
 import { handleBotMessage } from '@/lib/telegram/bot-handler';
 
