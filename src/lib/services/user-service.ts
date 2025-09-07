@@ -1,5 +1,5 @@
 import { Client } from 'pg';
-import { User, TelegramUser, createUser } from '@/lib/user-schema';
+import { User, TelegramUser, SubscriptionStatus, createUser } from '@/lib/user-schema';
 
 // Database connection
 async function getDbClient() {
@@ -9,8 +9,7 @@ async function getDbClient() {
     user: process.env.PGUSER,
     password: process.env.PGPASSWORD,
     ssl: {
-      rejectUnauthorized: false,
-      require: true
+      rejectUnauthorized: false
     },
     port: 5432
   });
@@ -131,7 +130,7 @@ export async function updateUserSubscription(
 function dbRowToUser(row: {
   id: string;
   telegram_id: number;
-  telegram_data: any;
+  telegram_data: unknown;
   telegram_language_code: string | null;
   favorite_meditations: string[];
   subscription_status: string;
@@ -140,13 +139,20 @@ function dbRowToUser(row: {
   updated_at: string;
   last_active_at: string;
 }): User {
+  const status = ((): SubscriptionStatus => {
+    if (row.subscription_status === 'premium' || row.subscription_status === 'trial' || row.subscription_status === 'free') {
+      return row.subscription_status as SubscriptionStatus;
+    }
+    return 'free';
+  })();
+
   return {
     id: row.id,
     telegramId: row.telegram_id,
-    telegramData: row.telegram_data,
-    telegramLanguageCode: row.telegram_language_code,
+    telegramData: row.telegram_data as TelegramUser,
+    telegramLanguageCode: row.telegram_language_code ?? undefined,
     favoriteMeditations: row.favorite_meditations || [],
-    subscriptionStatus: row.subscription_status,
+    subscriptionStatus: status,
     subscriptionExpiresAt: row.subscription_expires_at ? new Date(row.subscription_expires_at) : undefined,
     createdAt: new Date(row.created_at),
     updatedAt: new Date(row.updated_at),
