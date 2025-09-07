@@ -1,6 +1,22 @@
 import { Client } from 'pg';
 import { User, TelegramUser, SubscriptionStatus, createUser } from '@/lib/user-schema';
 
+type TelegramInitDataUnsafe = {
+  user?: {
+    id: number;
+    first_name?: string;
+    last_name?: string;
+    username?: string;
+    language_code?: string;
+    photo_url?: string;
+    allows_write_to_pm?: boolean;
+  };
+  query_id?: string;
+  auth_date?: string | number;
+  signature?: string;
+  hash?: string;
+};
+
 // Database connection
 async function getDbClient() {
   const client = new Client({
@@ -58,7 +74,7 @@ export async function createOrGetUser(telegramUser: TelegramUser): Promise<User>
   }
 }
 
-export async function upsertUserFromInitData(initDataUnsafe: any): Promise<User> {
+export async function upsertUserFromInitData(initDataUnsafe: TelegramInitDataUnsafe): Promise<User> {
   const client = await getDbClient();
   try {
     const u = initDataUnsafe?.user;
@@ -102,7 +118,7 @@ export async function upsertUserFromInitData(initDataUnsafe: any): Promise<User>
 
     const newData = createUser({
       id: u.id,
-      first_name: u.first_name,
+      first_name: u.first_name ?? '',
       last_name: u.last_name,
       username: u.username,
       language_code: u.language_code,
