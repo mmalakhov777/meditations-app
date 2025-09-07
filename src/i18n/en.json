@@ -1,0 +1,19 @@
+{
+  "app.title": "Meditations",
+  "app.tagline": "Calm focus. Short practices. For Telegram Mini Apps.",
+  "button.start": "Begin 3‑minute Meditation",
+  "button.browse": "Browse Practices",
+  "user.guest": "Guest",
+  "source.telegram": "Telegram WebApp",
+  "source.web": "Web",
+  "nav.today": "Today",
+  "nav.calendar": "Calendar",
+  "nav.favorites": "Favorites",
+  "nav.search": "Search",
+  "nav.profile": "Profile",
+  "theme.title": "Theme",
+  "theme.light": "Light",
+  "theme.dark": "Dark",
+  "theme.toggle": "Toggle"
+}
+

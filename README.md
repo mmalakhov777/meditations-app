@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Meditations – Telegram Mini Web App
 
-## Getting Started
+Lightweight Next.js app for daily audio meditations (morning/evening), optimized for Telegram Mini Apps. Uses Telegram init for auth, cloud-inspired minimal UI, and static JSON for catalog.
 
-First, run the development server:
-
+### Run locally
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### App structure
+- `src/app/`
+  - `page.tsx` – Today screen (morning/evening actions)
+  - `calendar/page.tsx` – Calendar + Profile (theme switcher)
+  - `favorites/page.tsx` – Saved meditations placeholder
+  - `meditation/[id]/page.tsx` – Full-screen cover + audio controls
+  - `admin/page.tsx` – Localhost-only admin (CRUD)
+  - `api/admin/meditations/route.ts` – JSON CRUD API for meditations
+  - `globals.css` – imports theme
+- `src/components/`
+  - `TelegramProvider.tsx` – Loads Telegram WebApp SDK, exposes context
+  - `ThemeProvider.tsx` – Light/Dark with localStorage
+  - `BottomNav.tsx` – Minimal 3-tab nav (Today/Calendar/Favorites)
+  - `UI.tsx` – Card/Button primitives
+  - `AudioPlayer.tsx` – Audio with resume, overlay controls
+  - `HideBottomNav.tsx` – Hides nav on media screens
+- `src/styles/theme.css` – Centralized variables, utilities, components, dark mode
+- `src/lib/`
+  - `i18n.ts` – simple t() helper
+  - `meditations.ts` – types + loader for month JSON
+  - `server/meditations-admin.ts` – fs-based CRUD helpers
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Public content
+- `public/meditations/`
+  - `schema.json` – JSON schema for meditations
+  - `YYYY-MM.json` – Monthly meditations (morning/evening per day)
+  - `audio/` – Audio files (e.g., `1-sept-meditation.mp3`)
+  - `covers/` – Cover images (e.g., `1-sept-light-cover.webp`)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Example `public/meditations/2025-09.json` item:
+```json
+{
+  "id": "2025-09-01-morning",
+  "day": "2025-09-01",
+  "title": "Morning Calm",
+  "text": "A gentle breath practice to begin your day.",
+  "about": "Focus on slow inhales and longer exhales to center attention.",
+  "audio": "/meditations/audio/1-sept-meditation.mp3",
+  "cover": "/meditations/covers/1-sept-light-cover.webp",
+  "type": "morning"
+}
+```
 
-## Learn More
+### Admin (localhost only)
+- UI: `http://localhost:3000/admin`
+- API: `/api/admin/meditations`
+- Middleware restricts access to localhost: see `middleware.ts`.
 
-To learn more about Next.js, take a look at the following resources:
+### Theming
+- Theme controlled via `ThemeProvider` → sets `html[data-theme]` and `color-scheme`.
+- Dark/light styles defined in `src/styles/theme.css`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Telegram integration
+- `TelegramProvider` loads `https://telegram.org/js/telegram-web-app.js`, calls `ready()`, and respects user theme when set.

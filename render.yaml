@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: meditations-app
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PGHOST
+        fromDatabase:
+          name: neondb
+          property: host
+      - key: PGDATABASE
+        fromDatabase:
+          name: neondb
+          property: database
+      - key: PGUSER
+        fromDatabase:
+          name: neondb
+          property: user
+      - key: PGPASSWORD
+        fromDatabase:
+          name: neondb
+          property: password
+      - key: PGSSLMODE
+        value: require
+      - key: PGCHANNELBINDING
+        value: require
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: NEXT_PUBLIC_APP_URL
+        sync: false

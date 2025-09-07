@@ -1,0 +1,25 @@
+{
+  "items": [
+    {
+      "id": "2025-09-01-morning",
+      "day": "2025-09-01",
+      "title": "Morning Calm",
+      "text": "A gentle breath practice to begin your day.",
+      "about": "Focus on slow inhales and longer exhales to center attention.",
+      "audio": "/meditations/audio/1-sept-meditation.mp3",
+      "cover": "/covers/1-sept-light-cover.webp",
+      "type": "morning"
+    },
+    {
+      "id": "2025-09-01-evening",
+      "day": "2025-09-01",
+      "title": "Evening Unwind",
+      "text": "Release tension and prepare for rest.",
+      "about": "Body scan with soft attention to breath.",
+      "audio": "/meditations/audio/1-sept-meditation.mp3",
+      "cover": "/covers/1-sept-light-cover.webp",
+      "type": "evening"
+    }
+  ]
+}
+

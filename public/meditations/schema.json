@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/meditations.schema.json",
+  "title": "Meditations",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "day", "title", "text", "about", "audio", "cover", "type"],
+        "properties": {
+          "id": { "type": "string" },
+          "day": { "type": "string", "description": "YYYY-MM-DD" },
+          "title": { "type": "string" },
+          "text": { "type": "string" },
+          "about": { "type": "string" },
+          "audio": { "type": "string", "description": "Public URL path to audio file" },
+          "cover": { "type": "string", "description": "Public URL path to cover image" },
+          "type": { "type": "string", "enum": ["morning", "evening", "other"] }
+        }
+      }
+    }
+  },
+  "required": ["items"]
+}
+
