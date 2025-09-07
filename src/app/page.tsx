@@ -11,10 +11,21 @@ export default function Home() {
   const { theme, toggle } = useTheme();
   const [todayMorning, setTodayMorning] = useState<MeditationItem | null>(null);
   const [todayEvening, setTodayEvening] = useState<MeditationItem | null>(null);
+  const [authLoading, setAuthLoading] = useState(false);
 
   const user = webApp?.initDataUnsafe.user;
 
   useEffect(() => {
+    // Authorize/upsert user in DB if inside Telegram
+    if (isTelegram && webApp?.initDataUnsafe?.user?.id) {
+      setAuthLoading(true);
+      fetch("/api/auth/telegram", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ initDataUnsafe: webApp.initDataUnsafe })
+      }).finally(() => setAuthLoading(false));
+    }
+
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth() + 1;
@@ -51,7 +62,10 @@ export default function Home() {
               <span className="muted small">{isTelegram ? t("source.telegram") : t("source.web")}</span>
             </div>
           </div>
-          <button className="button-secondary" onClick={toggle}>{theme === "light" ? t("theme.dark") : t("theme.light")}</button>
+          <div className="row" style={{ alignItems: "center", gap: 8 }}>
+            {authLoading ? <span className="muted small">{t("auth.loading")}</span> : null}
+            <button className="button-secondary" onClick={toggle}>{theme === "light" ? t("theme.dark") : t("theme.light")}</button>
+          </div>
         </div>
       </div>
 

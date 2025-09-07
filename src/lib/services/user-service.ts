@@ -58,6 +58,90 @@ export async function createOrGetUser(telegramUser: TelegramUser): Promise<User>
   }
 }
 
+export async function upsertUserFromInitData(initDataUnsafe: any): Promise<User> {
+  const client = await getDbClient();
+  try {
+    const u = initDataUnsafe?.user;
+    if (!u?.id) throw new Error('No telegram user in initData');
+
+    const existing = await getUserByTelegramId(u.id);
+    if (existing) {
+      await client.query(
+        `UPDATE users SET 
+          telegram_data = $1,
+          telegram_language_code = $2,
+          telegram_username = $3,
+          telegram_first_name = $4,
+          telegram_last_name = $5,
+          telegram_photo_url = $6,
+          telegram_allows_write_to_pm = $7,
+          telegram_query_id = $8,
+          telegram_auth_date = $9,
+          telegram_signature = $10,
+          telegram_hash = $11,
+          last_active_at = NOW(),
+          updated_at = NOW()
+        WHERE telegram_id = $12`,
+        [
+          JSON.stringify(u),
+          u.language_code ?? null,
+          u.username ?? null,
+          u.first_name ?? null,
+          u.last_name ?? null,
+          u.photo_url ?? null,
+          initDataUnsafe?.user?.allows_write_to_pm ?? null,
+          initDataUnsafe?.query_id ?? null,
+          initDataUnsafe?.auth_date ? Number(initDataUnsafe.auth_date) : null,
+          initDataUnsafe?.signature ?? null,
+          initDataUnsafe?.hash ?? null,
+          u.id,
+        ]
+      );
+      return (await getUserByTelegramId(u.id)) as User;
+    }
+
+    const newData = createUser({
+      id: u.id,
+      first_name: u.first_name,
+      last_name: u.last_name,
+      username: u.username,
+      language_code: u.language_code,
+      is_premium: false,
+      photo_url: u.photo_url,
+    });
+
+    const res = await client.query(
+      `INSERT INTO users (
+        telegram_id, telegram_data, telegram_language_code,
+        favorite_meditations, subscription_status,
+        telegram_username, telegram_first_name, telegram_last_name,
+        telegram_photo_url, telegram_allows_write_to_pm,
+        telegram_query_id, telegram_auth_date, telegram_signature, telegram_hash
+      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
+      RETURNING *`,
+      [
+        u.id,
+        JSON.stringify(u),
+        u.language_code ?? null,
+        newData.favoriteMeditations,
+        newData.subscriptionStatus,
+        u.username ?? null,
+        u.first_name ?? null,
+        u.last_name ?? null,
+        u.photo_url ?? null,
+        initDataUnsafe?.user?.allows_write_to_pm ?? null,
+        initDataUnsafe?.query_id ?? null,
+        initDataUnsafe?.auth_date ? Number(initDataUnsafe.auth_date) : null,
+        initDataUnsafe?.signature ?? null,
+        initDataUnsafe?.hash ?? null,
+      ]
+    );
+    return dbRowToUser(res.rows[0]);
+  } finally {
+    await client.end();
+  }
+}
+
 export async function getUserByTelegramId(telegramId: number): Promise<User | null> {
   const client = await getDbClient();
   

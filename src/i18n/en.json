@@ -17,6 +17,7 @@
   "theme.toggle": "Toggle"
   ,
   "debug.title": "Debug",
-  "debug.telegramData": "Telegram initDataUnsafe"
+  "debug.telegramData": "Telegram initDataUnsafe",
+  "auth.loading": "Authorizing..."
 }
 

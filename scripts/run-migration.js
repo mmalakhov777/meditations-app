@@ -25,12 +25,19 @@ async function runMigration() {
     await client.connect();
     console.log('✅ Connected to database');
 
-    const migrationFile = path.join(__dirname, '../migrations/001_create_users_table.sql');
-    const sql = fs.readFileSync(migrationFile, 'utf8');
+    const migrationsDir = path.join(__dirname, '../migrations');
+    const files = fs
+      .readdirSync(migrationsDir)
+      .filter(f => f.endsWith('.sql'))
+      .sort();
 
-    console.log('🚀 Running migration: 001_create_users_table.sql');
-    await client.query(sql);
-    console.log('✅ Migration completed successfully');
+    for (const file of files) {
+      const migrationPath = path.join(migrationsDir, file);
+      const sql = fs.readFileSync(migrationPath, 'utf8');
+      console.log(`🚀 Running migration: ${file}`);
+      await client.query(sql);
+      console.log('✅ Migration applied');
+    }
 
     // Verify table creation
     const result = await client.query(`
