@@ -72,22 +72,12 @@ Choose an option below or open the full app for the complete experience.
 
   await bot.sendMessage(chatId, welcomeMessage, {
     reply_markup: {
-      inline_keyboard: [
-        [
-          {
-            text: '🧘 Open Full App',
-            web_app: { url: process.env.NEXT_PUBLIC_APP_URL || 'https://your-app.vercel.app' }
-          }
-        ],
-        [
-          { text: '🌅 Morning Meditation', callback_data: 'morning' },
-          { text: '🌙 Evening Meditation', callback_data: 'evening' }
-        ],
-        [
-          { text: '❤️ My Favorites', callback_data: 'favorites' },
-          { text: '👤 Profile', callback_data: 'profile' }
-        ]
-      ]
+      inline_keyboard: [[
+        {
+          text: '🧘 Open Full App',
+          web_app: { url: process.env.NEXT_PUBLIC_APP_URL || 'https://your-app.vercel.app' }
+        }
+      ]]
     }
   });
 }
@@ -113,18 +103,12 @@ async function handleHelpCommand(bot: TelegramBot, chatId: number) {
 async function handleMeditateCommand(bot: TelegramBot, chatId: number) {
   await bot.sendMessage(chatId, "🧘 Choose your meditation:", {
     reply_markup: {
-      inline_keyboard: [
-        [
-          {
-            text: '🧘 Open Meditation App',
-            web_app: { url: process.env.NEXT_PUBLIC_APP_URL || 'https://your-app.vercel.app' }
-          }
-        ],
-        [
-          { text: '🌅 Morning Session', callback_data: 'morning' },
-          { text: '🌙 Evening Session', callback_data: 'evening' }
-        ]
-      ]
+      inline_keyboard: [[
+        {
+          text: '🧘 Open Full App',
+          web_app: { url: process.env.NEXT_PUBLIC_APP_URL || 'https://your-app.vercel.app' }
+        }
+      ]]
     }
   });
 }
@@ -138,12 +122,10 @@ async function handleFavoritesCommand(bot: TelegramBot, chatId: number, telegram
         "💔 You haven't favorited any meditations yet.\n\nOpen the app to explore and save your favorites!",
         {
           reply_markup: {
-            inline_keyboard: [[
-              {
-                text: '🧘 Open App',
-                web_app: { url: process.env.NEXT_PUBLIC_APP_URL || 'https://your-app.vercel.app' }
-              }
-            ]]
+            inline_keyboard: [[{
+              text: '🧘 Open Full App',
+              web_app: { url: process.env.NEXT_PUBLIC_APP_URL || 'https://your-app.vercel.app' }
+            }]]
           }
         }
       );
@@ -154,12 +136,10 @@ async function handleFavoritesCommand(bot: TelegramBot, chatId: number, telegram
       `❤️ You have ${user.favoriteMeditations.length} favorite meditation(s)!\n\nOpen the app to access them.`,
       {
         reply_markup: {
-          inline_keyboard: [[
-            {
-              text: '❤️ View Favorites',
-              web_app: { url: `${process.env.NEXT_PUBLIC_APP_URL}/favorites` || 'https://your-app.vercel.app/favorites' }
-            }
-          ]]
+          inline_keyboard: [[{
+            text: '🧘 Open Full App',
+            web_app: { url: process.env.NEXT_PUBLIC_APP_URL || 'https://your-app.vercel.app' }
+          }]]
         }
       }
     );
@@ -191,14 +171,7 @@ Joined: ${user.createdAt.toLocaleDateString()}
     `.trim();
 
     await bot.sendMessage(chatId, profileMessage, {
-      reply_markup: {
-        inline_keyboard: [[
-          {
-            text: '👤 Open Profile',
-            web_app: { url: `${process.env.NEXT_PUBLIC_APP_URL}/profile` || 'https://your-app.vercel.app/profile' }
-          }
-        ]]
-      }
+      reply_markup: getMainKeyboard()
     });
   } catch (error) {
     console.error('❌ Profile command error:', error);
@@ -208,17 +181,11 @@ Joined: ${user.createdAt.toLocaleDateString()}
 
 function getMainKeyboard(): TelegramBot.InlineKeyboardMarkup {
   return {
-    inline_keyboard: [
-      [
-        {
-          text: '🧘 Open App',
-          web_app: { url: process.env.NEXT_PUBLIC_APP_URL || 'https://your-app.vercel.app' }
-        }
-      ],
-      [
-        { text: '🌅 Morning', callback_data: 'morning' },
-        { text: '🌙 Evening', callback_data: 'evening' }
-      ]
-    ]
+    inline_keyboard: [[
+      {
+        text: '🧘 Open Full App',
+        web_app: { url: process.env.NEXT_PUBLIC_APP_URL || 'https://your-app.vercel.app' }
+      }
+    ]]
   };
 }
