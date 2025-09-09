@@ -14,11 +14,7 @@ export default function MeditationPage({ params }: { params: { id: string } }) {
       <TelegramBackButton />
       <div className="overlay" style={{ position: "relative", minHeight: "100dvh" }}>
         <img src="/covers/1-sept-light-cover.webp" alt="Cover" className="cover-full" />
-        <div className="overlay-top" style={{ top: "calc(env(safe-area-inset-top) + 64px)" }}>
-          <div className="overlay-glass">
-            <Link href="/" className="button-secondary" style={{ fontSize: 14 }}>Back</Link>
-          </div>
-        </div>
+        {/* Using native Telegram BackButton; no on-screen back link needed */}
         <div style={{ position: "absolute", left: 0, right: 0, bottom: 16 }}>
           <div className="container" style={{ padding: 0 }}>
             <div className="card" style={{ padding: 12, background: "transparent", border: "none", boxShadow: "none" }}>

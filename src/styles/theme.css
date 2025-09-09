@@ -224,10 +224,39 @@ html[data-theme="dark"] .cover-xl { background: rgba(255,255,255,0.06); }
 .overlay { position: relative; }
 .overlay-controls {
   position: absolute; left: 50%; transform: translateX(-50%); bottom: 12px;
-  display: inline-flex; align-items: center; gap: 8px;
+  display: inline-flex; align-items: center; gap: 12px;
   background: var(--glass); border: 1px solid var(--glass-border);
   backdrop-filter: blur(8px) saturate(1.05);
-  border-radius: 999px; padding: 6px; box-shadow: var(--shadow);
+  border-radius: 999px; padding: 10px; box-shadow: var(--shadow);
+}
+
+/* Larger controls for better tap targets inside overlay */
+.overlay-controls .button,
+.overlay-controls .button-secondary {
+  padding: 14px 20px;
+  font-size: 16px;
+}
+
+/* Audio progress bar */
+.audio-progress {
+  position: relative;
+  width: 100%;
+  height: 14px;
+  margin-top: 12px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--color-fg) 18%, transparent);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  cursor: pointer;
+}
+.audio-progress__fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0%;
+  background: linear-gradient(90deg, var(--gold-2), var(--gold-4));
 }
 
 .cover-full { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }

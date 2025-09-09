@@ -18,6 +18,19 @@
   ,
   "debug.title": "Debug",
   "debug.telegramData": "Telegram initDataUnsafe",
-  "auth.loading": "Authorizing..."
+  "auth.loading": "Authorizing...",
+  "onboarding.title": "Daily Meditations",
+  "onboarding.next": "Continue",
+  "onboarding.skip": "Skip",
+  "onboarding.back": "Back",
+  "onboarding.start": "Start now",
+  "onboarding.step1.title": "Orthodox‑rooted, Russian‑inspired calm",
+  "onboarding.step1.subtitle": "3‑minute prayers and reflections to begin and end each day.",
+  "onboarding.step2.title": "Grounded in sacred tradition",
+  "onboarding.step2.subtitle": "Scripture‑infused texts, choral ambience, and time‑honored rhythms.",
+  "onboarding.step3.title": "A simple daily rhythm",
+  "onboarding.step3.subtitle": "Morning uplift, evening reflection, and favorites at your fingertips.",
+  "onboarding.cta.title": "Ready to begin?",
+  "onboarding.cta.subtitle": "Start your first practice now."
 }
 

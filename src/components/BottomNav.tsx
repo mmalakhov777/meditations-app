@@ -6,7 +6,7 @@ import { t } from "@/lib/i18n";
 
 const items = [
   { href: "/", labelKey: "nav.today" },
-  { href: "/calendar", labelKey: "nav.calendar" },
+  // { href: "/calendar", labelKey: "nav.calendar" }, // temporarily hidden
   { href: "/favorites", labelKey: "nav.favorites" },
 ];
 
@@ -16,7 +16,7 @@ export function BottomNav() {
     <nav className="bottom-nav">
       <div className="bottom-nav__container">
         <div className="bottom-nav__wrap">
-          <div className="bottom-nav__grid">
+          <div className="bottom-nav__grid" style={{ gridTemplateColumns: `repeat(${items.length}, 1fr)` }}>
             {items.map(it => {
               const active = pathname === it.href;
               return (
