@@ -119,15 +119,18 @@ export default function OnboardingPage() {
                       backgroundImage: "url(/covers/2.1.png)",
                       backgroundSize: "cover",
                       backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
                       borderRadius: "12px",
                       overflow: "hidden",
-                      height: "140px"
+                      height: "130px",
+                      width: "80%",
+                      margin: "0 auto"
                     }}>
                       <div style={{ display: "flex", height: "100%" }}>
                         <div style={{ width: "40%" }}></div>
-                        <div style={{ width: "60%", padding: 16, display: "flex", alignItems: "center" }}>
+                        <div style={{ width: "60%", padding: 16, display: "flex", alignItems: "flex-start" }}>
                           <div className="stack-8">
-                            <p style={{ margin: 0, color: "#0b1b34", opacity: 0.8 }}>Daily readings rooted in Orthodox tradition and biblical wisdom</p>
+                            <p style={{ margin: 0, color: "#0b1b34", opacity: 0.8 }}>Daily readings rooted in Orthodox faith</p>
                           </div>
                         </div>
                       </div>
@@ -141,15 +144,18 @@ export default function OnboardingPage() {
                       backgroundImage: "url(/covers/2.2.png)",
                       backgroundSize: "cover",
                       backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
                       borderRadius: "12px",
                       overflow: "hidden",
-                      height: "140px"
+                      height: "130px",
+                      width: "80%",
+                      margin: "0 auto"
                     }}>
                       <div style={{ display: "flex", height: "100%" }}>
                         <div style={{ width: "40%" }}></div>
                         <div style={{ width: "60%", padding: 16, display: "flex", alignItems: "center" }}>
                           <div className="stack-8">
-                            <p style={{ margin: 0, color: "#0b1b34", opacity: 0.8 }}>Sacred music and hymns that transport you to peaceful reflection</p>
+                            <p style={{ margin: 0, color: "#0b1b34", opacity: 0.8 }}>Sacred music and hymns for peaceful reflection</p>
                           </div>
                         </div>
                       </div>
@@ -163,15 +169,18 @@ export default function OnboardingPage() {
                       backgroundImage: "url(/covers/2.3.png)",
                       backgroundSize: "cover",
                       backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
                       borderRadius: "12px",
                       overflow: "hidden",
-                      height: "140px"
+                      height: "130px",
+                      width: "80%",
+                      margin: "0 auto"
                     }}>
                       <div style={{ display: "flex", height: "100%" }}>
                         <div style={{ width: "40%" }}></div>
                         <div style={{ width: "60%", padding: 16, display: "flex", alignItems: "center" }}>
                           <div className="stack-8">
-                            <p style={{ margin: 0, color: "#0b1b34", opacity: 0.8 }}>Ancient practices adapted for modern spiritual growth</p>
+                            <p style={{ margin: 0, color: "#0b1b34", opacity: 0.8 }}>Ancient practices for modern spiritual growth</p>
                           </div>
                         </div>
                       </div>
