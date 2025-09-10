@@ -42,78 +42,50 @@ export default function OnboardingPage() {
         <div style={{ position: "fixed", inset: 0 }}>
           {index === 0 ? (
             <>
-              {/* Background gradient - same as third slide */}
-              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #e6c15a 0%, #f0c75e 50%, #fff7d1 100%)" }} />
+               {/* Background image */}
+               <img
+                 src="/covers/1stepnew.png"
+                 alt="Step 1 background"
+                 style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+               />
               
-              {/* Centered video */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: "200px", // Reserve space for text at bottom
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  padding: "calc(env(safe-area-inset-top) + 40px) 20px 40px",
-                  zIndex: 10,
-                }}
-              >
-                <video
-                  src="/covers/1stepback.mp4"
-                  autoPlay
-                  muted
-                  playsInline
-                  loop={false}
-                  style={{ 
-                    width: "60%", 
-                    maxWidth: "280px",
-                    height: "auto", 
-                    borderRadius: "16px",
-                    border: "2px solid white",
-                    boxShadow: "0 16px 64px rgba(0,0,0,0.4)"
-                  }}
-                />
-              </div>
               
-              {/* Title and description at bottom - same as slide 2 */}
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  padding: "calc(env(safe-area-inset-top) + 20px) 20px 100px",
-                  zIndex: 20,
-                }}
-              >
-                <div className="stack-8" style={{ maxWidth: 720, margin: "0 auto" }}>
-                  <h1
-                    style={{
-                      fontSize: 28,
-                      lineHeight: 1.1,
-                      letterSpacing: -0.3,
-                      margin: 0,
-                      fontWeight: 800,
-                      color: "#0b1b34",
-                    }}
-                  >
-                    {t(steps[index].titleKey)}
-                  </h1>
-                  <p
-                    style={{
-                      margin: 0,
-                      color: "rgba(11,27,52,0.8)",
-                      fontSize: 16,
-                      lineHeight: 1.4,
-                    }}
-                  >
-                    {t(steps[index].subtitleKey)}
-                  </p>
-                </div>
-              </div>
+               {/* Title and description at bottom - white text */}
+               <div
+                 style={{
+                   position: "absolute",
+                   bottom: 0,
+                   left: 0,
+                   right: 0,
+                   padding: "calc(env(safe-area-inset-top) + 20px) 20px 100px",
+                   zIndex: 20,
+                 }}
+               >
+                 <div className="stack-8" style={{ maxWidth: 720, margin: "0 auto" }}>
+                   <h1
+                     style={{
+                       fontSize: 28,
+                       lineHeight: 1.1,
+                       letterSpacing: -0.3,
+                       margin: 0,
+                       fontWeight: 800,
+                       color: "#ffffff",
+                     }}
+                   >
+                     {t(steps[index].titleKey)}
+                   </h1>
+                   <p
+                     style={{
+                       margin: 0,
+                       color: "rgba(255,255,255,0.8)",
+                       fontSize: 16,
+                       lineHeight: 1.4,
+                     }}
+                   >
+                     {t(steps[index].subtitleKey)}
+                   </p>
+                 </div>
+               </div>
             </>
           ) : index === 1 ? (
             <video
@@ -222,24 +194,24 @@ export default function OnboardingPage() {
                 <div style={{ maxWidth: 1000, width: "100%" }}>
                   {/* First row - 4 images */}
                   <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 4 }}>
-                    <img src="/covers/saitns/Untitled Design.png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
-                    <img src="/covers/saitns/Untitled Design (1).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
-                    <img src="/covers/saitns/Untitled Design (2).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
-                    <img src="/covers/saitns/Untitled Design (3).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
+                    <img src="/covers/saitns/Untitled Design.png" alt="Saint" style={{ width: 200, height: 200, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 1 }} />
+                    <img src="/covers/saitns/Untitled Design (1).png" alt="Saint" style={{ width: 200, height: 200, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.9 }} />
+                    <img src="/covers/saitns/Untitled Design (2).png" alt="Saint" style={{ width: 200, height: 200, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.8 }} />
+                    <img src="/covers/saitns/Untitled Design (3).png" alt="Saint" style={{ width: 200, height: 200, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.7 }} />
                   </div>
                   {/* Second row - 4 images */}
                   <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 4 }}>
-                    <img src="/covers/saitns/Untitled Design (4).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
-                    <img src="/covers/saitns/Untitled Design (5).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
-                    <img src="/covers/saitns/Untitled Design (6).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
-                    <img src="/covers/saitns/Untitled Design (7).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
+                    <img src="/covers/saitns/Untitled Design (4).png" alt="Saint" style={{ width: 200, height: 200, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.6 }} />
+                    <img src="/covers/saitns/Untitled Design (5).png" alt="Saint" style={{ width: 200, height: 200, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.5 }} />
+                    <img src="/covers/saitns/Untitled Design (6).png" alt="Saint" style={{ width: 200, height: 200, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.4 }} />
+                    <img src="/covers/saitns/Untitled Design (7).png" alt="Saint" style={{ width: 200, height: 200, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.3 }} />
                   </div>
                   {/* Third row - 4 images */}
                   <div style={{ display: "flex", justifyContent: "center", gap: 4 }}>
-                    <img src="/covers/saitns/Untitled Design (8).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
-                    <img src="/covers/saitns/Untitled Design (9).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
-                    <img src="/covers/saitns/Untitled Design (10).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
-                    <img src="/covers/saitns/Untitled Design (11).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
+                    <img src="/covers/saitns/Untitled Design (8).png" alt="Saint" style={{ width: 200, height: 200, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.2 }} />
+                    <img src="/covers/saitns/Untitled Design (9).png" alt="Saint" style={{ width: 200, height: 200, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.15 }} />
+                    <img src="/covers/saitns/Untitled Design (10).png" alt="Saint" style={{ width: 200, height: 200, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.1 }} />
+                    <img src="/covers/saitns/Untitled Design (11).png" alt="Saint" style={{ width: 200, height: 200, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.05 }} />
                   </div>
                 </div>
               </div>
