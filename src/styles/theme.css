@@ -78,29 +78,224 @@ html[data-theme="dark"] .card {
   justify-content: center;
   gap: 10px;
   font-weight: 600;
-  background: linear-gradient(180deg, #fffbe8 0%, #f3e3a9 100%);
-  color: var(--color-accent-contrast);
-  padding: 12px 16px;
+  position: relative;
+  
+  /* Glassy gold background with transparency */
+  background: 
+    /* Subtle top highlight */
+    linear-gradient(160deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 20%, transparent 40%),
+    /* Lighter gold gradient with transparency */
+    linear-gradient(180deg, rgba(255,248,220,0.9) 0%, rgba(255,215,0,0.8) 20%, rgba(255,193,7,0.7) 40%, rgba(218,165,32,0.6) 70%, rgba(184,134,11,0.5) 100%),
+    /* Glass-like radial highlight */
+    radial-gradient(ellipse at center top, rgba(255,255,255,0.3) 0%, transparent 60%);
+  
+  /* Glass effect with backdrop blur */
+  backdrop-filter: blur(12px) saturate(1.2);
+  
+  /* Text styling - lighter and more subtle */
+  color: rgba(44,24,16,0.9);
+  text-shadow: 
+    0 1px 0 rgba(255,255,255,0.4),
+    0 1px 2px rgba(139,105,20,0.2);
+  
+  padding: 14px 20px;
   border-radius: 999px;
-  border: 1px solid rgba(11,27,52,0.06);
+  
+  /* Glass-like border */
+  border: 1px solid rgba(255,215,0,0.3);
+  
   cursor: pointer;
-  box-shadow: 0 10px 24px rgba(11,27,52,0.06);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.2s ease;
+  
+  /* Softer, more diffused shadows */
+  box-shadow: 
+    /* Subtle inner glow */
+    inset 0 1px 0 rgba(255,255,255,0.5),
+    inset 0 -0.5px 0 rgba(255,215,0,0.2),
+    /* Soft outer shadows */
+    0 2px 8px rgba(255,215,0,0.15),
+    0 4px 16px rgba(255,215,0,0.1),
+    0 8px 32px rgba(255,215,0,0.05),
+    /* Gentle glow */
+    0 0 16px rgba(255,215,0,0.1);
+    
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              backdrop-filter 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              filter 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0) scale(1);
+  
+  /* Animated shimmer effect */
+  overflow: hidden;
+}
+
+.button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 40%,
+    rgba(255,255,255,0.4) 50%,
+    transparent 60%
+  );
+  transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.button::after {
+  content: '';
+  position: absolute;
+  inset: 0.5px;
+  border-radius: 999px;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.2) 0%,
+    transparent 30%,
+    transparent 70%,
+    rgba(255,215,0,0.1) 100%
+  );
+  pointer-events: none;
+}
+
+.button:hover {
+  transform: translateY(-0.5px) scale(1.01);
+  
+  /* Enhanced glassy appearance on hover */
+  backdrop-filter: blur(16px) saturate(1.3);
+  
+  /* Softer enhanced shadows */
+  box-shadow: 
+    /* Subtle inner glow */
+    inset 0 1.5px 0 rgba(255,255,255,0.6),
+    inset 0 -0.5px 0 rgba(255,215,0,0.3),
+    /* Enhanced soft shadows */
+    0 3px 12px rgba(255,215,0,0.2),
+    0 6px 24px rgba(255,215,0,0.15),
+    0 12px 48px rgba(255,215,0,0.08),
+    /* Gentle enhanced glow */
+    0 0 24px rgba(255,215,0,0.15);
+    
+  /* Use filter instead of background override to avoid flickering */
+  filter: brightness(1.05) saturate(1.1);
+}
+
+.button:hover::before {
+  transform: translateX(100%) translateY(100%) rotate(45deg);
 }
 
 .button:active {
-  transform: translateY(1px) scale(0.99);
+  transform: translateY(0.5px) scale(0.99);
+  
+  /* Subtle pressed state */
+  backdrop-filter: blur(10px) saturate(1.1);
+  
+  /* Gentle inset appearance */
+  box-shadow: 
+    /* Soft inner shadows */
+    inset 0 2px 4px rgba(255,215,0,0.2),
+    inset 0 1px 2px rgba(255,215,0,0.3),
+    /* Minimal outer shadows */
+    0 1px 4px rgba(255,215,0,0.1),
+    0 2px 8px rgba(255,215,0,0.05);
+    
+  /* Slightly less transparent when pressed */
+  background: 
+    linear-gradient(160deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.08) 20%, transparent 40%),
+    linear-gradient(180deg, rgba(255,248,220,0.85) 0%, rgba(255,215,0,0.75) 20%, rgba(255,193,7,0.65) 40%, rgba(218,165,32,0.55) 70%, rgba(184,134,11,0.45) 100%),
+    radial-gradient(ellipse at center top, rgba(255,255,255,0.25) 0%, transparent 60%);
 }
-
-.button:hover { filter: brightness(1.01); box-shadow: 0 12px 26px rgba(11,27,52,0.08); }
 
 html[data-theme="dark"] .button {
-  background: linear-gradient(180deg, #3b3a2f 0%, #6e6234 100%);
-  color: #fff7d1;
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+  /* Glassy gold for dark theme with transparency */
+  background: 
+    /* Subtle top highlight */
+    linear-gradient(160deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.08) 20%, transparent 40%),
+    /* Transparent gold gradient for dark theme */
+    linear-gradient(180deg, rgba(212,175,55,0.8) 0%, rgba(184,134,11,0.7) 20%, rgba(153,111,26,0.6) 40%, rgba(139,105,20,0.5) 70%, rgba(101,67,33,0.4) 100%),
+    /* Glass-like radial highlight */
+    radial-gradient(ellipse at center top, rgba(255,215,0,0.25) 0%, transparent 60%);
+  
+  /* Glass effect with backdrop blur */
+  backdrop-filter: blur(12px) saturate(1.2);
+  
+  color: rgba(255,248,220,0.95);
+  text-shadow: 
+    0 1px 0 rgba(255,255,255,0.2),
+    0 1px 3px rgba(0,0,0,0.4);
+  
+  /* Glass-like border */
+  border: 1px solid rgba(255,215,0,0.25);
+  
+  /* Softer shadows for dark theme */
+  box-shadow: 
+    /* Subtle inner glow */
+    inset 0 1px 0 rgba(255,215,0,0.3),
+    inset 0 -0.5px 0 rgba(0,0,0,0.3),
+    /* Soft outer shadows */
+    0 2px 8px rgba(0,0,0,0.3),
+    0 4px 16px rgba(0,0,0,0.2),
+    0 8px 32px rgba(0,0,0,0.1),
+    /* Gentle glow */
+    0 0 16px rgba(255,215,0,0.2);
 }
-html[data-theme="dark"] .button:hover { filter: brightness(1.02); box-shadow: 0 12px 26px rgba(0,0,0,0.3); }
+
+html[data-theme="dark"] .button::after {
+  background: linear-gradient(
+    135deg,
+    rgba(255,215,0,0.15) 0%,
+    transparent 30%,
+    transparent 70%,
+    rgba(0,0,0,0.2) 100%
+  );
+}
+
+html[data-theme="dark"] .button:hover {
+  transform: translateY(-0.5px) scale(1.01);
+  
+  /* Enhanced glassy appearance */
+  backdrop-filter: blur(16px) saturate(1.3);
+  
+  /* Softer enhanced shadows */
+  box-shadow: 
+    /* Subtle inner glow */
+    inset 0 1.5px 0 rgba(255,215,0,0.4),
+    inset 0 -0.5px 0 rgba(0,0,0,0.4),
+    /* Enhanced soft shadows */
+    0 3px 12px rgba(0,0,0,0.4),
+    0 6px 24px rgba(0,0,0,0.3),
+    0 12px 48px rgba(0,0,0,0.15),
+    /* Enhanced glow */
+    0 0 24px rgba(255,215,0,0.3);
+    
+  /* Use filter instead of background override to avoid flickering */
+  filter: brightness(1.1) saturate(1.15);
+}
+
+html[data-theme="dark"] .button:active {
+  transform: translateY(0.5px) scale(0.99);
+  
+  /* Subtle pressed state */
+  backdrop-filter: blur(10px) saturate(1.1);
+  
+  /* Gentle inset appearance */
+  box-shadow: 
+    /* Soft inner shadows */
+    inset 0 2px 4px rgba(0,0,0,0.4),
+    inset 0 1px 2px rgba(0,0,0,0.5),
+    /* Minimal outer shadows */
+    0 1px 4px rgba(0,0,0,0.2),
+    0 2px 8px rgba(0,0,0,0.1);
+    
+  /* Slightly less transparent when pressed */
+  background: 
+    linear-gradient(160deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.06) 20%, transparent 40%),
+    linear-gradient(180deg, rgba(212,175,55,0.75) 0%, rgba(184,134,11,0.65) 20%, rgba(153,111,26,0.55) 40%, rgba(139,105,20,0.45) 70%, rgba(101,67,33,0.35) 100%),
+    radial-gradient(ellipse at center top, rgba(255,215,0,0.2) 0%, transparent 60%);
+}
 
 .muted {
   color: color-mix(in oklab, var(--color-fg) 65%, transparent);
