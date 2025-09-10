@@ -41,70 +41,88 @@ export default function OnboardingPage() {
       {!isLastSlide ? (
         <div style={{ position: "fixed", inset: 0 }}>
           {index === 0 ? (
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: "calc(env(safe-area-inset-top) + 80px) 20px 120px",
-              }}
-            >
-              {/* Title above video */}
-              <h1
-                style={{
-                  fontSize: 28,
-                  lineHeight: 1.1,
-                  letterSpacing: -0.3,
-                  margin: "0 0 20px 0",
-                  fontWeight: 800,
-                  color: "#0b1b34",
-                  textAlign: "center",
-                  maxWidth: 720,
-                }}
-              >
-                {t(steps[index].titleKey)}
-              </h1>
-
+            <>
+              {/* Background gradient - same as third slide */}
+              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #e6c15a 0%, #f0c75e 50%, #fff7d1 100%)" }} />
+              
               {/* Centered video */}
-              <video
-                src="/covers/1stepback.mp4"
-                autoPlay
-                muted
-                playsInline
-                loop={false}
-                style={{ 
-                  width: "80%", 
-                  maxWidth: "400px",
-                  height: "auto", 
-                  borderRadius: "16px",
-                  border: "2px solid white",
-                  boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
-                  margin: "0 0 20px 0"
-                }}
-              />
-
-              {/* Description below video */}
-              <p
+              <div
                 style={{
-                  margin: 0,
-                  color: "rgba(11,27,52,0.8)",
-                  fontSize: 16,
-                  lineHeight: 1.4,
-                  textAlign: "center",
-                  maxWidth: 720,
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: "200px", // Reserve space for text at bottom
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: "calc(env(safe-area-inset-top) + 40px) 20px 40px",
+                  zIndex: 10,
                 }}
               >
-                {t(steps[index].subtitleKey)}
-              </p>
-            </div>
+                <video
+                  src="/covers/1stepback.mp4"
+                  autoPlay
+                  muted
+                  playsInline
+                  loop={false}
+                  style={{ 
+                    width: "60%", 
+                    maxWidth: "280px",
+                    height: "auto", 
+                    borderRadius: "16px",
+                    border: "2px solid white",
+                    boxShadow: "0 16px 64px rgba(0,0,0,0.4)"
+                  }}
+                />
+              </div>
+              
+              {/* Title and description at bottom - same as slide 2 */}
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  padding: "calc(env(safe-area-inset-top) + 20px) 20px 100px",
+                  zIndex: 20,
+                }}
+              >
+                <div className="stack-8" style={{ maxWidth: 720, margin: "0 auto" }}>
+                  <h1
+                    style={{
+                      fontSize: 28,
+                      lineHeight: 1.1,
+                      letterSpacing: -0.3,
+                      margin: 0,
+                      fontWeight: 800,
+                      color: "#0b1b34",
+                    }}
+                  >
+                    {t(steps[index].titleKey)}
+                  </h1>
+                  <p
+                    style={{
+                      margin: 0,
+                      color: "rgba(11,27,52,0.8)",
+                      fontSize: 16,
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    {t(steps[index].subtitleKey)}
+                  </p>
+                </div>
+              </div>
+            </>
           ) : index === 1 ? (
-            <img
-              src="/covers/2stepbg.png"
-              alt="Step 2 background"
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.3 }}
+            <video
+              src="/covers/2stepback.mp4"
+              autoPlay
+              muted
+              playsInline
+              loop={false}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 1 }}
             />
           ) : (
             <div style={{ position: "absolute", inset: 0, background: steps[index].gradient }} />
@@ -148,98 +166,85 @@ export default function OnboardingPage() {
 
           {/* Content overlay */}
           {index === 1 ? (
-            // Step 2: 3 cards layout with title at bottom
+            // Step 2: Title overlay at bottom - no cards
+            <div
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                padding: "calc(env(safe-area-inset-top) + 20px) 20px 100px",
+              }}
+            >
+              <div className="stack-8" style={{ maxWidth: 720, margin: "0 auto" }}>
+                <h1
+                  style={{
+                    fontSize: 28,
+                    lineHeight: 1.1,
+                    letterSpacing: -0.3,
+                    margin: 0,
+                    fontWeight: 800,
+                    color: "#0b1b34",
+                  }}
+                >
+                  {t(steps[index].titleKey)}
+                </h1>
+                <p
+                  style={{
+                    margin: 0,
+                    color: "rgba(11,27,52,0.8)",
+                    fontSize: 16,
+                    lineHeight: 1.4,
+                  }}
+                >
+                  {t(steps[index].subtitleKey)}
+                </p>
+              </div>
+            </div>
+          ) : index === 2 ? (
+            // Step 3: Saints images grid above text
             <>
+              {/* Saints images grid */}
               <div
                 style={{
                   position: "absolute",
+                  top: 0,
                   left: 0,
                   right: 0,
-                  bottom: "240px",
-                  padding: "0 20px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                  padding: "calc(env(safe-area-inset-top)) 20px 20px",
+                  zIndex: 10,
                 }}
               >
-                <div style={{ maxWidth: 720, margin: "0 auto", width: "100%" }}>
-                  <div className="stack-12">
-                    <Card style={{ 
-                      padding: 0, 
-                      background: "transparent", 
-                      border: "2px solid white",
-                      boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
-                      backgroundImage: "url(/covers/2.1.png)",
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      backgroundRepeat: "no-repeat",
-                      borderRadius: "12px",
-                      overflow: "hidden",
-                      height: "130px",
-                      width: "80%",
-                      margin: "0 auto"
-                    }}>
-                      <div style={{ display: "flex", height: "100%" }}>
-                        <div style={{ width: "40%" }}></div>
-                        <div style={{ width: "60%", padding: 16, display: "flex", alignItems: "flex-start" }}>
-                          <div className="stack-8">
-                            <p style={{ margin: 0, color: "#0b1b34", opacity: 0.8 }}>Daily readings rooted in Orthodox faith</p>
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
-                    
-                    <Card style={{ 
-                      padding: 0, 
-                      background: "transparent", 
-                      border: "2px solid white",
-                      boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
-                      backgroundImage: "url(/covers/2.2.png)",
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      backgroundRepeat: "no-repeat",
-                      borderRadius: "12px",
-                      overflow: "hidden",
-                      height: "130px",
-                      width: "80%",
-                      margin: "0 auto"
-                    }}>
-                      <div style={{ display: "flex", height: "100%" }}>
-                        <div style={{ width: "40%" }}></div>
-                        <div style={{ width: "60%", padding: 16, display: "flex", alignItems: "center" }}>
-                          <div className="stack-8">
-                            <p style={{ margin: 0, color: "#0b1b34", opacity: 0.8 }}>Sacred music and hymns for peaceful reflection</p>
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
-                    
-                    <Card style={{ 
-                      padding: 0, 
-                      background: "transparent", 
-                      border: "2px solid white",
-                      boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
-                      backgroundImage: "url(/covers/2.3.png)",
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      backgroundRepeat: "no-repeat",
-                      borderRadius: "12px",
-                      overflow: "hidden",
-                      height: "130px",
-                      width: "80%",
-                      margin: "0 auto"
-                    }}>
-                      <div style={{ display: "flex", height: "100%" }}>
-                        <div style={{ width: "40%" }}></div>
-                        <div style={{ width: "60%", padding: 16, display: "flex", alignItems: "center" }}>
-                          <div className="stack-8">
-                            <p style={{ margin: 0, color: "#0b1b34", opacity: 0.8 }}>Ancient practices for modern spiritual growth</p>
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
+                <div style={{ maxWidth: 1000, width: "100%" }}>
+                  {/* First row - 4 images */}
+                  <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 4 }}>
+                    <img src="/covers/saitns/Untitled Design.png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
+                    <img src="/covers/saitns/Untitled Design (1).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
+                    <img src="/covers/saitns/Untitled Design (2).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
+                    <img src="/covers/saitns/Untitled Design (3).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
+                  </div>
+                  {/* Second row - 4 images */}
+                  <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 4 }}>
+                    <img src="/covers/saitns/Untitled Design (4).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
+                    <img src="/covers/saitns/Untitled Design (5).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
+                    <img src="/covers/saitns/Untitled Design (6).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
+                    <img src="/covers/saitns/Untitled Design (7).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
+                  </div>
+                  {/* Third row - 4 images */}
+                  <div style={{ display: "flex", justifyContent: "center", gap: 4 }}>
+                    <img src="/covers/saitns/Untitled Design (8).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
+                    <img src="/covers/saitns/Untitled Design (9).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
+                    <img src="/covers/saitns/Untitled Design (10).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
+                    <img src="/covers/saitns/Untitled Design (11).png" alt="Saint" style={{ width: 180, height: 180, borderRadius: 8, objectFit: "cover", border: "3px solid white", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }} />
                   </div>
                 </div>
               </div>
               
-              {/* Title overlay at bottom - no gradient */}
+              {/* Title and description at bottom */}
               <div
                 style={{
                   position: "absolute",
@@ -247,6 +252,7 @@ export default function OnboardingPage() {
                   left: 0,
                   right: 0,
                   padding: "calc(env(safe-area-inset-top) + 20px) 20px 100px",
+                  zIndex: 20,
                 }}
               >
                 <div className="stack-8" style={{ maxWidth: 720, margin: "0 auto" }}>
