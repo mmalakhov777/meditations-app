@@ -98,13 +98,145 @@ export function AudioPlayer({ id, src, cover }: { id: string; src: string; cover
     <div className="stack-12">
       <div className="overlay">
         {cover ? <img src={cover} alt="Cover" className="cover-xl" /> : null}
-        <div className="overlay-controls">
-          <button className="button-secondary" onClick={toggleFavorite} title={isFavorite ? "Remove from favorites" : "Add to favorites"}>
-            {isFavorite ? "★" : "☆"}
+        <div className="overlay-controls" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16 }}>
+          <button 
+            onClick={toggleFavorite} 
+            title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+            style={{
+              width: 48,
+              height: 48,
+              borderRadius: "50%",
+              border: "none",
+              background: isFavorite ? "linear-gradient(135deg, #FFD700, #FFA500)" : "rgba(255, 255, 255, 0.2)",
+              boxShadow: isFavorite ? "0 4px 12px rgba(255, 215, 0, 0.3)" : "0 2px 8px rgba(0, 0, 0, 0.2)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              transition: "all 0.2s ease"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "scale(1.05)";
+              e.currentTarget.style.boxShadow = isFavorite ? "0 6px 16px rgba(255, 215, 0, 0.4)" : "0 4px 12px rgba(0, 0, 0, 0.3)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
+              e.currentTarget.style.boxShadow = isFavorite ? "0 4px 12px rgba(255, 215, 0, 0.3)" : "0 2px 8px rgba(0, 0, 0, 0.2)";
+            }}
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill={isFavorite ? "#1a1a1a" : "#fff"}>
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
           </button>
-          <button className="button-secondary" onClick={() => { const el = ref.current; if (!el) return; el.currentTime = Math.max(0, el.currentTime - 30); }}>-30s</button>
-          <button className="button" onClick={toggle}>{playing ? "Stop" : "Play"}</button>
-          <button className="button-secondary" onClick={() => { const el = ref.current; if (!el) return; el.currentTime = Math.min(el.duration || el.currentTime + 30, el.currentTime + 30); }}>+30s</button>
+          
+          <button 
+            onClick={() => { const el = ref.current; if (!el) return; el.currentTime = Math.max(0, el.currentTime - 30); }}
+            style={{
+              width: 48,
+              height: 48,
+              borderRadius: "50%",
+              border: "none",
+              background: "rgba(255, 255, 255, 0.2)",
+              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              lineHeight: 0,
+              padding: 0,
+              cursor: "pointer",
+              transition: "all 0.2s ease"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "scale(1.05)";
+              e.currentTarget.style.background = "rgba(255, 255, 255, 0.3)";
+              e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.3)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
+              e.currentTarget.style.background = "rgba(255, 255, 255, 0.2)";
+              e.currentTarget.style.boxShadow = "0 2px 8px rgba(0, 0, 0, 0.2)";
+            }}
+          >
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff" style={{ display: "block" }}>
+              <path d="M11 17l-5-5 5-5v10z"/>
+              <path d="M18 17l-5-5 5-5v10z"/>
+            </svg>
+          </button>
+          
+          <button 
+            onClick={toggle}
+            style={{
+              width: 64,
+              height: 64,
+              borderRadius: "50%",
+              border: "none",
+              background: "linear-gradient(135deg, #FFD700, #FFA500)",
+              boxShadow: "0 6px 20px rgba(255, 215, 0, 0.4)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              transition: "all 0.2s ease"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "scale(1.05)";
+              e.currentTarget.style.boxShadow = "0 8px 24px rgba(255, 215, 0, 0.5)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
+              e.currentTarget.style.boxShadow = "0 6px 20px rgba(255, 215, 0, 0.4)";
+            }}
+          >
+            {playing ? (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="#1a1a1a">
+                <rect x="6" y="4" width="4" height="16"/>
+                <rect x="14" y="4" width="4" height="16"/>
+              </svg>
+            ) : (
+              <div style={{
+                width: 0,
+                height: 0,
+                borderLeft: "20px solid #1a1a1a",
+                borderTop: "12px solid transparent",
+                borderBottom: "12px solid transparent",
+                marginLeft: "4px"
+              }} />
+            )}
+          </button>
+          
+          <button 
+            onClick={() => { const el = ref.current; if (!el) return; el.currentTime = Math.min(el.duration || el.currentTime + 30, el.currentTime + 30); }}
+            style={{
+              width: 48,
+              height: 48,
+              borderRadius: "50%",
+              border: "none",
+              background: "rgba(255, 255, 255, 0.2)",
+              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              lineHeight: 0,
+              padding: 0,
+              cursor: "pointer",
+              transition: "all 0.2s ease"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "scale(1.05)";
+              e.currentTarget.style.background = "rgba(255, 255, 255, 0.3)";
+              e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.3)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
+              e.currentTarget.style.background = "rgba(255, 255, 255, 0.2)";
+              e.currentTarget.style.boxShadow = "0 2px 8px rgba(0, 0, 0, 0.2)";
+            }}
+          >
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff" style={{ display: "block" }}>
+              <path d="M13 7l5 5-5 5V7z"/>
+              <path d="M6 7l5 5-5 5V7z"/>
+            </svg>
+          </button>
         </div>
       </div>
       <div className="audio-progress" onClick={onSeek}>

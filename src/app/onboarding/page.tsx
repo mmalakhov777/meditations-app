@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useState, useEffect, useCallback, useRef } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { t } from "@/lib/i18n";
-import { Card, Button, H1, Subtle } from "@/components/UI";
+import { Button } from "@/components/UI";
 import { HideBottomNav } from "@/components/HideBottomNav";
 
 export default function OnboardingPage() {
@@ -73,11 +73,11 @@ export default function OnboardingPage() {
 
     const loadPromises = assetsToPreload.map(async (src) => {
       if (src.endsWith('.mp4')) {
-        await new Promise((resolve) => {
+        await new Promise<void>((resolve) => {
           const video = document.createElement('video');
           video.preload = 'auto';
-          video.oncanplaythrough = resolve;
-          video.onerror = resolve;
+          video.oncanplaythrough = () => resolve();
+          video.onerror = () => resolve();
           video.src = src;
           video.load();
         });
@@ -93,8 +93,8 @@ export default function OnboardingPage() {
 
         const img = new Image();
         const loadPromise = new Promise<void>((resolve) => {
-          img.onload = resolve;
-          img.onerror = resolve;
+          img.onload = () => resolve();
+          img.onerror = () => resolve();
         });
         img.src = blobUrl;
         await loadPromise;
@@ -107,8 +107,8 @@ export default function OnboardingPage() {
         // fallback to original src if fetch fails
         const img = new Image();
         const loadPromise = new Promise<void>((resolve) => {
-          img.onload = resolve;
-          img.onerror = resolve;
+          img.onload = () => resolve();
+          img.onerror = () => resolve();
         });
         img.src = src;
         await loadPromise;
@@ -470,7 +470,7 @@ export default function OnboardingPage() {
                       const onResize = () => requestAnimationFrame(updateDistance);
                       window.addEventListener('resize', onResize);
                       // Cleanup if element is unmounted/replaced
-                      (el as any)._cleanup = () => window.removeEventListener('resize', onResize);
+                      (el as HTMLElement & { _cleanup?: () => void })._cleanup = () => window.removeEventListener('resize', onResize);
                     } catch {}
                   }}
                   style={{
@@ -526,7 +526,7 @@ export default function OnboardingPage() {
                           fontStyle: "italic",
                         }}
                       >
-                        "{t(`onboarding.testimonial${num}.text`)}"
+                        &ldquo;{t(`onboarding.testimonial${num}.text`)}&rdquo;
                       </p>
                       <p
                         style={{
@@ -584,7 +584,7 @@ export default function OnboardingPage() {
                           fontStyle: "italic",
                         }}
                       >
-                        "{t(`onboarding.testimonial${num}.text`)}"
+                        &ldquo;{t(`onboarding.testimonial${num}.text`)}&rdquo;
                       </p>
                       <p
                         style={{

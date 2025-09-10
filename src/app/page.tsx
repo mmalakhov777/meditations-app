@@ -68,7 +68,41 @@ export default function Home() {
           </div>
           <div className="row" style={{ alignItems: "center", gap: 8 }}>
             {authLoading ? <span className="muted small">{t("auth.loading")}</span> : null}
-            <button className="button-secondary" onClick={toggle}>{theme === "light" ? t("theme.dark") : t("theme.light")}</button>
+            <button 
+              onClick={toggle}
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: "50%",
+                border: "none",
+                background: "linear-gradient(135deg, #FFD700, #FFA500)",
+                boxShadow: "0 4px 12px rgba(255, 215, 0, 0.3)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                transition: "all 0.2s ease"
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.05)";
+                e.currentTarget.style.boxShadow = "0 6px 16px rgba(255, 215, 0, 0.4)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.boxShadow = "0 4px 12px rgba(255, 215, 0, 0.3)";
+              }}
+            >
+              {theme === "light" ? (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#1a1a1a"/>
+                </svg>
+              ) : (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="5" fill="#1a1a1a"/>
+                  <path d="m12 1 0 2m0 18 0 2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42M1 12l2 0m18 0 2 0M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="#1a1a1a"/>
+                </svg>
+              )}
+            </button>
           </div>
         </div>
       </div>
@@ -77,35 +111,83 @@ export default function Home() {
         <div className="muted small">{new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
       </div>
 
-      <div className="card" style={{ padding: 20 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+      <Link href="/meditation/f1" className="card" style={{ padding: 0, display: "block", textDecoration: "none", color: "inherit", position: "relative", overflow: "hidden" }}>
+        <div style={{ display: "flex", alignItems: "center", minHeight: 120 }}>
           {todayMorning?.cover ? (
-            <div style={{ flex: "0 0 30%" }}>
-              <img src={todayMorning.cover} alt={todayMorning.title} style={{ width: "100%", borderRadius: 12 }} />
+            <div style={{ flex: "0 0 30%", height: 120, position: "relative" }}>
+              <img src={todayMorning.cover} alt={todayMorning.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              <div style={{ 
+                position: "absolute", 
+                top: "50%", 
+                left: "50%", 
+                transform: "translate(-50%, -50%)",
+                width: 56,
+                height: 56,
+                background: "linear-gradient(135deg, #FFD700, #FFA500)",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0 6px 20px rgba(255, 215, 0, 0.4)",
+                transition: "all 0.3s ease"
+              }}>
+                <div style={{
+                  width: 0,
+                  height: 0,
+                  borderLeft: "16px solid #1a1a1a",
+                  borderTop: "10px solid transparent",
+                  borderBottom: "10px solid transparent",
+                  marginLeft: "4px"
+                }} />
+              </div>
             </div>
           ) : null}
-          <div style={{ flex: 1 }} className="stack-8">
+          <div style={{ flex: 1, padding: 20 }} className="stack-8">
             <div className="muted small">Morning</div>
             {todayMorning?.title ? <div><strong>{todayMorning.title}</strong></div> : null}
-            <Link href="/meditation/f1" className="button">Start</Link>
+            <div className="muted small">Tap to start meditation</div>
           </div>
         </div>
-      </div>
+      </Link>
 
-      <div className="card" style={{ padding: 20 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+      <Link href="/meditation/s1" className="card" style={{ padding: 0, display: "block", textDecoration: "none", color: "inherit", position: "relative", overflow: "hidden" }}>
+        <div style={{ display: "flex", alignItems: "center", minHeight: 120 }}>
           {todayEvening?.cover ? (
-            <div style={{ flex: "0 0 30%" }}>
-              <img src={todayEvening.cover} alt={todayEvening.title} style={{ width: "100%", borderRadius: 12 }} />
+            <div style={{ flex: "0 0 30%", height: 120, position: "relative" }}>
+              <img src={todayEvening.cover} alt={todayEvening.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              <div style={{ 
+                position: "absolute", 
+                top: "50%", 
+                left: "50%", 
+                transform: "translate(-50%, -50%)",
+                width: 56,
+                height: 56,
+                background: "linear-gradient(135deg, #FFD700, #FFA500)",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0 6px 20px rgba(255, 215, 0, 0.4)",
+                transition: "all 0.3s ease"
+              }}>
+                <div style={{
+                  width: 0,
+                  height: 0,
+                  borderLeft: "16px solid #1a1a1a",
+                  borderTop: "10px solid transparent",
+                  borderBottom: "10px solid transparent",
+                  marginLeft: "4px"
+                }} />
+              </div>
             </div>
           ) : null}
-          <div style={{ flex: 1 }} className="stack-8">
+          <div style={{ flex: 1, padding: 20 }} className="stack-8">
             <div className="muted small">Evening</div>
             {todayEvening?.title ? <div><strong>{todayEvening.title}</strong></div> : null}
-            <Link href="/meditation/s1" className="button-secondary">Start</Link>
+            <div className="muted small">Tap to start meditation</div>
           </div>
         </div>
-      </div>
+      </Link>
 
       {null}
     </div>
