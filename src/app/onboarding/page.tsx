@@ -273,7 +273,7 @@ export default function OnboardingPage() {
                    bottom: 0,
                    left: 0,
                    right: 0,
-                   padding: "calc(env(safe-area-inset-top) + 20px) 20px 100px",
+                   padding: "calc(env(safe-area-inset-top) + 20px) 20px 180px",
                    zIndex: 20,
                  }}
                >
@@ -403,7 +403,7 @@ export default function OnboardingPage() {
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  padding: "calc(env(safe-area-inset-top) + 20px) 20px 100px",
+                  padding: "calc(env(safe-area-inset-top) + 20px) 20px 180px",
                   zIndex: 20,
                 }}
               >
@@ -634,7 +634,7 @@ export default function OnboardingPage() {
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  padding: "calc(env(safe-area-inset-top) + 20px) 20px 100px",
+                  padding: "calc(env(safe-area-inset-top) + 20px) 20px 180px",
                   zIndex: 20,
                 }}
               >
@@ -679,8 +679,6 @@ export default function OnboardingPage() {
         }}
       >
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 16px calc(12px + env(safe-area-inset-bottom))" }}>
-          {/* Spacing div to push content higher */}
-          <div style={{ height: "60px" }} />
           {index < steps.length - 1 ? (
             <Button onClick={goNext} style={{ width: "100%", fontSize: "18px", padding: "16px 24px", fontWeight: "600" }}>{t("onboarding.next")}</Button>
           ) : (
