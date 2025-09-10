@@ -92,31 +92,31 @@ html[data-theme="dark"] .card {
   /* Glass effect with backdrop blur */
   backdrop-filter: blur(12px) saturate(1.2);
   
-  /* Text styling - lighter and more subtle */
+  /* Text styling - clean without shadow */
   color: rgba(44,24,16,0.9);
-  text-shadow: 
-    0 1px 0 rgba(255,255,255,0.4),
-    0 1px 2px rgba(139,105,20,0.2);
   
   padding: 14px 20px;
   border-radius: 999px;
   
-  /* Glass-like border */
-  border: 1px solid rgba(255,215,0,0.3);
+  /* 3D border effect for volume */
+  border: none;
   
   cursor: pointer;
   
-  /* Softer, more diffused shadows */
+  /* 3D volume effect with proper depth */
   box-shadow: 
-    /* Subtle inner glow */
-    inset 0 1px 0 rgba(255,255,255,0.5),
-    inset 0 -0.5px 0 rgba(255,215,0,0.2),
-    /* Soft outer shadows */
-    0 2px 8px rgba(255,215,0,0.15),
-    0 4px 16px rgba(255,215,0,0.1),
-    0 8px 32px rgba(255,215,0,0.05),
-    /* Gentle glow */
-    0 0 16px rgba(255,215,0,0.1);
+    /* Top light edge - creates raised effect */
+    inset 0 2px 0 rgba(255,255,255,0.8),
+    /* Bottom dark edge - creates depth */
+    inset 0 -3px 0 rgba(218,165,32,0.6),
+    /* Left light edge */
+    inset 2px 0 0 rgba(255,255,255,0.4),
+    /* Right dark edge */
+    inset -2px 0 0 rgba(218,165,32,0.4),
+    /* Outer shadows for floating effect */
+    0 4px 12px rgba(255,215,0,0.3),
+    0 8px 24px rgba(255,215,0,0.2),
+    0 0 20px rgba(255,215,0,0.15);
     
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
               box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
@@ -167,17 +167,19 @@ html[data-theme="dark"] .card {
   /* Enhanced glassy appearance on hover */
   backdrop-filter: blur(16px) saturate(1.3);
   
-  /* Softer enhanced shadows */
+  /* Enhanced 3D effect on hover - button press simulation */
   box-shadow: 
-    /* Subtle inner glow */
-    inset 0 1.5px 0 rgba(255,255,255,0.6),
-    inset 0 -0.5px 0 rgba(255,215,0,0.3),
-    /* Enhanced soft shadows */
-    0 3px 12px rgba(255,215,0,0.2),
-    0 6px 24px rgba(255,215,0,0.15),
-    0 12px 48px rgba(255,215,0,0.08),
-    /* Gentle enhanced glow */
-    0 0 24px rgba(255,215,0,0.15);
+    /* Reduced top light edge - button pressed down */
+    inset 0 1px 0 rgba(255,255,255,0.6),
+    /* Increased bottom depth */
+    inset 0 -4px 0 rgba(218,165,32,0.8),
+    /* Enhanced side edges */
+    inset 3px 0 0 rgba(255,255,255,0.3),
+    inset -3px 0 0 rgba(218,165,32,0.5),
+    /* Enhanced outer glow */
+    0 6px 16px rgba(255,215,0,0.4),
+    0 10px 30px rgba(255,215,0,0.25),
+    0 0 30px rgba(255,215,0,0.2);
     
   /* Use filter instead of background override to avoid flickering */
   filter: brightness(1.05) saturate(1.1);
@@ -430,6 +432,286 @@ html[data-theme="dark"] .cover-xl { background: rgba(255,255,255,0.06); }
 .overlay-controls .button-secondary {
   padding: 14px 20px;
   font-size: 16px;
+}
+
+/* Gold play button specific styling - overrides base button styles */
+.overlay-controls .gold-play-button {
+  width: 64px !important;
+  height: 64px !important;
+}
+
+.gold-play-button {
+  min-width: 48px;
+  min-height: 48px;
+  border-radius: 50% !important;
+  position: relative !important;
+  overflow: hidden !important;
+  font-weight: 600 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  
+  /* Glassy gold background with transparency */
+  background: 
+    linear-gradient(160deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 20%, transparent 40%),
+    linear-gradient(180deg, rgba(255,248,220,0.9) 0%, rgba(255,215,0,0.8) 20%, rgba(255,193,7,0.7) 40%, rgba(218,165,32,0.6) 70%, rgba(184,134,11,0.5) 100%),
+    radial-gradient(ellipse at center top, rgba(255,255,255,0.3) 0%, transparent 60%) !important;
+  
+  /* Glass effect with backdrop blur */
+  backdrop-filter: blur(12px) saturate(1.2) !important;
+  
+  /* No border - using 3D shadow volume instead */
+  border: none !important;
+  
+  cursor: pointer !important;
+  
+  /* 3D circular volume effect */
+  box-shadow: 
+    /* Top light arc - creates raised circular effect */
+    inset 0 3px 0 rgba(255,255,255,0.9),
+    /* Bottom dark arc - creates circular depth */
+    inset 0 -4px 0 rgba(218,165,32,0.7),
+    /* Circular side lighting simulation */
+    inset 3px 0 0 rgba(255,255,255,0.5),
+    inset -3px 0 0 rgba(218,165,32,0.5),
+    /* Outer circular shadow for floating effect */
+    0 6px 18px rgba(255,215,0,0.35),
+    0 10px 30px rgba(255,215,0,0.25),
+    0 0 25px rgba(255,215,0,0.2) !important;
+  
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              backdrop-filter 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              filter 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transform: translateY(0) scale(1) !important;
+}
+
+.overlay-controls .gold-play-button:hover,
+.gold-play-button:hover {
+  transform: translateY(-0.5px) scale(1.01) !important;
+  backdrop-filter: blur(16px) saturate(1.3) !important;
+  filter: brightness(1.05) saturate(1.1) !important;
+  
+  box-shadow: 
+    /* Enhanced circular press effect on hover */
+    inset 0 2px 0 rgba(255,255,255,0.7),
+    inset 0 -5px 0 rgba(218,165,32,0.9),
+    /* Enhanced circular side effects */
+    inset 4px 0 0 rgba(255,255,255,0.4),
+    inset -4px 0 0 rgba(218,165,32,0.6),
+    /* Enhanced outer circular glow */
+    0 8px 22px rgba(255,215,0,0.4),
+    0 12px 35px rgba(255,215,0,0.3),
+    0 0 35px rgba(255,215,0,0.25) !important;
+}
+
+/* Golden card styling - same 3D effect as buttons */
+.golden-card {
+  /* Glassy gold background with transparency */
+  background: 
+    linear-gradient(160deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 20%, transparent 40%),
+    linear-gradient(180deg, rgba(255,248,220,0.9) 0%, rgba(255,215,0,0.8) 20%, rgba(255,193,7,0.7) 40%, rgba(218,165,32,0.6) 70%, rgba(184,134,11,0.5) 100%),
+    radial-gradient(ellipse at center top, rgba(255,255,255,0.3) 0%, transparent 60%) !important;
+  
+  /* Glass effect with backdrop blur */
+  backdrop-filter: blur(12px) saturate(1.2) !important;
+  
+  /* No border - using 3D shadow volume instead */
+  border: none !important;
+  
+  /* 3D volume effect with proper depth */
+  box-shadow: 
+    /* Top light edge - creates raised effect */
+    inset 0 2px 0 rgba(255,255,255,0.8),
+    /* Bottom dark edge - creates depth */
+    inset 0 -3px 0 rgba(218,165,32,0.6),
+    /* Left light edge */
+    inset 2px 0 0 rgba(255,255,255,0.4),
+    /* Right dark edge */
+    inset -2px 0 0 rgba(218,165,32,0.4),
+    /* Outer shadows for floating effect */
+    0 4px 12px rgba(255,215,0,0.3),
+    0 8px 24px rgba(255,215,0,0.2),
+    0 0 20px rgba(255,215,0,0.15) !important;
+    
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              backdrop-filter 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              filter 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transform: translateY(0) scale(1) !important;
+  
+  /* Ensure proper positioning and overflow */
+  position: relative !important;
+  overflow: hidden !important;
+  
+  /* Text styling for golden background */
+  color: rgba(44,24,16,0.9) !important;
+}
+
+/* Override muted text color inside golden cards */
+.golden-card .muted {
+  color: rgba(44,24,16,0.7) !important;
+}
+
+/* Small theme button - separate from play buttons */
+.gold-theme-button {
+  border-radius: 50% !important;
+  position: relative !important;
+  overflow: hidden !important;
+  font-weight: 600 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  
+  /* Glassy gold background with transparency */
+  background: 
+    linear-gradient(160deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 20%, transparent 40%),
+    linear-gradient(180deg, rgba(255,248,220,0.9) 0%, rgba(255,215,0,0.8) 20%, rgba(255,193,7,0.7) 40%, rgba(218,165,32,0.6) 70%, rgba(184,134,11,0.5) 100%),
+    radial-gradient(ellipse at center top, rgba(255,255,255,0.3) 0%, transparent 60%) !important;
+  
+  /* Glass effect with backdrop blur */
+  backdrop-filter: blur(12px) saturate(1.2) !important;
+  
+  /* No border - using 3D shadow volume instead */
+  border: none !important;
+  
+  cursor: pointer !important;
+  
+  /* 3D circular volume effect */
+  box-shadow: 
+    /* Top light arc - creates raised circular effect */
+    inset 0 3px 0 rgba(255,255,255,0.9),
+    /* Bottom dark arc - creates circular depth */
+    inset 0 -4px 0 rgba(218,165,32,0.7),
+    /* Circular side lighting simulation */
+    inset 3px 0 0 rgba(255,255,255,0.5),
+    inset -3px 0 0 rgba(218,165,32,0.5),
+    /* Outer circular shadow for floating effect */
+    0 6px 18px rgba(255,215,0,0.35),
+    0 10px 30px rgba(255,215,0,0.25),
+    0 0 25px rgba(255,215,0,0.2) !important;
+  
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              backdrop-filter 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              filter 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transform: translateY(0) scale(1) !important;
+}
+
+.gold-theme-button:hover {
+  transform: translateY(-0.5px) scale(1.01) !important;
+  backdrop-filter: blur(16px) saturate(1.3) !important;
+  filter: brightness(1.05) saturate(1.1) !important;
+  
+  box-shadow: 
+    /* Enhanced circular press effect on hover */
+    inset 0 2px 0 rgba(255,255,255,0.7),
+    inset 0 -5px 0 rgba(218,165,32,0.9),
+    /* Enhanced circular side effects */
+    inset 4px 0 0 rgba(255,255,255,0.4),
+    inset -4px 0 0 rgba(218,165,32,0.6),
+    /* Enhanced outer circular glow */
+    0 8px 22px rgba(255,215,0,0.4),
+    0 12px 35px rgba(255,215,0,0.3),
+    0 0 35px rgba(255,215,0,0.25) !important;
+}
+
+/* Small play button for cards - separate from main AudioPlayer button */
+.gold-card-play-button {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 50% !important;
+  position: relative !important;
+  overflow: hidden !important;
+  font-weight: 600 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  
+  /* Glassy gold background with transparency */
+  background: 
+    linear-gradient(160deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 20%, transparent 40%),
+    linear-gradient(180deg, rgba(255,248,220,0.9) 0%, rgba(255,215,0,0.8) 20%, rgba(255,193,7,0.7) 40%, rgba(218,165,32,0.6) 70%, rgba(184,134,11,0.5) 100%),
+    radial-gradient(ellipse at center top, rgba(255,255,255,0.3) 0%, transparent 60%) !important;
+  
+  /* Glass effect with backdrop blur */
+  backdrop-filter: blur(12px) saturate(1.2) !important;
+  
+  /* No border - using 3D shadow volume instead */
+  border: none !important;
+  
+  cursor: pointer !important;
+  
+  /* 3D circular volume effect - scaled for smaller button */
+  box-shadow: 
+    /* Top light arc - creates raised circular effect */
+    inset 0 2px 0 rgba(255,255,255,0.9),
+    /* Bottom dark arc - creates circular depth */
+    inset 0 -3px 0 rgba(218,165,32,0.7),
+    /* Circular side lighting simulation */
+    inset 2px 0 0 rgba(255,255,255,0.5),
+    inset -2px 0 0 rgba(218,165,32,0.5),
+    /* Outer circular shadow for floating effect */
+    0 4px 12px rgba(255,215,0,0.35),
+    0 6px 20px rgba(255,215,0,0.25),
+    0 0 15px rgba(255,215,0,0.2) !important;
+  
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              backdrop-filter 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              filter 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transform: translateY(0) scale(1) !important;
+}
+
+.gold-card-play-button:hover {
+  transform: translateY(-0.5px) scale(1.01) !important;
+  backdrop-filter: blur(16px) saturate(1.3) !important;
+  filter: brightness(1.05) saturate(1.1) !important;
+  
+  box-shadow: 
+    /* Enhanced circular press effect on hover */
+    inset 0 1px 0 rgba(255,255,255,0.7),
+    inset 0 -4px 0 rgba(218,165,32,0.9),
+    /* Enhanced circular side effects */
+    inset 3px 0 0 rgba(255,255,255,0.4),
+    inset -3px 0 0 rgba(218,165,32,0.6),
+    /* Enhanced outer circular glow */
+    0 6px 16px rgba(255,215,0,0.4),
+    0 8px 25px rgba(255,215,0,0.3),
+    0 0 20px rgba(255,215,0,0.25) !important;
+}
+
+.golden-card:hover {
+  transform: translateY(-1px) scale(1.005) !important;
+  
+  /* Enhanced glassy appearance on hover */
+  backdrop-filter: blur(16px) saturate(1.3) !important;
+  
+  /* Enhanced 3D effect on hover */
+  box-shadow: 
+    /* Reduced top light edge - subtle press effect */
+    inset 0 1px 0 rgba(255,255,255,0.6),
+    /* Increased bottom depth */
+    inset 0 -4px 0 rgba(218,165,32,0.8),
+    /* Enhanced side edges */
+    inset 3px 0 0 rgba(255,255,255,0.3),
+    inset -3px 0 0 rgba(218,165,32,0.5),
+    /* Enhanced outer glow */
+    0 6px 16px rgba(255,215,0,0.4),
+    0 10px 30px rgba(255,215,0,0.25),
+    0 0 30px rgba(255,215,0,0.2) !important;
+    
+  /* Enhanced brightness and saturation */
+  filter: brightness(1.05) saturate(1.1) !important;
 }
 
 /* Audio progress bar */

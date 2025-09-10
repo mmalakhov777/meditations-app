@@ -70,34 +70,15 @@ export default function Home() {
             {authLoading ? <span className="muted small">{t("auth.loading")}</span> : null}
             <button 
               onClick={toggle}
-              style={{
-                width: 44,
-                height: 44,
-                borderRadius: "50%",
-                border: "none",
-                background: "linear-gradient(135deg, #FFD700, #FFA500)",
-                boxShadow: "0 4px 12px rgba(255, 215, 0, 0.3)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                transition: "all 0.2s ease"
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "scale(1.05)";
-                e.currentTarget.style.boxShadow = "0 6px 16px rgba(255, 215, 0, 0.4)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.boxShadow = "0 4px 12px rgba(255, 215, 0, 0.3)";
-              }}
+              className="gold-theme-button"
+              style={{ width: 38, height: 38 }}
             >
               {theme === "light" ? (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#1a1a1a"/>
                 </svg>
               ) : (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <circle cx="12" cy="12" r="5" fill="#1a1a1a"/>
                   <path d="m12 1 0 2m0 18 0 2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42M1 12l2 0m18 0 2 0M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="#1a1a1a"/>
                 </svg>
@@ -116,28 +97,26 @@ export default function Home() {
           {todayMorning?.cover ? (
             <div style={{ flex: "0 0 30%", height: 120, position: "relative" }}>
               <img src={todayMorning.cover} alt={todayMorning.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-              <div style={{ 
-                position: "absolute", 
-                top: "50%", 
-                left: "50%", 
-                transform: "translate(-50%, -50%)",
-                width: 56,
-                height: 56,
-                background: "linear-gradient(135deg, #FFD700, #FFA500)",
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow: "0 6px 20px rgba(255, 215, 0, 0.4)",
-                transition: "all 0.3s ease"
-              }}>
+              <div 
+                className="gold-play-button"
+                style={{ 
+                  position: "absolute", 
+                  top: "50%", 
+                  left: "50%", 
+                  transform: "translate(-50%, -50%)",
+                  width: 48,
+                  height: 48,
+                  zIndex: 10,
+                  backgroundColor: "red !important"
+                }}
+              >
                 <div style={{
                   width: 0,
                   height: 0,
-                  borderLeft: "16px solid #1a1a1a",
-                  borderTop: "10px solid transparent",
-                  borderBottom: "10px solid transparent",
-                  marginLeft: "4px"
+                  borderLeft: "14px solid #1a1a1a",
+                  borderTop: "8px solid transparent",
+                  borderBottom: "8px solid transparent",
+                  marginLeft: "3px"
                 }} />
               </div>
             </div>
@@ -155,28 +134,26 @@ export default function Home() {
           {todayEvening?.cover ? (
             <div style={{ flex: "0 0 30%", height: 120, position: "relative" }}>
               <img src={todayEvening.cover} alt={todayEvening.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-              <div style={{ 
-                position: "absolute", 
-                top: "50%", 
-                left: "50%", 
-                transform: "translate(-50%, -50%)",
-                width: 56,
-                height: 56,
-                background: "linear-gradient(135deg, #FFD700, #FFA500)",
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow: "0 6px 20px rgba(255, 215, 0, 0.4)",
-                transition: "all 0.3s ease"
-              }}>
+              <div 
+                className="gold-play-button"
+                style={{ 
+                  position: "absolute", 
+                  top: "50%", 
+                  left: "50%", 
+                  transform: "translate(-50%, -50%)",
+                  width: 48,
+                  height: 48,
+                  zIndex: 10,
+                  backgroundColor: "red !important"
+                }}
+              >
                 <div style={{
                   width: 0,
                   height: 0,
-                  borderLeft: "16px solid #1a1a1a",
-                  borderTop: "10px solid transparent",
-                  borderBottom: "10px solid transparent",
-                  marginLeft: "4px"
+                  borderLeft: "14px solid #1a1a1a",
+                  borderTop: "8px solid transparent",
+                  borderBottom: "8px solid transparent",
+                  marginLeft: "3px"
                 }} />
               </div>
             </div>

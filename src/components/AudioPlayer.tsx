@@ -165,27 +165,7 @@ export function AudioPlayer({ id, src, cover }: { id: string; src: string; cover
           
           <button 
             onClick={toggle}
-            style={{
-              width: 64,
-              height: 64,
-              borderRadius: "50%",
-              border: "none",
-              background: "linear-gradient(135deg, #FFD700, #FFA500)",
-              boxShadow: "0 6px 20px rgba(255, 215, 0, 0.4)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              transition: "all 0.2s ease"
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "scale(1.05)";
-              e.currentTarget.style.boxShadow = "0 8px 24px rgba(255, 215, 0, 0.5)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "scale(1)";
-              e.currentTarget.style.boxShadow = "0 6px 20px rgba(255, 215, 0, 0.4)";
-            }}
+            className="gold-play-button"
           >
             {playing ? (
               <svg width="24" height="24" viewBox="0 0 24 24" fill="#1a1a1a">
