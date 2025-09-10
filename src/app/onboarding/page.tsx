@@ -41,19 +41,70 @@ export default function OnboardingPage() {
       {!isLastSlide ? (
         <div style={{ position: "fixed", inset: 0 }}>
           {index === 0 ? (
-            <video
-              src="/covers/1stepback.mp4"
-              autoPlay
-              muted
-              playsInline
-              loop={false}
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-            />
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "calc(env(safe-area-inset-top) + 80px) 20px 120px",
+              }}
+            >
+              {/* Title above video */}
+              <h1
+                style={{
+                  fontSize: 28,
+                  lineHeight: 1.1,
+                  letterSpacing: -0.3,
+                  margin: "0 0 20px 0",
+                  fontWeight: 800,
+                  color: "#0b1b34",
+                  textAlign: "center",
+                  maxWidth: 720,
+                }}
+              >
+                {t(steps[index].titleKey)}
+              </h1>
+
+              {/* Centered video */}
+              <video
+                src="/covers/1stepback.mp4"
+                autoPlay
+                muted
+                playsInline
+                loop={false}
+                style={{ 
+                  width: "80%", 
+                  maxWidth: "400px",
+                  height: "auto", 
+                  borderRadius: "16px",
+                  border: "2px solid white",
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
+                  margin: "0 0 20px 0"
+                }}
+              />
+
+              {/* Description below video */}
+              <p
+                style={{
+                  margin: 0,
+                  color: "rgba(11,27,52,0.8)",
+                  fontSize: 16,
+                  lineHeight: 1.4,
+                  textAlign: "center",
+                  maxWidth: 720,
+                }}
+              >
+                {t(steps[index].subtitleKey)}
+              </p>
+            </div>
           ) : index === 1 ? (
             <img
               src="/covers/2stepbg.png"
               alt="Step 2 background"
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "blur(4px)" }}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.3 }}
             />
           ) : (
             <div style={{ position: "absolute", inset: 0, background: steps[index].gradient }} />
@@ -66,7 +117,6 @@ export default function OnboardingPage() {
               top: 0,
               left: 0,
               right: 0,
-              background: "linear-gradient(rgba(0,0,0,0.3), transparent)",
               padding: "calc(env(safe-area-inset-top) + 20px) 20px 100px",
               zIndex: 10,
             }}
@@ -189,14 +239,13 @@ export default function OnboardingPage() {
                 </div>
               </div>
               
-              {/* Title overlay at bottom - same as other steps */}
+              {/* Title overlay at bottom - no gradient */}
               <div
                 style={{
                   position: "absolute",
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  background: "linear-gradient(transparent, rgba(0,0,0,0.8))",
                   padding: "calc(env(safe-area-inset-top) + 20px) 20px 100px",
                 }}
               >
@@ -208,7 +257,7 @@ export default function OnboardingPage() {
                       letterSpacing: -0.3,
                       margin: 0,
                       fontWeight: 800,
-                      color: "#ffffff",
+                      color: "#0b1b34",
                     }}
                   >
                     {t(steps[index].titleKey)}
@@ -216,7 +265,7 @@ export default function OnboardingPage() {
                   <p
                     style={{
                       margin: 0,
-                      color: "rgba(255,255,255,0.9)",
+                      color: "rgba(11,27,52,0.8)",
                       fontSize: 16,
                       lineHeight: 1.4,
                     }}
@@ -226,15 +275,14 @@ export default function OnboardingPage() {
                 </div>
               </div>
             </>
-          ) : (
-            // Other steps: Text overlay at bottom
+          ) : index !== 0 ? (
+            // Other steps (not first): Text overlay at bottom
             <div
               style={{
                 position: "absolute",
                 bottom: 0,
                 left: 0,
                 right: 0,
-                background: "linear-gradient(transparent, rgba(0,0,0,0.7))",
                 padding: "calc(env(safe-area-inset-top) + 20px) 20px 100px",
               }}
             >
@@ -246,7 +294,7 @@ export default function OnboardingPage() {
                     letterSpacing: -0.3,
                     margin: 0,
                     fontWeight: 800,
-                    color: "#ffffff",
+                    color: "#0b1b34",
                   }}
                 >
                   {t(steps[index].titleKey)}
@@ -254,7 +302,7 @@ export default function OnboardingPage() {
                 <p
                   style={{
                     margin: 0,
-                    color: "rgba(255,255,255,0.9)",
+                    color: "rgba(11,27,52,0.8)",
                     fontSize: 16,
                     lineHeight: 1.4,
                   }}
@@ -263,7 +311,7 @@ export default function OnboardingPage() {
                 </p>
               </div>
             </div>
-          )}
+          ) : null}
         </div>
       ) : (
         <div className="container stack-16" style={{ paddingTop: 24 }}>
@@ -287,7 +335,6 @@ export default function OnboardingPage() {
           right: 0,
           bottom: 0,
           zIndex: 40,
-          background: "linear-gradient(transparent, rgba(0,0,0,0.3))",
         }}
       >
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 16px calc(12px + env(safe-area-inset-bottom))" }}>

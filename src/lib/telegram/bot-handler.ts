@@ -75,7 +75,7 @@ Choose an option below or open the full app for the complete experience.
       inline_keyboard: [[
         {
           text: '🧘 Open Full App',
-          web_app: { url: process.env.NEXT_PUBLIC_APP_URL || 'https://your-app.vercel.app' }
+          web_app: { url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://your-app.vercel.app'}/onboarding` }
         }
       ]]
     }
@@ -106,7 +106,7 @@ async function handleMeditateCommand(bot: TelegramBot, chatId: number) {
       inline_keyboard: [[
         {
           text: '🧘 Open Full App',
-          web_app: { url: process.env.NEXT_PUBLIC_APP_URL || 'https://your-app.vercel.app' }
+          web_app: { url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://your-app.vercel.app'}/onboarding` }
         }
       ]]
     }
@@ -124,7 +124,7 @@ async function handleFavoritesCommand(bot: TelegramBot, chatId: number, telegram
           reply_markup: {
             inline_keyboard: [[{
               text: '🧘 Open Full App',
-              web_app: { url: process.env.NEXT_PUBLIC_APP_URL || 'https://your-app.vercel.app' }
+              web_app: { url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://your-app.vercel.app'}/onboarding` }
             }]]
           }
         }
@@ -138,7 +138,7 @@ async function handleFavoritesCommand(bot: TelegramBot, chatId: number, telegram
         reply_markup: {
           inline_keyboard: [[{
             text: '🧘 Open Full App',
-            web_app: { url: process.env.NEXT_PUBLIC_APP_URL || 'https://your-app.vercel.app' }
+            web_app: { url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://your-app.vercel.app'}/onboarding` }
           }]]
         }
       }
