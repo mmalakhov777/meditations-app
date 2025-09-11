@@ -341,7 +341,7 @@ export default function OnboardingPage() {
               <div
                 style={{
                   position: "absolute",
-                  top: "-20px",
+                  top: "-60px",
                   left: 0,
                   right: 0,
                   display: "flex",
