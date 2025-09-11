@@ -15,12 +15,6 @@ export default function OnboardingPage() {
       icon: "✦",
     },
     {
-      titleKey: "onboarding.step2.title",
-      subtitleKey: "onboarding.step2.subtitle",
-      gradient: "linear-gradient(135deg, #0b1b34 0%, #1a2d4f 50%, #2a3f6b 100%)",
-      icon: "☦",
-    },
-    {
       titleKey: "onboarding.step3.title",
       subtitleKey: "onboarding.step3.subtitle",
       gradient: "linear-gradient(135deg, #e6c15a 0%, #f0c75e 50%, #fff7d1 100%)",
@@ -31,12 +25,6 @@ export default function OnboardingPage() {
       subtitleKey: "onboarding.step4.subtitle",
       gradient: "linear-gradient(135deg, #e6c15a 0%, #f0c75e 50%, #fff7d1 100%)",
       icon: "✨",
-    },
-    {
-      titleKey: "onboarding.step5.title",
-      subtitleKey: "onboarding.step5.subtitle",
-      gradient: "linear-gradient(135deg, #e6c15a 0%, #f0c75e 50%, #fff7d1 100%)",
-      icon: "💬",
     },
   ], []);
 
@@ -51,8 +39,7 @@ export default function OnboardingPage() {
   // All assets to preload
   const assetsToPreload = useMemo(() => [
     '/covers/newfirstbg.png',
-    '/covers/newsecondslidebg.png',
-    '/covers/newthirdslidebg.png',
+    '/covers/notfinal2slide.png',
     '/covers/saitns/Untitled Design.png',
     '/covers/saitns/Untitled Design (1).png',
     '/covers/saitns/Untitled Design (2).png',
@@ -244,15 +231,14 @@ export default function OnboardingPage() {
           opacity: isTransitioning ? 0.8 : 1,
           transition: "opacity 0.15s ease"
         }}>
-          {index <= 2 ? (
-            // Steps 1-3: Identical design with different background images
+          {index <= 1 ? (
+            // Steps 1-2: Identical design with different background images
             <>
                {/* Background image */}
                <img
                  src={
                    index === 0 ? "/covers/newfirstbg.png" :
-                   index === 1 ? "/covers/newsecondslidebg.png" :
-                   "/covers/newthirdslidebg.png"
+                   "/covers/notfinal2slide.png"
                  }
                  alt="Background"
                  style={{ 
@@ -303,19 +289,10 @@ export default function OnboardingPage() {
                  </div>
                </div>
             </>
-          ) : (
-            // Steps 4-5: Gradient background
-            <div style={{ 
-              position: "absolute", 
-              inset: 0, 
-              background: steps[index].gradient,
-              opacity: isTransitioning ? 0.8 : 1,
-              transition: "opacity 0.15s ease"
-            }} />
-          )}
+          ) : null}
 
           {/* Progress dots header */}
-          {index !== 4 && (
+          {index !== 2 && (
             <div
               style={{
                 position: "absolute",
@@ -327,7 +304,7 @@ export default function OnboardingPage() {
               }}
             >
             <div className="row" style={{ justifyContent: "center", gap: 6 }}>
-              {Array.from({ length: steps.length + 1 }).map((_, i) => {
+              {Array.from({ length: steps.length }).map((_, i) => {
                 const active = i === index;
                 const done = i < index;
                 return (
@@ -353,8 +330,8 @@ export default function OnboardingPage() {
           )}
 
           {/* Content overlay */}
-          {index === 3 ? (
-            // Step 4: Saints images grid above text
+          {index === 2 ? (
+            // Step 3: Saints images grid above text
             <>
               {/* Saints images grid */}
               <div
@@ -396,238 +373,20 @@ export default function OnboardingPage() {
                 </div>
               </div>
               
-              {/* Title and description at bottom */}
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  padding: "calc(env(safe-area-inset-top) + 20px) 20px 180px",
-                  zIndex: 20,
-                }}
-              >
-                <div className="stack-8" style={{ maxWidth: 720, margin: "0 auto" }}>
-                  <h1
-                    style={{
-                      fontSize: 28,
-                      lineHeight: 1.1,
-                      letterSpacing: -0.3,
-                      margin: 0,
-                      fontWeight: 800,
-                      color: "#0b1b34",
-                    }}
-                  >
-                    {t(steps[index].titleKey)}
-                  </h1>
-                  <p
-                    style={{
-                      margin: 0,
-                      color: "rgba(11,27,52,0.8)",
-                      fontSize: 16,
-                      lineHeight: 1.4,
-                    }}
-                  >
-                    {t(steps[index].subtitleKey)}
-                  </p>
-                </div>
-              </div>
-            </>
-          ) : index === 4 ? (
-            // Step 5: Testimonials loop
-            <>
-              {/* Testimonials scrolling container */}
+              {/* Solid black overlay filling entire height */}
               <div
                 style={{
                   position: "absolute",
                   top: 0,
                   left: 0,
                   right: 0,
-                  height: "100%",
-                  overflow: "hidden",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  padding: "calc(env(safe-area-inset-top) + 80px) 20px 200px",
-                  zIndex: 10,
-                }}
-              >
-                {/* Continuous testimonials loop */}
-                <div
-                  ref={(el) => {
-                    if (!el) return;
-                    try {
-                      // Use half of full scroll height to match duplicated content exactly
-                      const updateDistance = () => {
-                        const total = el.scrollHeight;
-                        const half = total / 2;
-                        el.style.setProperty('--loop-distance', `${half}px`);
-                      };
-                      // Defer to next frame to ensure layout is ready
-                      requestAnimationFrame(updateDistance);
-                      // Also update on window resize for responsiveness
-                      const onResize = () => requestAnimationFrame(updateDistance);
-                      window.addEventListener('resize', onResize);
-                      // Cleanup if element is unmounted/replaced
-                      (el as HTMLElement & { _cleanup?: () => void })._cleanup = () => window.removeEventListener('resize', onResize);
-                    } catch {}
-                  }}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 24,
-                    animation: "testimonialLoop 60s linear infinite",
-                    willChange: "transform",
-                    maxWidth: 600,
-                    width: "100%",
-                  }}
-                >
-                  {/* First set of testimonials */}
-                  {[1, 2, 3, 4, 5].map((num) => (
-                    <div
-                      key={`testimonial-${num}`}
-                      style={{
-                        backgroundColor: "rgba(0, 0, 0, 0.7)",
-                        borderRadius: 16,
-                        padding: "24px",
-                        backdropFilter: "blur(10px)",
-                        border: "1px solid rgba(255, 255, 255, 0.1)",
-                        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
-                      }}
-                    >
-                      {/* Stars rating */}
-                      <div
-                        style={{
-                          display: "flex",
-                          gap: 4,
-                          marginBottom: 12,
-                        }}
-                      >
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <span
-                            key={star}
-                            style={{
-                              color: "#f0c75e",
-                              fontSize: 16,
-                            }}
-                          >
-                            ⭐
-                          </span>
-                        ))}
-                      </div>
-                      
-                      <p
-                        style={{
-                          margin: "0 0 16px 0",
-                          color: "#ffffff",
-                          fontSize: 16,
-                          lineHeight: 1.5,
-                          fontStyle: "italic",
-                        }}
-                      >
-                        &ldquo;{t(`onboarding.testimonial${num}.text`)}&rdquo;
-                      </p>
-                      <p
-                        style={{
-                          margin: 0,
-                          color: "rgba(255, 255, 255, 0.8)",
-                          fontSize: 14,
-                          fontWeight: 600,
-                        }}
-                      >
-                        — {t(`onboarding.testimonial${num}.author`)}
-                      </p>
-                    </div>
-                  ))}
-                  
-                  {/* Duplicate set for seamless loop */}
-                  {[1, 2, 3, 4, 5].map((num) => (
-                    <div
-                      key={`testimonial-duplicate-${num}`}
-                      style={{
-                        backgroundColor: "rgba(0, 0, 0, 0.7)",
-                        borderRadius: 16,
-                        padding: "24px",
-                        backdropFilter: "blur(10px)",
-                        border: "1px solid rgba(255, 255, 255, 0.1)",
-                        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
-                      }}
-                    >
-                      {/* Stars rating */}
-                      <div
-                        style={{
-                          display: "flex",
-                          gap: 4,
-                          marginBottom: 12,
-                        }}
-                      >
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <span
-                            key={star}
-                            style={{
-                              color: "#f0c75e",
-                              fontSize: 16,
-                            }}
-                          >
-                            ⭐
-                          </span>
-                        ))}
-                      </div>
-                      
-                      <p
-                        style={{
-                          margin: "0 0 16px 0",
-                          color: "#ffffff",
-                          fontSize: 16,
-                          lineHeight: 1.5,
-                          fontStyle: "italic",
-                        }}
-                      >
-                        &ldquo;{t(`onboarding.testimonial${num}.text`)}&rdquo;
-                      </p>
-                      <p
-                        style={{
-                          margin: 0,
-                          color: "rgba(255, 255, 255, 0.8)",
-                          fontSize: 14,
-                          fontWeight: 600,
-                        }}
-                      >
-                        — {t(`onboarding.testimonial${num}.author`)}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Solid black div at very bottom */}
-              <div
-                style={{
-                  position: "absolute",
                   bottom: 0,
-                  left: 0,
-                  right: 0,
-                  height: "180px",
-                  background: "rgba(0,0,0,0.95)",
+                  background: "rgba(0,0,0,0.85)",
                   zIndex: 15,
                 }}
               />
-
-              {/* Black gradient overlay above solid bottom */}
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: "180px",
-                  left: 0,
-                  right: 0,
-                  height: "150px",
-                  background: "linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.2) 70%, transparent 100%)",
-                  zIndex: 15,
-                }}
-              />
-
-              {/* Title and description at bottom */}
+              
+              {/* Title, description and bullet points at bottom */}
               <div
                 style={{
                   position: "absolute",
@@ -644,27 +403,42 @@ export default function OnboardingPage() {
                       fontSize: 28,
                       lineHeight: 1.1,
                       letterSpacing: -0.3,
-                      margin: 0,
+                      margin: "0 0 20px 0",
                       fontWeight: 800,
                       color: "#ffffff",
                     }}
                   >
                     {t(steps[index].titleKey)}
                   </h1>
-                  <p
-                    style={{
-                      margin: 0,
-                      color: "rgba(255,255,255,0.8)",
-                      fontSize: 16,
-                      lineHeight: 1.4,
-                    }}
-                  >
-                    {t(steps[index].subtitleKey)}
-                  </p>
+                  
+                  {/* Bullet points replacing subtitle */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                      <span style={{ color: "#f0c75e", fontSize: 16, marginTop: 6 }}>•</span>
+                      <p style={{ margin: 0, color: "rgba(255,255,255,0.8)", fontSize: 15, lineHeight: 1.4 }}>
+                        <strong style={{ color: "#ffffff" }}>2-minute meditations</strong> for morning and evening practice
+                      </p>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                      <span style={{ color: "#f0c75e", fontSize: 16, marginTop: 6 }}>•</span>
+                      <p style={{ margin: 0, color: "rgba(255,255,255,0.8)", fontSize: 15, lineHeight: 1.4 }}>
+                        <strong style={{ color: "#ffffff" }}>Daily saint-based content</strong> with new meditation each day
+                      </p>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                      <span style={{ color: "#f0c75e", fontSize: 16, marginTop: 6 }}>•</span>
+                      <p style={{ margin: 0, color: "rgba(255,255,255,0.8)", fontSize: 15, lineHeight: 1.4 }}>
+                        <strong style={{ color: "#ffffff" }}>Deep cultural roots</strong> connecting you to Orthodox tradition
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </>
-          ) : null}
+          ) : (
+            // Step 4: Feature bullets (previously had saints grid, now just text with title and bullets at bottom)
+            <></>
+          )}
         </div>
       ) : null}
 
@@ -680,9 +454,9 @@ export default function OnboardingPage() {
       >
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 16px calc(12px + env(safe-area-inset-bottom))" }}>
           {index < steps.length - 1 ? (
-            <Button onClick={goNext} style={{ width: "100%", fontSize: "18px", padding: "16px 24px", fontWeight: "600" }}>{t("onboarding.next")}</Button>
+            <Button onClick={goNext} style={{ width: "100%", fontSize: "18px", padding: "16px 24px", fontWeight: "600", color: "white" }}>{t("onboarding.next")}</Button>
           ) : (
-            <Link href="/" className="button" style={{ width: "100%", display: "block", textAlign: "center", fontSize: "18px", padding: "16px 24px", fontWeight: "600" }}>{t("onboarding.start")}</Link>
+            <Link href="/" className="button" style={{ width: "100%", display: "block", textAlign: "center", fontSize: "18px", padding: "16px 24px", fontWeight: "600", color: "white" }}>{t("onboarding.start")}</Link>
           )}
         </div>
       </div>
