@@ -474,7 +474,7 @@ export default function OnboardingPage() {
           zIndex: 40,
         }}
       >
-        <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 16px calc(12px + env(safe-area-inset-bottom))" }}>
+        <div style={{ maxWidth: 720, margin: "0 auto", padding: "60px 16px calc(12px + env(safe-area-inset-bottom))" }}>
           {index < steps.length - 1 ? (
             <Button onClick={goNext} style={{ width: "100%", fontSize: "18px", padding: "16px 24px", fontWeight: "600", color: "white" }}>{t("onboarding.next")}</Button>
           ) : (
