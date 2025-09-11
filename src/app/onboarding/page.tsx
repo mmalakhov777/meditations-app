@@ -468,7 +468,7 @@ export default function OnboardingPage() {
                       border: "1px solid rgba(240, 199, 94, 0.3)",
                       borderRadius: "16px",
                       backdropFilter: "blur(10px)",
-                      marginTop: "-10px"
+                      marginTop: "-20px"
                     }}>
                       <div style={{ marginBottom: "8px" }}>
                         <span style={{
