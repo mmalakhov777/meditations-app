@@ -341,7 +341,7 @@ export default function OnboardingPage() {
               <div
                 style={{
                   position: "absolute",
-                  top: 0,
+                  top: "-20px",
                   left: 0,
                   right: 0,
                   display: "flex",
@@ -408,7 +408,7 @@ export default function OnboardingPage() {
                       fontSize: 28,
                       lineHeight: 1.1,
                       letterSpacing: -0.3,
-                      margin: "0 0 20px 0",
+                      margin: "0",
                       fontWeight: 800,
                       color: "#ffffff",
                     }}
