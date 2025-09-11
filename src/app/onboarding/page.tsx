@@ -412,7 +412,7 @@ export default function OnboardingPage() {
                       fontSize: 28,
                       lineHeight: 1.1,
                       letterSpacing: -0.3,
-                      margin: "0 0 20px 0",
+                      margin: "0 0 5px 0",
                       fontWeight: 800,
                       color: "#ffffff",
                     }}
@@ -421,9 +421,9 @@ export default function OnboardingPage() {
                   </h1>
                   
                   {/* 2. Row with bullets + image */}
-                  <div style={{ display: "flex", alignItems: "center", gap: 24, marginBottom: "20px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
                     {/* Left side - Bullet points */}
-                    <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 12 }}>
+                    <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 6 }}>
                       <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
                         <span style={{ color: "#f0c75e", fontSize: 16, marginTop: 6 }}>•</span>
                         <p style={{ margin: 0, color: "rgba(255,255,255,0.8)", fontSize: 15, lineHeight: 1.4 }}>
@@ -467,7 +467,8 @@ export default function OnboardingPage() {
                       background: "linear-gradient(135deg, rgba(240, 199, 94, 0.15) 0%, rgba(233, 194, 90, 0.1) 100%)",
                       border: "1px solid rgba(240, 199, 94, 0.3)",
                       borderRadius: "16px",
-                      backdropFilter: "blur(10px)"
+                      backdropFilter: "blur(10px)",
+                      marginTop: "-10px"
                     }}>
                       <div style={{ marginBottom: "8px" }}>
                         <span style={{
