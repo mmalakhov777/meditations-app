@@ -38,9 +38,11 @@ export default function OnboardingPage() {
 
   // All assets to preload
   const assetsToPreload = useMemo(() => [
-    '/covers/newfirstbg.png',
-    '/covers/notfinal2slide.png',
+    '/covers/1stepnotfinal.png',
+    '/covers/2stepnotfinal.png',
+    '/covers/subscrimage.png',
     '/covers/saitns/Untitled Design.png',
+    '/covers/saitns/Untitled Design (4).png',
     '/covers/saitns/Untitled Design (1).png',
     '/covers/saitns/Untitled Design (2).png',
     '/covers/saitns/Untitled Design (3).png',
@@ -238,8 +240,8 @@ export default function OnboardingPage() {
                {/* Background image */}
                <img
                  src={
-                   index === 0 ? "/covers/newfirstbg.png" :
-                   "/covers/notfinal2slide.png"
+                   index === 0 ? "/covers/1stepnotfinal.png" :
+                   "/covers/2stepnotfinal.png"
                  }
                  alt="Background"
                  style={{ 
@@ -249,7 +251,8 @@ export default function OnboardingPage() {
                    height: "100%", 
                    objectFit: "cover",
                    opacity: isTransitioning ? 0.8 : 1,
-                   transition: "opacity 0.15s ease"
+                   transition: "opacity 0.15s ease",
+                   transform: index === 0 && !isTransitioning ? "rotate(0.5deg)" : "none"
                  }}
                />
               
@@ -374,6 +377,7 @@ export default function OnboardingPage() {
                 </div>
               </div>
               
+              
               {/* Gradient overlay filling entire height - lighter top to darker bottom */}
               <div
                 style={{
@@ -412,32 +416,49 @@ export default function OnboardingPage() {
                     {t(steps[index].titleKey)}
                   </h1>
                   
-                  {/* Bullet points replacing subtitle */}
-                  <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                    <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
-                      <span style={{ color: "#f0c75e", fontSize: 16, marginTop: 6 }}>•</span>
-                      <p style={{ margin: 0, color: "rgba(255,255,255,0.8)", fontSize: 15, lineHeight: 1.4 }}>
-                        <strong style={{ color: "#ffffff" }}>2-minute meditations</strong> for morning and evening practice
-                      </p>
+                  {/* Text and Image side by side */}
+                  <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
+                    {/* Left side - Bullet points */}
+                    <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 12 }}>
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                        <span style={{ color: "#f0c75e", fontSize: 16, marginTop: 6 }}>•</span>
+                        <p style={{ margin: 0, color: "rgba(255,255,255,0.8)", fontSize: 15, lineHeight: 1.4 }}>
+                          <strong style={{ color: "#ffffff" }}>2-minute meditations</strong> for morning and evening practice
+                        </p>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                        <span style={{ color: "#f0c75e", fontSize: 16, marginTop: 6 }}>•</span>
+                        <p style={{ margin: 0, color: "rgba(255,255,255,0.8)", fontSize: 15, lineHeight: 1.4 }}>
+                          <strong style={{ color: "#ffffff" }}>Daily saint-based content</strong> with new meditation each day
+                        </p>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                        <span style={{ color: "#f0c75e", fontSize: 16, marginTop: 6 }}>•</span>
+                        <p style={{ margin: 0, color: "rgba(255,255,255,0.8)", fontSize: 15, lineHeight: 1.4 }}>
+                          <strong style={{ color: "#ffffff" }}>Deep cultural roots</strong> connecting you to Orthodox tradition
+                        </p>
+                      </div>
                     </div>
-                    <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
-                      <span style={{ color: "#f0c75e", fontSize: 16, marginTop: 6 }}>•</span>
-                      <p style={{ margin: 0, color: "rgba(255,255,255,0.8)", fontSize: 15, lineHeight: 1.4 }}>
-                        <strong style={{ color: "#ffffff" }}>Daily saint-based content</strong> with new meditation each day
-                      </p>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
-                      <span style={{ color: "#f0c75e", fontSize: 16, marginTop: 6 }}>•</span>
-                      <p style={{ margin: 0, color: "rgba(255,255,255,0.8)", fontSize: 15, lineHeight: 1.4 }}>
-                        <strong style={{ color: "#ffffff" }}>Deep cultural roots</strong> connecting you to Orthodox tradition
-                      </p>
+                    
+                    {/* Right side - Subscription image */}
+                    <div style={{ flexShrink: 0 }}>
+                      <img 
+                        src={preloadedUrls['/covers/subscrimage.png'] || "/covers/subscrimage.png"}
+                        alt="Subscription"
+                        style={{
+                          width: "120px",
+                          height: "auto",
+                          borderRadius: "8px",
+                          objectFit: "cover",
+                        }}
+                      />
                     </div>
                   </div>
                 </div>
               </div>
             </>
           ) : (
-            // Step 4: Feature bullets (previously had saints grid, now just text with title and bullets at bottom)
+            // Other steps (if any)
             <></>
           )}
         </div>
@@ -457,7 +478,50 @@ export default function OnboardingPage() {
           {index < steps.length - 1 ? (
             <Button onClick={goNext} style={{ width: "100%", fontSize: "18px", padding: "16px 24px", fontWeight: "600", color: "white" }}>{t("onboarding.next")}</Button>
           ) : (
-            <Link href="/" className="button" style={{ width: "100%", display: "block", textAlign: "center", fontSize: "18px", padding: "16px 24px", fontWeight: "600", color: "white" }}>{t("onboarding.start")}</Link>
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              {/* Pricing info above button */}
+              <div style={{ 
+                textAlign: "center", 
+                padding: "16px 20px", 
+                background: "linear-gradient(135deg, rgba(240, 199, 94, 0.15) 0%, rgba(233, 194, 90, 0.1) 100%)",
+                border: "1px solid rgba(240, 199, 94, 0.3)",
+                borderRadius: "16px",
+                backdropFilter: "blur(10px)"
+              }}>
+                <div style={{ marginBottom: "8px" }}>
+                  <span style={{
+                    fontSize: "16px",
+                    color: "rgba(255,255,255,0.6)",
+                    textDecoration: "line-through",
+                    marginRight: "8px"
+                  }}>
+                    $9.99
+                  </span>
+                  <span style={{
+                    fontSize: "28px",
+                    fontWeight: "800",
+                    color: "#ffffff"
+                  }}>
+                    $4.99
+                  </span>
+                  <span style={{
+                    fontSize: "14px",
+                    color: "rgba(255,255,255,0.8)",
+                    marginLeft: "4px"
+                  }}>
+                    /month
+                  </span>
+                </div>
+                <p style={{
+                  margin: 0,
+                  color: "rgba(255,255,255,0.8)",
+                  fontSize: "12px"
+                }}>
+                  🔥 50% OFF • Cancel anytime • 7-day free trial
+                </p>
+              </div>
+              <Link href="/" className="button" style={{ width: "100%", display: "block", textAlign: "center", fontSize: "18px", padding: "16px 24px", fontWeight: "600", color: "white" }}>Start Now - $4.99/month</Link>
+            </div>
           )}
         </div>
       </div>

@@ -1,28 +1,61 @@
 import { getMeditation } from "@/lib/data";
 import { notFound } from "next/navigation";
-import { AudioPlayer } from "@/components/AudioPlayer";
-import Link from "next/link";
+import { ClassicalAudioPlayer } from "@/components/ClassicalAudioPlayer";
 import { HideBottomNav } from "@/components/HideBottomNav";
 import TelegramBackButton from "@/components/TelegramBackButton";
 
 export default function MeditationPage({ params }: { params: { id: string } }) {
   const m = getMeditation(params.id);
   if (!m) return notFound();
+  
+  // Random cover selection from saints folder
+  const saintCovers = [
+    "Untitled Design.png",
+    "Untitled Design (1).png",
+    "Untitled Design (2).png", 
+    "Untitled Design (3).png",
+    "Untitled Design (4).png",
+    "Untitled Design (5).png",
+    "Untitled Design (6).png",
+    "Untitled Design (7).png",
+    "Untitled Design (8).png",
+    "Untitled Design (9).png",
+    "Untitled Design (10).png",
+    "Untitled Design (11).png",
+    "Untitled Design (12).png",
+    "Untitled Design (13).png"
+  ];
+  const randomCover = saintCovers[Math.floor(Math.random() * saintCovers.length)];
+  
   return (
-    <div className="container" style={{ padding: 0 }}>
+    <div style={{ position: "fixed", inset: 0, display: "flex", flexDirection: "column" }}>
       <HideBottomNav />
       <TelegramBackButton />
-      <div className="overlay" style={{ position: "relative", minHeight: "100dvh" }}>
-        <img src="/covers/1-sept-light-cover.webp" alt="Cover" className="cover-full" />
-        {/* Using native Telegram BackButton; no on-screen back link needed */}
-        <div style={{ position: "absolute", left: 0, right: 0, bottom: 16 }}>
-          <div className="container" style={{ padding: 0 }}>
-            <div className="card" style={{ padding: 12, background: "transparent", border: "none", boxShadow: "none" }}>
-              <AudioPlayer id={m.id} src="/meditations/audio/1-sept-meditation.mp3" />
-            </div>
-          </div>
-        </div>
+      
+      {/* Cover image section - takes remaining space */}
+      <div style={{
+        flex: 1,
+        overflow: "hidden"
+      }}>
+        <img 
+          src={`/covers/saitns/${randomCover}`} 
+          alt="Cover" 
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            filter: "brightness(0.9) contrast(1.1)"
+          }}
+        />
       </div>
+
+      {/* Classical audio player controls at bottom */}
+      <ClassicalAudioPlayer 
+        id={m.id} 
+        src="/meditations/audio/1-sept-meditation.mp3" 
+        title={m.title}
+        artist="Meditation"
+      />
     </div>
   );
 }

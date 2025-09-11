@@ -14,6 +14,26 @@ export default function Home() {
   const [authLoading, setAuthLoading] = useState(false);
   const didAuthRef = useRef(false);
 
+  // Random cover selection from saints folder
+  const saintCovers = [
+    "Untitled Design.png",
+    "Untitled Design (1).png",
+    "Untitled Design (2).png", 
+    "Untitled Design (3).png",
+    "Untitled Design (4).png",
+    "Untitled Design (5).png",
+    "Untitled Design (6).png",
+    "Untitled Design (7).png",
+    "Untitled Design (8).png",
+    "Untitled Design (9).png",
+    "Untitled Design (10).png",
+    "Untitled Design (11).png",
+    "Untitled Design (12).png",
+    "Untitled Design (13).png"
+  ];
+  const randomMorningCover = saintCovers[Math.floor(Math.random() * saintCovers.length)];
+  const randomEveningCover = saintCovers[Math.floor(Math.random() * saintCovers.length)];
+
   const user = webApp?.initDataUnsafe.user;
 
   // Authorize/upsert user once per app load when Telegram data is available
@@ -94,9 +114,8 @@ export default function Home() {
 
       <Link href="/meditation/f1" className="card" style={{ padding: 0, display: "block", textDecoration: "none", color: "inherit", position: "relative", overflow: "hidden" }}>
         <div style={{ display: "flex", alignItems: "center", minHeight: 120 }}>
-          {todayMorning?.cover ? (
-            <div style={{ flex: "0 0 30%", height: 120, position: "relative" }}>
-              <img src={todayMorning.cover} alt={todayMorning.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          <div style={{ flex: "0 0 30%", height: 120, position: "relative" }}>
+            <img src={`/covers/saitns/${randomMorningCover}`} alt="Morning Meditation" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               <div 
                 className="gold-play-button"
                 style={{ 
@@ -120,7 +139,6 @@ export default function Home() {
                 }} />
               </div>
             </div>
-          ) : null}
           <div style={{ flex: 1, padding: 20 }} className="stack-8">
             <div className="muted small">Morning</div>
             {todayMorning?.title ? <div><strong>{todayMorning.title}</strong></div> : null}
@@ -131,9 +149,8 @@ export default function Home() {
 
       <Link href="/meditation/s1" className="card" style={{ padding: 0, display: "block", textDecoration: "none", color: "inherit", position: "relative", overflow: "hidden" }}>
         <div style={{ display: "flex", alignItems: "center", minHeight: 120 }}>
-          {todayEvening?.cover ? (
-            <div style={{ flex: "0 0 30%", height: 120, position: "relative" }}>
-              <img src={todayEvening.cover} alt={todayEvening.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          <div style={{ flex: "0 0 30%", height: 120, position: "relative" }}>
+            <img src={`/covers/saitns/${randomEveningCover}`} alt="Evening Meditation" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               <div 
                 className="gold-play-button"
                 style={{ 
@@ -157,7 +174,6 @@ export default function Home() {
                 }} />
               </div>
             </div>
-          ) : null}
           <div style={{ flex: 1, padding: 20 }} className="stack-8">
             <div className="muted small">Evening</div>
             {todayEvening?.title ? <div><strong>{todayEvening.title}</strong></div> : null}
