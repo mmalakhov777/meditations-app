@@ -391,24 +391,28 @@ export default function OnboardingPage() {
                 }}
               />
               
-              {/* Title, description and bullet points at bottom */}
+              {/* Content in proper order from top to bottom */}
               <div
                 style={{
                   position: "absolute",
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  padding: "calc(env(safe-area-inset-top) + 20px) 20px 180px",
+                  padding: "calc(env(safe-area-inset-top) + 20px) 20px 140px",
                   zIndex: 20,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "20px"
                 }}
               >
-                <div className="stack-8" style={{ maxWidth: 720, margin: "0 auto" }}>
+                <div style={{ maxWidth: 720, margin: "0 auto", width: "100%" }}>
+                  {/* 1. Title */}
                   <h1
                     style={{
                       fontSize: 28,
                       lineHeight: 1.1,
                       letterSpacing: -0.3,
-                      margin: "0",
+                      margin: "0 0 20px 0",
                       fontWeight: 800,
                       color: "#ffffff",
                     }}
@@ -416,8 +420,8 @@ export default function OnboardingPage() {
                     {t(steps[index].titleKey)}
                   </h1>
                   
-                  {/* Text and Image side by side */}
-                  <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
+                  {/* 2. Row with bullets + image */}
+                  <div style={{ display: "flex", alignItems: "center", gap: 24, marginBottom: "20px" }}>
                     {/* Left side - Bullet points */}
                     <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 12 }}>
                       <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
@@ -454,6 +458,50 @@ export default function OnboardingPage() {
                       />
                     </div>
                   </div>
+
+                  {/* 3. Pricing card */}
+                  {index === 2 && (
+                    <div style={{ 
+                      textAlign: "center", 
+                      padding: "16px 20px", 
+                      background: "linear-gradient(135deg, rgba(240, 199, 94, 0.15) 0%, rgba(233, 194, 90, 0.1) 100%)",
+                      border: "1px solid rgba(240, 199, 94, 0.3)",
+                      borderRadius: "16px",
+                      backdropFilter: "blur(10px)"
+                    }}>
+                      <div style={{ marginBottom: "8px" }}>
+                        <span style={{
+                          fontSize: "16px",
+                          color: "rgba(255,255,255,0.6)",
+                          textDecoration: "line-through",
+                          marginRight: "8px"
+                        }}>
+                          $9.99
+                        </span>
+                        <span style={{
+                          fontSize: "28px",
+                          fontWeight: "800",
+                          color: "#ffffff"
+                        }}>
+                          $4.99
+                        </span>
+                        <span style={{
+                          fontSize: "14px",
+                          color: "rgba(255,255,255,0.8)",
+                          marginLeft: "4px"
+                        }}>
+                          /month
+                        </span>
+                      </div>
+                      <p style={{
+                        margin: 0,
+                        color: "rgba(255,255,255,0.8)",
+                        fontSize: "12px"
+                      }}>
+                        🔥 50% OFF • Cancel anytime • 7-day free trial
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </>
@@ -474,54 +522,11 @@ export default function OnboardingPage() {
           zIndex: 40,
         }}
       >
-        <div style={{ maxWidth: 720, margin: "0 auto", padding: "60px 16px calc(12px + env(safe-area-inset-bottom))" }}>
+        <div style={{ maxWidth: 720, margin: "0 auto", padding: "20px 16px calc(12px + env(safe-area-inset-bottom))" }}>
           {index < steps.length - 1 ? (
             <Button onClick={goNext} style={{ width: "100%", fontSize: "18px", padding: "16px 24px", fontWeight: "600", color: "white" }}>{t("onboarding.next")}</Button>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              {/* Pricing info above button */}
-              <div style={{ 
-                textAlign: "center", 
-                padding: "16px 20px", 
-                background: "linear-gradient(135deg, rgba(240, 199, 94, 0.15) 0%, rgba(233, 194, 90, 0.1) 100%)",
-                border: "1px solid rgba(240, 199, 94, 0.3)",
-                borderRadius: "16px",
-                backdropFilter: "blur(10px)"
-              }}>
-                <div style={{ marginBottom: "8px" }}>
-                  <span style={{
-                    fontSize: "16px",
-                    color: "rgba(255,255,255,0.6)",
-                    textDecoration: "line-through",
-                    marginRight: "8px"
-                  }}>
-                    $9.99
-                  </span>
-                  <span style={{
-                    fontSize: "28px",
-                    fontWeight: "800",
-                    color: "#ffffff"
-                  }}>
-                    $4.99
-                  </span>
-                  <span style={{
-                    fontSize: "14px",
-                    color: "rgba(255,255,255,0.8)",
-                    marginLeft: "4px"
-                  }}>
-                    /month
-                  </span>
-                </div>
-                <p style={{
-                  margin: 0,
-                  color: "rgba(255,255,255,0.8)",
-                  fontSize: "12px"
-                }}>
-                  🔥 50% OFF • Cancel anytime • 7-day free trial
-                </p>
-              </div>
-              <Link href="/" className="button" style={{ width: "100%", display: "block", textAlign: "center", fontSize: "18px", padding: "16px 24px", fontWeight: "600", color: "white" }}>Start Now - $4.99/month</Link>
-            </div>
+            <Link href="/" className="button" style={{ width: "100%", display: "block", textAlign: "center", fontSize: "18px", padding: "16px 24px", fontWeight: "600", color: "white" }}>Start Now - $4.99/month</Link>
           )}
         </div>
       </div>
