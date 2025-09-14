@@ -13,23 +13,12 @@ export function useFullscreen() {
     }
 
     try {
-      // Check if Bot API 8.0+ is available
-      if (webApp.isVersionAtLeast && webApp.isVersionAtLeast('8.0')) {
-        if (webApp.requestFullscreen && typeof webApp.requestFullscreen === 'function') {
-          webApp.requestFullscreen();
-          return true;
-        }
-      } else {
-        // Manual version check for older clients without isVersionAtLeast
-        const version = webApp.version || '0.0';
-        const [major] = version.split('.').map(Number);
-        if (major >= 8 && webApp.requestFullscreen) {
-          webApp.requestFullscreen();
-          return true;
-        }
+      if (webApp.requestFullscreen && typeof webApp.requestFullscreen === 'function') {
+        webApp.requestFullscreen();
+        return true;
       }
       
-      console.warn('Fullscreen requires Telegram WebApp version 8.0 or higher');
+      console.warn('Fullscreen not available');
       return false;
     } catch (error) {
       console.error('Error requesting fullscreen:', error);
@@ -55,15 +44,7 @@ export function useFullscreen() {
   const isFullscreenAvailable = useCallback(() => {
     if (!isTelegram || !webApp) return false;
     
-    // Check if Bot API 8.0+ is available
-    if (webApp.isVersionAtLeast && webApp.isVersionAtLeast('8.0')) {
-      return typeof webApp.requestFullscreen === 'function';
-    }
-    
-    // Manual version check for older clients
-    const version = webApp.version || '0.0';
-    const [major] = version.split('.').map(Number);
-    return major >= 8 && typeof webApp.requestFullscreen === 'function';
+    return typeof webApp.requestFullscreen === 'function';
   }, [webApp, isTelegram]);
 
   return {
