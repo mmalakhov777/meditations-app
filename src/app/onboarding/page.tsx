@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect, useCallback } from "react";
+import { useMemo, useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { t } from "@/lib/i18n";
 import { Button } from "@/components/UI";
@@ -35,15 +35,16 @@ export default function OnboardingPage() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [preloadedUrls, setPreloadedUrls] = useState<Record<string, string>>({});
   const isLastSlide = index >= steps.length;
+  const step3Ref = useRef<HTMLDivElement | null>(null);
 
-  // All assets to preload - entire app resources
+  // ALL assets to preload - complete onboarding and app resources
   const assetsToPreload = useMemo(() => [
-    // Onboarding assets
+    // Critical onboarding background images (highest priority)
     '/covers/1stepcorrectnotfinal.png',
     '/covers/2stepnotfinal.png',
     '/covers/subscrimage.png',
     
-    // Saints covers (for home page and saint pages)
+    // ALL saint images used in onboarding (preload all for instant step 3)
     '/covers/saitns/Untitled Design.png',
     '/covers/saitns/Untitled Design (1).png',
     '/covers/saitns/Untitled Design (2).png',
@@ -59,17 +60,59 @@ export default function OnboardingPage() {
     '/covers/saitns/Untitled Design (12).png',
     '/covers/saitns/Untitled Design (13).png',
     
-    // Meditation assets
+    // Main app assets (for seamless transition after onboarding)
     '/meditations/covers/1-sept-light-cover.webp',
     '/meditations/audio/1-sept-meditation.mp3',
   ], []);
 
-  // Preload assets function - loads entire app
+  // Preload assets function - loads entire app and warms up CSS classes
   const preloadAssets = useCallback(async () => {
-    const totalAssets = assetsToPreload.length + 3; // +3 for app data and routes
+    const totalAssets = assetsToPreload.length + 5; // +5 for app data, routes, and CSS warming
     const progressIncrement = 100 / totalAssets;
 
-    // 1. Load meditation data first (critical for app)
+    // 1. Warm up all CSS classes by creating invisible elements (instant CSS parsing)
+    try {
+      const warmupContainer = document.createElement('div');
+      warmupContainer.style.position = 'absolute';
+      warmupContainer.style.top = '-9999px';
+      warmupContainer.style.left = '-9999px';
+      warmupContainer.style.visibility = 'hidden';
+      warmupContainer.style.pointerEvents = 'none';
+      
+      // Create elements with all onboarding CSS classes to force browser parsing
+      const classesToWarmup = [
+        'onboarding-container', 'onboarding-background', 'onboarding-content',
+        'saints-grid-container', 'saints-row', 'saints-row-left', 'saints-row-right', 'saints-row-left-delayed',
+        'saint-image', 'progress-dots', 'progress-dot', 'progress-dot-active', 'progress-dot-done', 'progress-dot-inactive',
+        'fixed-bottom-controls', 'bottom-controls-container', 'onboarding-title', 'onboarding-subtitle',
+        'onboarding-bullet-point', 'onboarding-bullet', 'onboarding-bullet-text', 'onboarding-bullet-strong',
+        'subscription-image', 'pricing-card', 'pricing-old-price', 'pricing-new-price', 'pricing-period',
+        'pricing-description', 'gradient-overlay', 'click-area-left', 'click-area-right',
+        'loading-screen', 'loading-content', 'loading-title', 'loading-progress-bar', 'loading-progress-fill', 'loading-percentage'
+      ];
+      
+      classesToWarmup.forEach(className => {
+        const el = document.createElement('div');
+        el.className = className;
+        el.textContent = 'warmup';
+        warmupContainer.appendChild(el);
+      });
+      
+      document.body.appendChild(warmupContainer);
+      
+      // Force reflow to ensure CSS is parsed
+      warmupContainer.offsetHeight;
+      
+      // Clean up
+      document.body.removeChild(warmupContainer);
+      
+      setLoadingProgress(prev => Math.min(prev + progressIncrement, 100));
+    } catch (error) {
+      console.warn('Failed to warm up CSS classes:', error);
+      setLoadingProgress(prev => Math.min(prev + progressIncrement, 100));
+    }
+
+    // 2. Load meditation data (critical for app)
     try {
       await fetch('/meditations/2025-09.json', { cache: 'force-cache' });
       setLoadingProgress(prev => Math.min(prev + progressIncrement, 100));
@@ -78,7 +121,7 @@ export default function OnboardingPage() {
       setLoadingProgress(prev => Math.min(prev + progressIncrement, 100));
     }
 
-    // 2. Preload critical app routes
+    // 3. Preload critical app routes
     try {
       await Promise.all([
         fetch('/', { cache: 'force-cache' }), // Home page
@@ -91,7 +134,7 @@ export default function OnboardingPage() {
       setLoadingProgress(prev => Math.min(prev + progressIncrement, 100));
     }
 
-    // 3. Load all visual and audio assets
+    // 4. Load all visual and audio assets with maximum priority
     const loadPromises = assetsToPreload.map(async (src) => {
       if (src.endsWith('.mp3') || src.endsWith('.mp4')) {
         await new Promise<void>((resolve) => {
@@ -155,82 +198,52 @@ export default function OnboardingPage() {
     preloadAssets();
   }, [preloadAssets]);
 
+  // CSS-only animation control via class (no forced reflow)
+  useEffect(() => {
+    if (!step3Ref.current) return;
+    if (index === 2) {
+      step3Ref.current.classList.add('animate');
+    } else {
+      step3Ref.current.classList.remove('animate');
+    }
+  }, [index]);
+
   // Smooth transition functions
   const goNext = useCallback(() => {
     if (isTransitioning) return;
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setIndex(prev => Math.min(prev + 1, steps.length));
-      setIsTransitioning(false);
-    }, 150);
+    setIndex(prev => Math.min(prev + 1, steps.length));
   }, [isTransitioning, steps.length]);
 
   const goBack = useCallback(() => {
     if (isTransitioning) return;
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setIndex(prev => Math.max(prev - 1, 0));
-      setIsTransitioning(false);
-    }, 150);
+    setIndex(prev => Math.max(prev - 1, 0));
   }, [isTransitioning]);
 
   const skip = useCallback(() => {
     if (isTransitioning) return;
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setIndex(steps.length);
-      setIsTransitioning(false);
-    }, 150);
+    setIndex(steps.length);
   }, [isTransitioning, steps.length]);
 
-  // Show loading screen while preloading
+  // Show loading screen while preloading - using preloaded CSS classes
   if (isLoading) {
     return (
       <>
         <HideBottomNav />
-        <div style={{ 
-          position: "fixed", 
-          inset: 0, 
-          background: "linear-gradient(135deg, #e6c15a 0%, #f0c75e 50%, #fff7d1 100%)",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: "20px"
-        }}>
-          <div style={{ textAlign: "center", maxWidth: 300, width: "100%" }}>
-            <h2 style={{ 
-              color: "#0b1b34", 
-              marginBottom: 32,
-              fontSize: 24,
-              fontWeight: 700
-            }}>
+        <div className="loading-screen">
+          <div className="loading-content">
+            <h2 className="loading-title">
               {t("onboarding.loading.title") || "Preparing your experience..."}
             </h2>
             
-            {/* Progress bar */}
-            <div style={{ 
-              width: "100%", 
-              height: 8, 
-              backgroundColor: "rgba(11,27,52,0.2)", 
-              borderRadius: 4,
-              overflow: "hidden",
-              marginBottom: 16
-            }}>
-              <div style={{ 
-                width: `${loadingProgress}%`, 
-                height: "100%", 
-                backgroundColor: "#0b1b34",
-                borderRadius: 4,
-                transition: "width 0.3s ease"
-              }} />
+            {/* Progress bar using preloaded classes */}
+            <div className="loading-progress-bar">
+              <div 
+                className="loading-progress-fill"
+                style={{ width: `${loadingProgress}%` }}
+              />
             </div>
             
-            <p style={{ 
-              color: "rgba(11,27,52,0.7)", 
-              fontSize: 14,
-              margin: 0
-            }}>
+            <p className="loading-percentage">
               {Math.round(loadingProgress)}%
             </p>
           </div>
@@ -242,75 +255,38 @@ export default function OnboardingPage() {
   return (
     <>
       <HideBottomNav />
-      <style>{`
-        @keyframes rowDriftLeft {
-          0% { transform: translateX(-12px); opacity: 0.98; }
-          60% { transform: translateX(2px); }
-          100% { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes rowDriftRight {
-          0% { transform: translateX(12px); opacity: 0.98; }
-          60% { transform: translateX(-1px); }
-          100% { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes testimonialLoop {
-          0% { transform: translateY(0); }
-          100% { transform: translateY(calc(var(--loop-distance, 50%) * -1)); }
-        }
-      `}</style>
+      {/* All CSS classes are now preloaded in layout.tsx for instant rendering */}
       {!isLastSlide ? (
-        <div style={{ 
-          position: "fixed", 
-          inset: 0,
-          background: "#000000",
-          opacity: isTransitioning ? 0.8 : 1,
-          transition: "opacity 0.15s ease"
-        }}>
+        <div 
+          className="onboarding-container"
+        >
           {/* Left click area for previous slide */}
           <div
             onClick={goBack}
-            style={{
-              position: "absolute",
-              left: 0,
-              top: 0,
-              width: "50%",
-              height: "100%",
-              zIndex: 30,
-              cursor: "pointer"
-            }}
+            className="click-area-left"
             aria-label="Previous slide"
           />
           
           {/* Right click area for next slide */}
           <div
             onClick={goNext}
-            style={{
-              position: "absolute",
-              right: 0,
-              top: 0,
-              width: "50%",
-              height: "100%",
-              zIndex: 30,
-              cursor: "pointer"
-            }}
+            className="click-area-right"
             aria-label="Next slide"
           />
           {index <= 1 ? (
             // Steps 1-2: Identical design with different background images
             <>
-               {/* Background image */}
+               {/* Background image with explicit dimensions and preloaded class */}
                <img
                  src={
                    index === 0 ? "/covers/1stepcorrectnotfinal.png" :
                    "/covers/2stepnotfinal.png"
                  }
                  alt="Background"
+                 width={720}
+                 height={960}
+                 className="onboarding-background"
                  style={{ 
-                   position: "absolute", 
-                   inset: 0, 
-                   width: "100%", 
-                   height: "100%", 
-                   objectFit: "cover",
                    opacity: isTransitioning ? 0.8 : 1,
                    transition: "opacity 0.15s ease",
                    transform: "none"
@@ -318,37 +294,12 @@ export default function OnboardingPage() {
                />
               
                {/* Title and description at bottom - white text */}
-               <div
-                 style={{
-                   position: "absolute",
-                   bottom: 0,
-                   left: 0,
-                   right: 0,
-                   padding: "calc(env(safe-area-inset-top) + 20px) 20px 180px",
-                   zIndex: 20,
-                 }}
-               >
+               <div className="onboarding-content">
                  <div className="stack-8" style={{ maxWidth: 720, margin: "0 auto" }}>
-                   <h1
-                     style={{
-                       fontSize: 28,
-                       lineHeight: 1.1,
-                       letterSpacing: -0.3,
-                       margin: 0,
-                       fontWeight: 800,
-                       color: "#ffffff",
-                     }}
-                   >
+                   <h1 className="onboarding-title">
                      {t(steps[index].titleKey)}
                    </h1>
-                   <p
-                     style={{
-                       margin: 0,
-                       color: "rgba(255,255,255,0.8)",
-                       fontSize: 16,
-                       lineHeight: 1.4,
-                     }}
-                   >
+                   <p className="onboarding-subtitle">
                      {t(steps[index].subtitleKey)}
                    </p>
                  </div>
@@ -358,16 +309,7 @@ export default function OnboardingPage() {
 
           {/* Progress dots header */}
           {index !== 2 && (
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                padding: "calc(env(safe-area-inset-top) + 20px) 20px 100px",
-                zIndex: 10,
-              }}
-            >
+            <div className="progress-dots">
             <div className="row" style={{ justifyContent: "center", gap: 6 }}>
               {Array.from({ length: steps.length }).map((_, i) => {
                 const active = i === index;
@@ -376,17 +318,11 @@ export default function OnboardingPage() {
                   <span
                     key={i}
                     aria-hidden
-                    style={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: 999,
-                      background: active
-                        ? "#ffffff"
-                        : done
-                        ? "rgba(255,255,255,0.8)"
-                        : "rgba(255,255,255,0.3)",
-                      boxShadow: active ? "0 0 0 4px rgba(255,255,255,0.3)" : undefined,
-                    }}
+                    className={`progress-dot ${
+                      active ? 'progress-dot-active' : 
+                      done ? 'progress-dot-done' : 
+                      'progress-dot-inactive'
+                    }`}
                   />
                 );
               })}
@@ -395,45 +331,33 @@ export default function OnboardingPage() {
           )}
 
           {/* Content overlay */}
-          {index === 2 ? (
-            // Step 3: Saints images grid above text
+          {/* Pre-mounted Step 3 grid kept decoded offscreen until shown */}
+          <div className={`${index === 2 ? 'animate' : ''} ${index === 2 ? '' : 'preload-hidden'}`} ref={step3Ref}>
+            {/* Step 3: Saints images grid above text */}
             <>
               {/* Saints images grid */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: "-60px",
-                  left: 0,
-                  right: 0,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
-                  padding: "calc(env(safe-area-inset-top)) 20px 20px",
-                  zIndex: 10,
-                }}
-              >
+              <div className="saints-grid-container">
                 <div style={{ maxWidth: 1000, width: "100%" }}>
                    {/* First row - 4 images */}
-                   <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 4, willChange: "transform", animationName: "rowDriftLeft", animationDuration: "1200ms", animationTimingFunction: "ease-out", animationDelay: "60ms", animationFillMode: "forwards" }}>
-                     <img loading="eager" src={preloadedUrls['/covers/saitns/Untitled Design.png'] || "/covers/saitns/Untitled Design.png"} alt="Saint" style={{ width: 200, height: 200, borderRadius: 0, objectFit: "cover", border: "3px solid", borderImage: "linear-gradient(135deg, #f0c75e 0%, #e9c25a 50%, #caa43b 100%) 1", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 1, display: "block", backgroundColor: "rgba(255,255,255,0.1)" }} />
-                     <img loading="eager" src={preloadedUrls['/covers/saitns/Untitled Design (1).png'] || "/covers/saitns/Untitled Design (1).png"} alt="Saint" style={{ width: 200, height: 200, borderRadius: 0, objectFit: "cover", border: "3px solid", borderImage: "linear-gradient(135deg, #f0c75e 0%, #e9c25a 50%, #caa43b 100%) 1", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.9, display: "block", backgroundColor: "rgba(255,255,255,0.1)" }} />
-                     <img loading="eager" src={preloadedUrls['/covers/saitns/Untitled Design (2).png'] || "/covers/saitns/Untitled Design (2).png"} alt="Saint" style={{ width: 200, height: 200, borderRadius: 0, objectFit: "cover", border: "3px solid", borderImage: "linear-gradient(135deg, #f0c75e 0%, #e9c25a 50%, #caa43b 100%) 1", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.8, display: "block", backgroundColor: "rgba(255,255,255,0.1)" }} />
-                     <img loading="eager" src={preloadedUrls['/covers/saitns/Untitled Design (3).png'] || "/covers/saitns/Untitled Design (3).png"} alt="Saint" style={{ width: 200, height: 200, borderRadius: 0, objectFit: "cover", border: "3px solid", borderImage: "linear-gradient(135deg, #f0c75e 0%, #e9c25a 50%, #caa43b 100%) 1", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.7, display: "block", backgroundColor: "rgba(255,255,255,0.1)" }} />
+                   <div className="saints-row saints-row-left">
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design.png'] || "/covers/saitns/Untitled Design.png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 1 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (1).png'] || "/covers/saitns/Untitled Design (1).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.9 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (2).png'] || "/covers/saitns/Untitled Design (2).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.8 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (3).png'] || "/covers/saitns/Untitled Design (3).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.7 }} />
                    </div>
                    {/* Second row - 4 images */}
-                   <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 4, willChange: "transform", animationName: "rowDriftRight", animationDuration: "1400ms", animationTimingFunction: "ease-out", animationDelay: "120ms", animationFillMode: "forwards" }}>
-                     <img loading="eager" src={preloadedUrls['/covers/saitns/Untitled Design (4).png'] || "/covers/saitns/Untitled Design (4).png"} alt="Saint" style={{ width: 200, height: 200, borderRadius: 0, objectFit: "cover", border: "3px solid", borderImage: "linear-gradient(135deg, #f0c75e 0%, #e9c25a 50%, #caa43b 100%) 1", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.6, display: "block", backgroundColor: "rgba(255,255,255,0.1)" }} />
-                     <img loading="eager" src={preloadedUrls['/covers/saitns/Untitled Design (5).png'] || "/covers/saitns/Untitled Design (5).png"} alt="Saint" style={{ width: 200, height: 200, borderRadius: 0, objectFit: "cover", border: "3px solid", borderImage: "linear-gradient(135deg, #f0c75e 0%, #e9c25a 50%, #caa43b 100%) 1", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.5, display: "block", backgroundColor: "rgba(255,255,255,0.1)" }} />
-                     <img loading="eager" src={preloadedUrls['/covers/saitns/Untitled Design (6).png'] || "/covers/saitns/Untitled Design (6).png"} alt="Saint" style={{ width: 200, height: 200, borderRadius: 0, objectFit: "cover", border: "3px solid", borderImage: "linear-gradient(135deg, #f0c75e 0%, #e9c25a 50%, #caa43b 100%) 1", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.4, display: "block", backgroundColor: "rgba(255,255,255,0.1)" }} />
-                     <img loading="eager" src={preloadedUrls['/covers/saitns/Untitled Design (7).png'] || "/covers/saitns/Untitled Design (7).png"} alt="Saint" style={{ width: 200, height: 200, borderRadius: 0, objectFit: "cover", border: "3px solid", borderImage: "linear-gradient(135deg, #f0c75e 0%, #e9c25a 50%, #caa43b 100%) 1", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.3, display: "block", backgroundColor: "rgba(255,255,255,0.1)" }} />
+                   <div className="saints-row saints-row-right">
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (4).png'] || "/covers/saitns/Untitled Design (4).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.6 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (5).png'] || "/covers/saitns/Untitled Design (5).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.5 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (6).png'] || "/covers/saitns/Untitled Design (6).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.4 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (7).png'] || "/covers/saitns/Untitled Design (7).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.3 }} />
                    </div>
                    {/* Third row - 4 images */}
-                   <div style={{ display: "flex", justifyContent: "center", gap: 4, willChange: "transform", animationName: "rowDriftLeft", animationDuration: "1600ms", animationTimingFunction: "ease-out", animationDelay: "180ms", animationFillMode: "forwards" }}>
-                     <img loading="eager" src={preloadedUrls['/covers/saitns/Untitled Design (8).png'] || "/covers/saitns/Untitled Design (8).png"} alt="Saint" style={{ width: 200, height: 200, borderRadius: 0, objectFit: "cover", border: "3px solid", borderImage: "linear-gradient(135deg, #f0c75e 0%, #e9c25a 50%, #caa43b 100%) 1", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.2, display: "block", backgroundColor: "rgba(255,255,255,0.1)" }} />
-                     <img loading="eager" src={preloadedUrls['/covers/saitns/Untitled Design (9).png'] || "/covers/saitns/Untitled Design (9).png"} alt="Saint" style={{ width: 200, height: 200, borderRadius: 0, objectFit: "cover", border: "3px solid", borderImage: "linear-gradient(135deg, #f0c75e 0%, #e9c25a 50%, #caa43b 100%) 1", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.15, display: "block", backgroundColor: "rgba(255,255,255,0.1)" }} />
-                     <img loading="eager" src={preloadedUrls['/covers/saitns/Untitled Design (10).png'] || "/covers/saitns/Untitled Design (10).png"} alt="Saint" style={{ width: 200, height: 200, borderRadius: 0, objectFit: "cover", border: "3px solid", borderImage: "linear-gradient(135deg, #f0c75e 0%, #e9c25a 50%, #caa43b 100%) 1", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.1, display: "block", backgroundColor: "rgba(255,255,255,0.1)" }} />
-                     <img loading="eager" src={preloadedUrls['/covers/saitns/Untitled Design (11).png'] || "/covers/saitns/Untitled Design (11).png"} alt="Saint" style={{ width: 200, height: 200, borderRadius: 0, objectFit: "cover", border: "3px solid", borderImage: "linear-gradient(135deg, #f0c75e 0%, #e9c25a 50%, #caa43b 100%) 1", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", opacity: 0.05, display: "block", backgroundColor: "rgba(255,255,255,0.1)" }} />
+                   <div className="saints-row saints-row-left-delayed">
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (8).png'] || "/covers/saitns/Untitled Design (8).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.2 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (9).png'] || "/covers/saitns/Untitled Design (9).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.15 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (10).png'] || "/covers/saitns/Untitled Design (10).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.1 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (11).png'] || "/covers/saitns/Untitled Design (11).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.05 }} />
                    </div>
                 </div>
               </div>
@@ -510,6 +434,8 @@ export default function OnboardingPage() {
                       <img 
                         src={preloadedUrls['/covers/subscrimage.png'] || "/covers/subscrimage.png"}
                         alt="Subscription"
+                        width={120}
+                        height={120}
                         style={{
                           width: "120px",
                           height: "auto",
@@ -567,10 +493,7 @@ export default function OnboardingPage() {
                 </div>
               </div>
             </>
-          ) : (
-            // Other steps (if any)
-            <></>
-          )}
+          </div>
         </div>
       ) : null}
 
