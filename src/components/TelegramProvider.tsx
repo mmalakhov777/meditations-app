@@ -23,7 +23,17 @@ type TelegramWebApp = {
   ready: () => void;
   expand: () => void;
   close: () => void;
-  // Fullscreen controls (availability depends on Telegram client version)
+  // Version checking
+  isVersionAtLeast?: (version: string) => boolean;
+  // Header color
+  setHeaderColor?: (color: string) => void;
+  // Viewport API for fullscreen (Bot API 8.0+)
+  viewport?: {
+    requestFullscreen?: {
+      isAvailable?: () => boolean;
+    } & (() => void);
+  };
+  // Legacy fullscreen controls (for backwards compatibility)
   requestFullscreen?: () => void;
   exitFullscreen?: () => void;
   isFullscreen?: boolean;
@@ -61,9 +71,24 @@ export function TelegramProvider({ children }: { children: React.ReactNode }) {
     try {
       app.ready();
       app.expand();
-      // Try to request fullscreen if available
-      if (app.requestFullscreen && typeof app.requestFullscreen === 'function') {
-        app.requestFullscreen();
+      
+      // Set header color for better visibility in fullscreen
+      if (app.setHeaderColor) {
+        const isDark = app.colorScheme === 'dark';
+        app.setHeaderColor(isDark ? '#000000' : '#ffffff');
+      }
+      
+      // Try to request fullscreen using the modern API (Bot API 8.0+)
+      if (app.isVersionAtLeast && app.isVersionAtLeast('8.0')) {
+        if (app.viewport?.requestFullscreen?.isAvailable?.()) {
+          // Use the new viewport API
+          app.viewport.requestFullscreen();
+        } else if (app.requestFullscreen && typeof app.requestFullscreen === 'function') {
+          // Fallback to legacy API
+          app.requestFullscreen();
+        }
+      } else {
+        console.info('Fullscreen mode requires Telegram WebApp version 8.0 or higher');
       }
     } catch (error) {
       console.warn('Telegram WebApp initialization error:', error);

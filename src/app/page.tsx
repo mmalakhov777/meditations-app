@@ -3,12 +3,14 @@ import { useEffect, useState, useRef } from "react";
 import { useTelegram } from "@/components/TelegramProvider";
 import { t } from "@/lib/i18n";
 import { useTheme } from "@/components/ThemeProvider";
+import { useFullscreen } from "@/hooks/useFullscreen";
 import { loadMeditationsDoc, pickToday, type MeditationItem } from "@/lib/meditations";
 import Link from "next/link";
 
 export default function Home() {
   const { webApp, isTelegram } = useTelegram();
   const { theme, toggle } = useTheme();
+  const { requestFullscreen, isFullscreenAvailable } = useFullscreen();
   const [todayMorning, setTodayMorning] = useState<MeditationItem | null>(null);
   const [todayEvening, setTodayEvening] = useState<MeditationItem | null>(null);
   const [authLoading, setAuthLoading] = useState(false);
@@ -86,13 +88,30 @@ export default function Home() {
             alt="Saint of the day"
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
-          {/* Top-right overlay: theme toggle */}
-          <div style={{ position: "absolute", top: "calc(env(safe-area-inset-top) + 64px)", right: 16 }}>
+          {/* Top-right overlay: controls */}
+          <div style={{ position: "absolute", top: "calc(env(safe-area-inset-top) + 64px)", right: 16, display: "flex", gap: 8, alignItems: "center" }}>
             {authLoading ? <span className="muted small" style={{ marginRight: 8 }}>{t("auth.loading")}</span> : null}
+            
+            {/* Fullscreen button */}
+            {isTelegram && isFullscreenAvailable() && (
+              <button 
+                onClick={requestFullscreen}
+                className="gold-theme-button"
+                style={{ width: 38, height: 38 }}
+                title="Enter fullscreen"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" strokeWidth="2">
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                </svg>
+              </button>
+            )}
+            
+            {/* Theme toggle */}
             <button 
               onClick={toggle}
               className="gold-theme-button"
               style={{ width: 38, height: 38 }}
+              title="Toggle theme"
             >
               {theme === "light" ? (
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="none" strokeWidth="2">
