@@ -58,11 +58,11 @@ export function TelegramProvider({ children }: { children: React.ReactNode }) {
     try {
       app.ready();
       app.expand();
-      // Try to enter fullscreen when available
-      try {
-        app.requestFullscreen && app.requestFullscreen();
-      } catch {}
-    } catch {}
+      // Note: requestFullscreen is not supported in Telegram WebApp version 6.0
+      // Will be enabled when support is added in future versions
+    } catch (error) {
+      console.warn('Telegram WebApp initialization error:', error);
+    }
     setWebApp(app);
 
     // Respect user's theme choice if set by ThemeProvider. Only apply if none is set.

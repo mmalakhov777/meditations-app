@@ -4,6 +4,7 @@ import "./globals.css";
 import { TelegramProvider } from "@/components/TelegramProvider";
 import { BottomNav } from "@/components/BottomNav";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { TelegramViewportHandler } from "@/components/TelegramViewportHandler";
 import type { Viewport } from "next";
 
 const geistSans = Geist({
@@ -33,10 +34,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider>
           <TelegramProvider>
+            <TelegramViewportHandler />
             <div className="app-shell">
               <div className="cloud-bg" />
               <main className="app-content">{children}</main>

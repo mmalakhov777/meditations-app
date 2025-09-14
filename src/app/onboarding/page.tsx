@@ -36,13 +36,15 @@ export default function OnboardingPage() {
   const [preloadedUrls, setPreloadedUrls] = useState<Record<string, string>>({});
   const isLastSlide = index >= steps.length;
 
-  // All assets to preload
+  // All assets to preload - entire app resources
   const assetsToPreload = useMemo(() => [
-    '/covers/1stepnotfinal.png',
+    // Onboarding assets
+    '/covers/1stepcorrectnotfinal.png',
     '/covers/2stepnotfinal.png',
     '/covers/subscrimage.png',
+    
+    // Saints covers (for home page and saint pages)
     '/covers/saitns/Untitled Design.png',
-    '/covers/saitns/Untitled Design (4).png',
     '/covers/saitns/Untitled Design (1).png',
     '/covers/saitns/Untitled Design (2).png',
     '/covers/saitns/Untitled Design (3).png',
@@ -54,21 +56,51 @@ export default function OnboardingPage() {
     '/covers/saitns/Untitled Design (9).png',
     '/covers/saitns/Untitled Design (10).png',
     '/covers/saitns/Untitled Design (11).png',
+    '/covers/saitns/Untitled Design (12).png',
+    '/covers/saitns/Untitled Design (13).png',
+    
+    // Meditation assets
+    '/meditations/covers/1-sept-light-cover.webp',
+    '/meditations/audio/1-sept-meditation.mp3',
   ], []);
 
-  // Preload assets function
+  // Preload assets function - loads entire app
   const preloadAssets = useCallback(async () => {
-    const progressIncrement = 100 / assetsToPreload.length;
+    const totalAssets = assetsToPreload.length + 3; // +3 for app data and routes
+    const progressIncrement = 100 / totalAssets;
 
+    // 1. Load meditation data first (critical for app)
+    try {
+      await fetch('/meditations/2025-09.json', { cache: 'force-cache' });
+      setLoadingProgress(prev => Math.min(prev + progressIncrement, 100));
+    } catch (error) {
+      console.warn('Failed to preload meditation data:', error);
+      setLoadingProgress(prev => Math.min(prev + progressIncrement, 100));
+    }
+
+    // 2. Preload critical app routes
+    try {
+      await Promise.all([
+        fetch('/', { cache: 'force-cache' }), // Home page
+        fetch('/calendar', { cache: 'force-cache' }), // Calendar page
+        fetch('/favorites', { cache: 'force-cache' }), // Favorites page
+      ]);
+      setLoadingProgress(prev => Math.min(prev + progressIncrement, 100));
+    } catch (error) {
+      console.warn('Failed to preload app routes:', error);
+      setLoadingProgress(prev => Math.min(prev + progressIncrement, 100));
+    }
+
+    // 3. Load all visual and audio assets
     const loadPromises = assetsToPreload.map(async (src) => {
-      if (src.endsWith('.mp4')) {
+      if (src.endsWith('.mp3') || src.endsWith('.mp4')) {
         await new Promise<void>((resolve) => {
-          const video = document.createElement('video');
-          video.preload = 'auto';
-          video.oncanplaythrough = () => resolve();
-          video.onerror = () => resolve();
-          video.src = src;
-          video.load();
+          const media = src.endsWith('.mp3') ? document.createElement('audio') : document.createElement('video');
+          media.preload = 'auto';
+          media.oncanplaythrough = () => resolve();
+          media.onerror = () => resolve();
+          media.src = src;
+          media.load();
         });
         setLoadingProgress(prev => Math.min(prev + progressIncrement, 100));
         return;
@@ -234,13 +266,42 @@ export default function OnboardingPage() {
           opacity: isTransitioning ? 0.8 : 1,
           transition: "opacity 0.15s ease"
         }}>
+          {/* Left click area for previous slide */}
+          <div
+            onClick={goBack}
+            style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              width: "50%",
+              height: "100%",
+              zIndex: 30,
+              cursor: "pointer"
+            }}
+            aria-label="Previous slide"
+          />
+          
+          {/* Right click area for next slide */}
+          <div
+            onClick={goNext}
+            style={{
+              position: "absolute",
+              right: 0,
+              top: 0,
+              width: "50%",
+              height: "100%",
+              zIndex: 30,
+              cursor: "pointer"
+            }}
+            aria-label="Next slide"
+          />
           {index <= 1 ? (
             // Steps 1-2: Identical design with different background images
             <>
                {/* Background image */}
                <img
                  src={
-                   index === 0 ? "/covers/1stepnotfinal.png" :
+                   index === 0 ? "/covers/1stepcorrectnotfinal.png" :
                    "/covers/2stepnotfinal.png"
                  }
                  alt="Background"
@@ -252,7 +313,7 @@ export default function OnboardingPage() {
                    objectFit: "cover",
                    opacity: isTransitioning ? 0.8 : 1,
                    transition: "opacity 0.15s ease",
-                   transform: index === 0 && !isTransitioning ? "rotate(0.5deg)" : "none"
+                   transform: "none"
                  }}
                />
               

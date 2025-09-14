@@ -109,14 +109,14 @@ export default function Home() {
           {/* Bottom overlay: left name/date, right snippet + CTA */}
           <div style={{ position: "absolute", left: 12, right: 12, bottom: 12, display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 12, background: "var(--glass)", border: "1px solid var(--glass-border)", backdropFilter: "blur(8px) saturate(1.05)", borderRadius: 12, padding: 12 }}>
             <div className="stack-8">
-              <div className="h1">Saint of the Day</div>
-              <div className="muted small">{new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+              <div className="h1 saint-overlay-text">Saint of the Day</div>
+              <div className="muted small saint-overlay-text">{new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
             </div>
             <div className="stack-8" style={{ maxWidth: "55%" }}>
-              <div className="small" style={{ lineHeight: 1.3 }}>
-                A short note about the saint goes here. Replace with real bio copy to introduce today’s saint and their story.
+              <div className="small saint-overlay-text" style={{ lineHeight: 1.3 }}>
+                A short note about the saint goes here. Replace with real bio copy to introduce today's saint and their story.
               </div>
-              <Link href="/collections" className="button-secondary" style={{ textDecoration: "none", alignSelf: "start" }}>
+              <Link href="/saint/daily" className="button-secondary" style={{ textDecoration: "none", alignSelf: "start" }}>
                 Learn more
               </Link>
             </div>
@@ -153,7 +153,10 @@ export default function Home() {
             </div>
           <div style={{ flex: 1, padding: 20 }} className="stack-8">
             <div className="pill pill--sun">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" fill="#f4b400"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="5" fill="#f4b400"/>
+                <path d="m12 1 0 2m0 18 0 2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42M1 12l2 0m18 0 2 0M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="#f4b400" strokeWidth="1.5"/>
+              </svg>
               Morning
             </div>
             {todayMorning?.title ? <div><strong>{todayMorning.title}</strong></div> : null}
@@ -162,7 +165,7 @@ export default function Home() {
         </div>
       </Link>
 
-      <Link href="/meditation/s1" className="card meditation-card card--evening" style={{ display: "block", textDecoration: "none", color: "inherit", position: "relative" }}>
+      <Link href="/meditation/s1" className="card meditation-card card--evening evening-meditation" style={{ display: "block", textDecoration: "none", color: "inherit", position: "relative" }}>
         <div style={{ display: "flex", alignItems: "center", minHeight: 120 }}>
           <div style={{ flex: "0 0 30%", height: 120, position: "relative" }}>
             <img src={`/covers/saitns/${dailySaintCover}`} alt="Evening Meditation" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
