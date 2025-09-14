@@ -6,6 +6,7 @@ import { useTheme } from "@/components/ThemeProvider";
 import { useFullscreen } from "@/hooks/useFullscreen";
 import { loadMeditationsDoc, pickToday, type MeditationItem } from "@/lib/meditations";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   const { webApp, isTelegram } = useTelegram();
@@ -83,10 +84,12 @@ export default function Home() {
       {/* Full-bleed saint hero */}
       <div style={{ position: "relative", width: "100vw", marginLeft: "calc(50% - 50vw)" }}>
         <div style={{ width: "100%", aspectRatio: "3 / 4", position: "relative" }}>
-          <img
+          <Image
             src={`/covers/saitns/${dailySaintCover}`}
             alt="Saint of the day"
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            fill
+            style={{ objectFit: "cover" }}
+            priority
           />
           {/* Top-right overlay: controls */}
           <div style={{ position: "absolute", top: "calc(env(safe-area-inset-top) + 64px)", right: 16, display: "flex", gap: 8, alignItems: "center" }}>
@@ -152,7 +155,7 @@ export default function Home() {
       <Link href="/meditation/f1" className="card meditation-card card--morning" style={{ display: "block", textDecoration: "none", color: "inherit", position: "relative" }}>
         <div style={{ display: "flex", alignItems: "center", minHeight: 120 }}>
           <div style={{ flex: "0 0 30%", height: 120, position: "relative" }}>
-            <img src={`/covers/saitns/${dailySaintCover}`} alt="Morning Meditation" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <Image src={`/covers/saitns/${dailySaintCover}`} alt="Morning Meditation" fill style={{ objectFit: "cover" }} />
               <div 
                 className="gold-play-button"
                 style={{ 
@@ -187,7 +190,7 @@ export default function Home() {
       <Link href="/meditation/s1" className="card meditation-card card--evening evening-meditation" style={{ display: "block", textDecoration: "none", color: "inherit", position: "relative" }}>
         <div style={{ display: "flex", alignItems: "center", minHeight: 120 }}>
           <div style={{ flex: "0 0 30%", height: 120, position: "relative" }}>
-            <img src={`/covers/saitns/${dailySaintCover}`} alt="Evening Meditation" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <Image src={`/covers/saitns/${dailySaintCover}`} alt="Evening Meditation" fill style={{ objectFit: "cover" }} />
               <div 
                 className="gold-play-button"
                 style={{ 

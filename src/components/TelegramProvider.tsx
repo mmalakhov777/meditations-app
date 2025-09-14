@@ -33,8 +33,8 @@ type TelegramWebApp = {
   exitFullscreen?: () => void;
   isFullscreen?: boolean;
   // Event handling for fullscreen
-  onEvent?: (eventType: 'fullscreen_changed' | 'fullscreen_failed' | 'viewportChanged' | string, callback: (event?: any) => void) => void;
-  offEvent?: (eventType: 'fullscreen_changed' | 'fullscreen_failed' | 'viewportChanged' | string, callback: (event?: any) => void) => void;
+  onEvent?: (eventType: 'fullscreen_changed' | 'fullscreen_failed' | 'viewportChanged' | string, callback: (event?: { is_fullscreen?: boolean; error?: string; [key: string]: unknown }) => void) => void;
+  offEvent?: (eventType: 'fullscreen_changed' | 'fullscreen_failed' | 'viewportChanged' | string, callback: (event?: { is_fullscreen?: boolean; error?: string; [key: string]: unknown }) => void) => void;
   BackButton: { show: () => void; hide: () => void; onClick: (cb: () => void) => void };
   MainButton: { setText: (t: string) => void; show: () => void; hide: () => void; onClick: (cb: () => void) => void };
 };

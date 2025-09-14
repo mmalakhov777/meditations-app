@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useTelegram } from "@/components/TelegramProvider";
+import Image from "next/image";
 
 export function AudioPlayer({ id, src, cover }: { id: string; src: string; cover?: string }) {
   const ref = useRef<HTMLAudioElement | null>(null);
@@ -97,7 +98,11 @@ export function AudioPlayer({ id, src, cover }: { id: string; src: string; cover
   return (
     <div className="stack-12">
       <div className="overlay">
-        {cover ? <img src={cover} alt="Cover" className="cover-xl" /> : null}
+        {cover ? (
+          <div style={{ position: "relative", width: "100%", aspectRatio: "1/1" }}>
+            <Image src={cover} alt="Cover" fill style={{ objectFit: "cover" }} className="cover-xl" />
+          </div>
+        ) : null}
         <div className="overlay-controls" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16 }}>
           <button 
             onClick={toggleFavorite} 

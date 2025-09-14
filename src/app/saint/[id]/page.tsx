@@ -2,6 +2,7 @@
 import { useParams } from "next/navigation";
 import { useTheme } from "@/components/ThemeProvider";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function SaintPage() {
   const params = useParams();
@@ -41,10 +42,12 @@ The saint's feast day is celebrated annually, and their teachings continue to gu
       {/* Saint header with image - taller with back button overlay */}
       <div style={{ position: "relative", width: "100vw", marginLeft: "calc(50% - 50vw)", marginBottom: 16 }}>
         <div style={{ width: "100%", aspectRatio: "4 / 5", position: "relative" }}>
-          <img
+          <Image
             src={saintData.image}
             alt={saintData.name}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            fill
+            style={{ objectFit: "cover" }}
+            priority
           />
           {/* Top overlay: back button */}
           <div style={{ position: "absolute", top: "calc(env(safe-area-inset-top) + 16px)", left: 16 }}>
