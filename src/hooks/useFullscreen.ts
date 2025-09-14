@@ -13,21 +13,23 @@ export function useFullscreen() {
     }
 
     try {
-      // Check if modern API is available (Bot API 8.0+)
+      // Check if Bot API 8.0+ is available
       if (webApp.isVersionAtLeast && webApp.isVersionAtLeast('8.0')) {
-        if (webApp.viewport?.requestFullscreen?.isAvailable?.()) {
-          webApp.viewport.requestFullscreen();
+        if (webApp.requestFullscreen && typeof webApp.requestFullscreen === 'function') {
+          webApp.requestFullscreen();
+          return true;
+        }
+      } else {
+        // Manual version check for older clients without isVersionAtLeast
+        const version = webApp.version || '0.0';
+        const [major] = version.split('.').map(Number);
+        if (major >= 8 && webApp.requestFullscreen) {
+          webApp.requestFullscreen();
           return true;
         }
       }
       
-      // Fallback to legacy API
-      if (webApp.requestFullscreen && typeof webApp.requestFullscreen === 'function') {
-        webApp.requestFullscreen();
-        return true;
-      }
-      
-      console.warn('Fullscreen not available in this Telegram version');
+      console.warn('Fullscreen requires Telegram WebApp version 8.0 or higher');
       return false;
     } catch (error) {
       console.error('Error requesting fullscreen:', error);
@@ -53,13 +55,15 @@ export function useFullscreen() {
   const isFullscreenAvailable = useCallback(() => {
     if (!isTelegram || !webApp) return false;
     
-    // Check modern API
+    // Check if Bot API 8.0+ is available
     if (webApp.isVersionAtLeast && webApp.isVersionAtLeast('8.0')) {
-      return webApp.viewport?.requestFullscreen?.isAvailable?.() ?? false;
+      return typeof webApp.requestFullscreen === 'function';
     }
     
-    // Check legacy API
-    return typeof webApp.requestFullscreen === 'function';
+    // Manual version check for older clients
+    const version = webApp.version || '0.0';
+    const [major] = version.split('.').map(Number);
+    return major >= 8 && typeof webApp.requestFullscreen === 'function';
   }, [webApp, isTelegram]);
 
   return {

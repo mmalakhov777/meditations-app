@@ -23,23 +23,18 @@ type TelegramWebApp = {
   ready: () => void;
   expand: () => void;
   close: () => void;
+  version: string;
   // Version checking
   isVersionAtLeast?: (version: string) => boolean;
   // Header color
   setHeaderColor?: (color: string) => void;
-  // Viewport API for fullscreen (Bot API 8.0+)
-  viewport?: {
-    requestFullscreen?: {
-      isAvailable?: () => boolean;
-    } & (() => void);
-  };
-  // Legacy fullscreen controls (for backwards compatibility)
+  // Fullscreen controls (Bot API 8.0+)
   requestFullscreen?: () => void;
   exitFullscreen?: () => void;
   isFullscreen?: boolean;
-  // Event handling
-  onEvent?: (eventType: string, callback: () => void) => void;
-  offEvent?: (eventType: string, callback: () => void) => void;
+  // Event handling for fullscreen
+  onEvent?: (eventType: 'fullscreen_changed' | 'fullscreen_failed' | 'viewportChanged' | string, callback: (event?: any) => void) => void;
+  offEvent?: (eventType: 'fullscreen_changed' | 'fullscreen_failed' | 'viewportChanged' | string, callback: (event?: any) => void) => void;
   BackButton: { show: () => void; hide: () => void; onClick: (cb: () => void) => void };
   MainButton: { setText: (t: string) => void; show: () => void; hide: () => void; onClick: (cb: () => void) => void };
 };
@@ -78,17 +73,37 @@ export function TelegramProvider({ children }: { children: React.ReactNode }) {
         app.setHeaderColor(isDark ? '#000000' : '#ffffff');
       }
       
-      // Try to request fullscreen using the modern API (Bot API 8.0+)
+      // Set up fullscreen event listeners first
+      if (app.onEvent) {
+        app.onEvent('fullscreen_changed', (event) => {
+          console.log('Fullscreen changed:', event?.is_fullscreen ? 'entered' : 'exited');
+        });
+        
+        app.onEvent('fullscreen_failed', (event) => {
+          if (event?.error === 'UNSUPPORTED') {
+            console.warn('Fullscreen mode is not supported on this device or platform');
+          } else if (event?.error === 'ALREADY_FULLSCREEN') {
+            console.info('The Mini App is already in fullscreen mode');
+          } else {
+            console.error('Fullscreen request failed:', event?.error);
+          }
+        });
+      }
+      
+      // Try to request fullscreen using the correct API (Bot API 8.0+)
       if (app.isVersionAtLeast && app.isVersionAtLeast('8.0')) {
-        if (app.viewport?.requestFullscreen?.isAvailable?.()) {
-          // Use the new viewport API
-          app.viewport.requestFullscreen();
-        } else if (app.requestFullscreen && typeof app.requestFullscreen === 'function') {
-          // Fallback to legacy API
+        if (app.requestFullscreen && typeof app.requestFullscreen === 'function') {
           app.requestFullscreen();
         }
       } else {
-        console.info('Fullscreen mode requires Telegram WebApp version 8.0 or higher');
+        // Check version manually for older clients
+        const version = app.version || '0.0';
+        const [major] = version.split('.').map(Number);
+        if (major >= 8 && app.requestFullscreen) {
+          app.requestFullscreen();
+        } else {
+          console.info('Fullscreen mode requires Telegram WebApp version 8.0 or higher');
+        }
       }
     } catch (error) {
       console.warn('Telegram WebApp initialization error:', error);
