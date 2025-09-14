@@ -27,6 +27,9 @@ type TelegramWebApp = {
   requestFullscreen?: () => void;
   exitFullscreen?: () => void;
   isFullscreen?: boolean;
+  // Event handling
+  onEvent?: (eventType: string, callback: () => void) => void;
+  offEvent?: (eventType: string, callback: () => void) => void;
   BackButton: { show: () => void; hide: () => void; onClick: (cb: () => void) => void };
   MainButton: { setText: (t: string) => void; show: () => void; hide: () => void; onClick: (cb: () => void) => void };
 };
@@ -58,8 +61,10 @@ export function TelegramProvider({ children }: { children: React.ReactNode }) {
     try {
       app.ready();
       app.expand();
-      // Note: requestFullscreen is not supported in Telegram WebApp version 6.0
-      // Will be enabled when support is added in future versions
+      // Try to request fullscreen if available
+      if (app.requestFullscreen && typeof app.requestFullscreen === 'function') {
+        app.requestFullscreen();
+      }
     } catch (error) {
       console.warn('Telegram WebApp initialization error:', error);
     }
