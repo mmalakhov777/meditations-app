@@ -50,7 +50,7 @@ export function useTelegram() {
 
 export function TelegramProvider({ children }: { children: React.ReactNode }) {
   const [webApp, setWebApp] = useState<TelegramWebApp | null>(null);
-  const isTelegram = useMemo(() => typeof window !== "undefined" && !!window.Telegram?.WebApp, [webApp]);
+  const isTelegram = useMemo(() => typeof window !== "undefined" && !!window.Telegram?.WebApp, []);
 
   useEffect(() => {
     if (!window?.Telegram?.WebApp) return;
@@ -75,7 +75,7 @@ export function TelegramProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive" />
+      <Script src="https://telegram.org/js/telegram-web-app.js" strategy="afterInteractive" />
       <TelegramContext.Provider value={{ webApp, isTelegram }}>{children}</TelegramContext.Provider>
     </>
   );

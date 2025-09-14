@@ -7,7 +7,7 @@ export function TelegramViewportHandler() {
     // This effect runs only on the client side after hydration
     // It ensures Telegram viewport properties are set after React has hydrated
     if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
-      const webApp = window.Telegram.WebApp;
+      // Set up viewport handling for Telegram
       
       // Set viewport properties that Telegram expects
       const root = document.documentElement;

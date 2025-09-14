@@ -174,14 +174,7 @@ export default function OnboardingPage() {
     }, 150);
   }, [isTransitioning]);
 
-  const skip = useCallback(() => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setIndex(steps.length);
-      setIsTransitioning(false);
-    }, 150);
-  }, [isTransitioning, steps.length]);
+  // Skip function removed as it's not used
 
   // Show loading screen while preloading
   if (isLoading) {

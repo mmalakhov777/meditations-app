@@ -35,7 +35,7 @@ export default function Home() {
   const dayKey = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
   const dailySaintCover = saintCovers[dayKey % saintCovers.length];
 
-  const user = webApp?.initDataUnsafe.user;
+  // User data available via webApp?.initDataUnsafe.user when needed
 
   // Authorize/upsert user once per app load when Telegram data is available
   useEffect(() => {
@@ -114,7 +114,7 @@ export default function Home() {
             </div>
             <div className="stack-8" style={{ maxWidth: "55%" }}>
               <div className="small saint-overlay-text" style={{ lineHeight: 1.3 }}>
-                A short note about the saint goes here. Replace with real bio copy to introduce today's saint and their story.
+                A short note about the saint goes here. Replace with real bio copy to introduce today&apos;s saint and their story.
               </div>
               <Link href="/saint/daily" className="button-secondary" style={{ textDecoration: "none", alignSelf: "start" }}>
                 Learn more

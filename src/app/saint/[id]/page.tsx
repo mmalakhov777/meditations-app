@@ -97,7 +97,7 @@ The saint's feast day is celebrated annually, and their teachings continue to gu
                 fontStyle: "italic",
                 lineHeight: 1.5
               }}>
-                "{quote}"
+                &ldquo;{quote}&rdquo;
               </div>
             ))}
           </div>
@@ -109,11 +109,11 @@ The saint's feast day is celebrated annually, and their teachings continue to gu
         <div className="stack-16">
           <h3 style={{ margin: 0, fontSize: "18px", fontWeight: "600" }}>Meditation Practice</h3>
           <div style={{ lineHeight: 1.6 }}>
-            <p>Inspired by {saintData.name}'s teachings, try this simple meditation practice:</p>
+            <p>Inspired by {saintData.name}&apos;s teachings, try this simple meditation practice:</p>
             <ol style={{ paddingLeft: "20px", lineHeight: 1.8 }}>
               <li>Find a quiet place and sit comfortably</li>
               <li>Close your eyes and take three deep breaths</li>
-              <li>Repeat silently: "Peace begins within"</li>
+              <li>Repeat silently: &ldquo;Peace begins within&rdquo;</li>
               <li>Focus on your heart center and feel the warmth of divine love</li>
               <li>When ready, slowly open your eyes and carry this peace with you</li>
             </ol>
