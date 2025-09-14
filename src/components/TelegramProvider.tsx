@@ -23,18 +23,10 @@ type TelegramWebApp = {
   ready: () => void;
   expand: () => void;
   close: () => void;
-  version: string;
-  // Version checking
-  isVersionAtLeast?: (version: string) => boolean;
-  // Header color
-  setHeaderColor?: (color: string) => void;
-  // Fullscreen controls (Bot API 8.0+)
+  // Fullscreen controls (availability depends on Telegram client version)
   requestFullscreen?: () => void;
   exitFullscreen?: () => void;
   isFullscreen?: boolean;
-  // Event handling for fullscreen
-  onEvent?: (eventType: 'fullscreen_changed' | 'fullscreen_failed' | 'viewportChanged' | string, callback: (event?: { is_fullscreen?: boolean; error?: string; [key: string]: unknown }) => void) => void;
-  offEvent?: (eventType: 'fullscreen_changed' | 'fullscreen_failed' | 'viewportChanged' | string, callback: (event?: { is_fullscreen?: boolean; error?: string; [key: string]: unknown }) => void) => void;
   BackButton: { show: () => void; hide: () => void; onClick: (cb: () => void) => void };
   MainButton: { setText: (t: string) => void; show: () => void; hide: () => void; onClick: (cb: () => void) => void };
 };
@@ -58,7 +50,7 @@ export function useTelegram() {
 
 export function TelegramProvider({ children }: { children: React.ReactNode }) {
   const [webApp, setWebApp] = useState<TelegramWebApp | null>(null);
-  const isTelegram = useMemo(() => typeof window !== "undefined" && !!window.Telegram?.WebApp, []);
+  const isTelegram = useMemo(() => typeof window !== "undefined" && !!window.Telegram?.WebApp, [webApp]);
 
   useEffect(() => {
     if (!window?.Telegram?.WebApp) return;
@@ -66,48 +58,11 @@ export function TelegramProvider({ children }: { children: React.ReactNode }) {
     try {
       app.ready();
       app.expand();
-      
-      // Set header color for better visibility in fullscreen
-      if (app.setHeaderColor) {
-        const isDark = app.colorScheme === 'dark';
-        app.setHeaderColor(isDark ? '#000000' : '#ffffff');
-      }
-      
-      // Set up fullscreen event listeners first
-      if (app.onEvent) {
-        app.onEvent('fullscreen_changed', (event) => {
-          console.log('Fullscreen changed:', event?.is_fullscreen ? 'entered' : 'exited');
-        });
-        
-        app.onEvent('fullscreen_failed', (event) => {
-          if (event?.error === 'UNSUPPORTED') {
-            console.warn('Fullscreen mode is not supported on this device or platform');
-          } else if (event?.error === 'ALREADY_FULLSCREEN') {
-            console.info('The Mini App is already in fullscreen mode');
-          } else {
-            console.error('Fullscreen request failed:', event?.error);
-          }
-        });
-      }
-      
-      // Try to request fullscreen using the correct API (Bot API 8.0+)
-      if (app.isVersionAtLeast && app.isVersionAtLeast('8.0')) {
-        if (app.requestFullscreen && typeof app.requestFullscreen === 'function') {
-          app.requestFullscreen();
-        }
-      } else {
-        // Check version manually for older clients
-        const version = app.version || '0.0';
-        const [major] = version.split('.').map(Number);
-        if (major >= 8 && app.requestFullscreen) {
-          app.requestFullscreen();
-        } else {
-          console.info('Fullscreen mode requires Telegram WebApp version 8.0 or higher');
-        }
-      }
-    } catch (error) {
-      console.warn('Telegram WebApp initialization error:', error);
-    }
+      // Try to enter fullscreen when available
+      try {
+        app.requestFullscreen && app.requestFullscreen();
+      } catch {}
+    } catch {}
     setWebApp(app);
 
     // Respect user's theme choice if set by ThemeProvider. Only apply if none is set.
@@ -120,7 +75,7 @@ export function TelegramProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Script src="https://telegram.org/js/telegram-web-app.js" strategy="afterInteractive" />
+      <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive" />
       <TelegramContext.Provider value={{ webApp, isTelegram }}>{children}</TelegramContext.Provider>
     </>
   );

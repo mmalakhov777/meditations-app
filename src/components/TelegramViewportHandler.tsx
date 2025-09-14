@@ -11,35 +11,19 @@ export function TelegramViewportHandler() {
       
       // Set viewport properties that Telegram expects
       const root = document.documentElement;
+      root.style.setProperty('--tg-viewport-height', '100vh');
+      root.style.setProperty('--tg-viewport-stable-height', '100vh');
       
+      // Update when viewport changes
       const updateViewport = () => {
-        const height = window.innerHeight;
-        root.style.setProperty('--tg-viewport-height', `${height}px`);
-        root.style.setProperty('--tg-viewport-stable-height', `${height}px`);
-        
-        // Ensure body takes full height
-        document.body.style.height = `${height}px`;
-        document.body.style.minHeight = `${height}px`;
+        root.style.setProperty('--tg-viewport-height', `${window.innerHeight}px`);
+        root.style.setProperty('--tg-viewport-stable-height', `${window.innerHeight}px`);
       };
       
-      // Initial viewport setup
-      updateViewport();
-      
-      // Listen for viewport changes
       window.addEventListener('resize', updateViewport);
-      window.addEventListener('orientationchange', updateViewport);
-      
-      // Listen for Telegram-specific events if available
-      if (webApp.onEvent) {
-        webApp.onEvent('viewportChanged', updateViewport);
-      }
       
       return () => {
         window.removeEventListener('resize', updateViewport);
-        window.removeEventListener('orientationchange', updateViewport);
-        if (webApp.offEvent) {
-          webApp.offEvent('viewportChanged', updateViewport);
-        }
       };
     }
   }, []);

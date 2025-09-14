@@ -174,7 +174,14 @@ export default function OnboardingPage() {
     }, 150);
   }, [isTransitioning]);
 
-  // Skip function removed as it's not used
+  const skip = useCallback(() => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setIndex(steps.length);
+      setIsTransitioning(false);
+    }, 150);
+  }, [isTransitioning, steps.length]);
 
   // Show loading screen while preloading
   if (isLoading) {
