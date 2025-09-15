@@ -57,19 +57,20 @@ export default function Home() {
             style={{ objectFit: "cover" }}
           />
           
-          {/* Static overlay content */}
+          {/* Static overlay content with skeleton placeholders */}
           <div className="hero-overlay">
             <div className="stack-8">
               <div className="h1 saint-overlay-text">Saint of the Day</div>
               <div className="muted small saint-overlay-text">{todayDate}</div>
             </div>
-            <div className="stack-8" style={{ maxWidth: "55%" }}>
-              <div className="small saint-overlay-text" style={{ lineHeight: 1.3 }}>
-                A short note about the saint goes here. Replace with real bio copy to introduce today&apos;s saint and their story.
+            <div className="stack-8" style={{ maxWidth: "55%" }} id="saint-content-container">
+              {/* Skeleton loading state - will be replaced by dynamic content */}
+              <div className="saint-content-skeleton">
+                <div className="skeleton-line" style={{ width: "90%", height: "16px", marginBottom: "8px" }}></div>
+                <div className="skeleton-line" style={{ width: "85%", height: "16px", marginBottom: "8px" }}></div>
+                <div className="skeleton-line" style={{ width: "70%", height: "16px", marginBottom: "16px" }}></div>
+                <div className="skeleton-button" style={{ width: "120px", height: "36px" }}></div>
               </div>
-              <Link href="/saint/daily" className="button-secondary" style={{ textDecoration: "none", alignSelf: "start" }}>
-                Learn more
-              </Link>
             </div>
           </div>
         </div>

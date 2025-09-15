@@ -37,6 +37,13 @@ export default function OnboardingPage() {
   const isLastSlide = index >= steps.length;
   const step3Ref = useRef<HTMLDivElement | null>(null);
 
+  // Static approach - all slides pre-rendered
+  const didInitRef = useRef(false);
+  const lastNavAtRef = useRef(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const resolveSrc = useCallback((src: string) => preloadedUrls[src] || src, [preloadedUrls]);
+
   // ALL assets to preload - complete onboarding and app resources
   const assetsToPreload = useMemo(() => [
     // Critical onboarding background images (highest priority)
@@ -193,29 +200,42 @@ export default function OnboardingPage() {
     }
   }, [assetsToPreload]);
 
-  // Start preloading on mount
+  // Start preloading on mount (guard against StrictMode double-invoke)
   useEffect(() => {
+    if (didInitRef.current) return;
+    didInitRef.current = true;
     preloadAssets();
   }, [preloadAssets]);
 
-  // CSS-only animation control via class (no forced reflow)
+  // Update container transform when index changes
   useEffect(() => {
-    if (!step3Ref.current) return;
-    if (index === 2) {
-      step3Ref.current.classList.add('animate');
-    } else {
-      step3Ref.current.classList.remove('animate');
-    }
-  }, [index]);
+    if (!containerRef.current || isLoading) return;
+    
+    // Each slide is 33.33% wide, so move by 33.33% per slide
+    const translateX = -index * (100 / steps.length);
+    containerRef.current.style.transform = `translateX(${translateX}%)`;
+  }, [index, isLoading, steps.length]);
 
   // Smooth transition functions
   const goNext = useCallback(() => {
     if (isTransitioning) return;
+    const now = Date.now();
+    if (now - lastNavAtRef.current < 400) return;
+    lastNavAtRef.current = now;
+    
+    setIsTransitioning(true);
+    setTimeout(() => setIsTransitioning(false), 400);
     setIndex(prev => Math.min(prev + 1, steps.length));
   }, [isTransitioning, steps.length]);
 
   const goBack = useCallback(() => {
     if (isTransitioning) return;
+    const now = Date.now();
+    if (now - lastNavAtRef.current < 400) return;
+    lastNavAtRef.current = now;
+    
+    setIsTransitioning(true);
+    setTimeout(() => setIsTransitioning(false), 400);
     setIndex(prev => Math.max(prev - 1, 0));
   }, [isTransitioning]);
 
@@ -259,12 +279,18 @@ export default function OnboardingPage() {
       {!isLastSlide ? (
         <div 
           className="onboarding-container"
+          style={{
+            background: 'linear-gradient(135deg, #1b1406 0%, #0e0b05 100%)',
+            minHeight: '100svh',
+            overflow: 'hidden'
+          }}
         >
           {/* Left click area for previous slide */}
           <div
             onClick={goBack}
             className="click-area-left"
             aria-label="Previous slide"
+            style={{ pointerEvents: isTransitioning ? 'none' : 'auto' }}
           />
           
           {/* Right click area for next slide */}
@@ -272,40 +298,179 @@ export default function OnboardingPage() {
             onClick={goNext}
             className="click-area-right"
             aria-label="Next slide"
+            style={{ pointerEvents: isTransitioning ? 'none' : 'auto' }}
           />
-          {index <= 1 ? (
-            // Steps 1-2: Identical design with different background images
-            <>
-               {/* Background image with explicit dimensions and preloaded class */}
-               <img
-                 src={
-                   index === 0 ? "/covers/1stepcorrectnotfinal.webp" :
-                   "/covers/2stepnotfinal.webp"
-                 }
-                 alt="Background"
-                 width={720}
-                 height={960}
-                 className="onboarding-background"
-                 style={{ 
-                   opacity: isTransitioning ? 0.8 : 1,
-                   transition: "opacity 0.15s ease",
-                   transform: "none"
-                 }}
-               />
+
+          {/* Static slides container that slides horizontally */}
+          <div 
+            ref={containerRef}
+            style={{
+              display: 'flex',
+              width: `${steps.length * 100}%`,
+              height: '100%',
+              transition: 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+              transform: 'translateX(0%)',
+              willChange: 'transform'
+            }}
+          >
+            {/* Slide 1 */}
+            <div style={{ width: `${100 / steps.length}%`, position: 'relative', flexShrink: 0 }}>
+              <img
+                src={resolveSrc('/covers/1stepcorrectnotfinal.webp')}
+                alt="Background"
+                width={720}
+                height={960}
+                loading="eager"
+                decoding="sync"
+                fetchPriority="high"
+                className="onboarding-background"
+                style={{ transform: "none", zIndex: 1 }}
+              />
+              <div className="onboarding-content">
+                <div className="stack-8" style={{ maxWidth: 720, margin: "0 auto" }}>
+                  <h1 className="onboarding-title">{t(steps[0].titleKey)}</h1>
+                  <p className="onboarding-subtitle">{t(steps[0].subtitleKey)}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Slide 2 */}
+            <div style={{ width: `${100 / steps.length}%`, position: 'relative', flexShrink: 0, zIndex: 100 }}>
+              <img
+                src={resolveSrc('/covers/2stepnotfinal.webp')}
+                alt="Background"
+                width={720}
+                height={960}
+                loading="eager"
+                decoding="sync"
+                fetchPriority="high"
+                className="onboarding-background"
+                style={{ transform: "none", zIndex: 100 }}
+              />
+              <div className="onboarding-content" style={{ zIndex: 101 }}>
+                <div className="stack-8" style={{ maxWidth: 720, margin: "0 auto" }}>
+                  <h1 className="onboarding-title">{t(steps[1].titleKey)}</h1>
+                  <p className="onboarding-subtitle">{t(steps[1].subtitleKey)}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Slide 3 - Saints grid */}
+            <div style={{ width: `${100 / steps.length}%`, position: 'relative', flexShrink: 0 }}>
+              {/* Saints images grid */}
+              <div className="saints-grid-container">
+                <div style={{ maxWidth: 1000, width: "100%" }}>
+                   {/* First row - 4 images */}
+                   <div className="saints-row saints-row-left">
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={resolveSrc('/covers/saitns/Untitled Design.webp')} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 1 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={resolveSrc('/covers/saitns/Untitled Design (1).webp')} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.9 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={resolveSrc('/covers/saitns/Untitled Design (2).webp')} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.8 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={resolveSrc('/covers/saitns/Untitled Design (3).webp')} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.7 }} />
+                   </div>
+                   {/* Second row - 4 images */}
+                   <div className="saints-row saints-row-right">
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={resolveSrc('/covers/saitns/Untitled Design (4).webp')} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.6 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={resolveSrc('/covers/saitns/Untitled Design (5).webp')} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.5 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={resolveSrc('/covers/saitns/Untitled Design (6).webp')} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.4 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={resolveSrc('/covers/saitns/Untitled Design (7).webp')} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.3 }} />
+                   </div>
+                   {/* Third row - 4 images */}
+                   <div className="saints-row saints-row-left-delayed">
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={resolveSrc('/covers/saitns/Untitled Design (8).webp')} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.2 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={resolveSrc('/covers/saitns/Untitled Design (9).webp')} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.15 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={resolveSrc('/covers/saitns/Untitled Design (10).webp')} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.1 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={resolveSrc('/covers/saitns/Untitled Design (11).webp')} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.05 }} />
+                   </div>
+                </div>
+              </div>
               
-               {/* Title and description at bottom - white text */}
-               <div className="onboarding-content">
-                 <div className="stack-8" style={{ maxWidth: 720, margin: "0 auto" }}>
-                   <h1 className="onboarding-title">
-                     {t(steps[index].titleKey)}
-                   </h1>
-                   <p className="onboarding-subtitle">
-                     {t(steps[index].subtitleKey)}
-                   </p>
-                 </div>
-               </div>
-            </>
-          ) : null}
+              {/* Gradient overlay */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.9) 100%)",
+                  zIndex: 15,
+                }}
+              />
+              
+              {/* Content */}
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  padding: "calc(env(safe-area-inset-top) + 20px) 20px 140px",
+                  zIndex: 20,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "20px"
+                }}
+              >
+                <div style={{ maxWidth: 720, margin: "0 auto", width: "100%" }}>
+                  <h1 style={{ fontSize: 28, lineHeight: 1.1, letterSpacing: -0.3, margin: "0 0 5px 0", fontWeight: 800, color: "#ffffff" }}>
+                    {t(steps[2].titleKey)}
+                  </h1>
+                  
+                  <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
+                    <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 6 }}>
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                        <span style={{ color: "#f0c75e", fontSize: 16, marginTop: 6 }}>•</span>
+                        <p style={{ margin: 0, color: "rgba(255,255,255,0.8)", fontSize: 15, lineHeight: 1.4 }}>
+                          <strong style={{ color: "#ffffff" }}>2-minute meditations</strong> for morning and evening practice
+                        </p>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                        <span style={{ color: "#f0c75e", fontSize: 16, marginTop: 6 }}>•</span>
+                        <p style={{ margin: 0, color: "rgba(255,255,255,0.8)", fontSize: 15, lineHeight: 1.4 }}>
+                          <strong style={{ color: "#ffffff" }}>Daily saint-based content</strong> with new meditation each day
+                        </p>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                        <span style={{ color: "#f0c75e", fontSize: 16, marginTop: 6 }}>•</span>
+                        <p style={{ margin: 0, color: "rgba(255,255,255,0.8)", fontSize: 15, lineHeight: 1.4 }}>
+                          <strong style={{ color: "#ffffff" }}>Deep cultural roots</strong> connecting you to Orthodox tradition
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div style={{ flexShrink: 0 }}>
+                      <img 
+                        src={resolveSrc('/covers/subscrimage.webp')}
+                        alt="Subscription"
+                        width={120}
+                        height={120}
+                        style={{ width: "120px", height: "auto", borderRadius: "8px", objectFit: "cover" }}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ 
+                    textAlign: "center", 
+                    padding: "16px 20px", 
+                    background: "linear-gradient(135deg, rgba(240, 199, 94, 0.15) 0%, rgba(233, 194, 90, 0.1) 100%)",
+                    border: "1px solid rgba(240, 199, 94, 0.3)",
+                    borderRadius: "16px",
+                    backdropFilter: "blur(10px)",
+                    marginTop: "-30px"
+                  }}>
+                    <div style={{ marginBottom: "8px" }}>
+                      <span style={{ fontSize: "16px", color: "rgba(255,255,255,0.6)", textDecoration: "line-through", marginRight: "8px" }}>$9.99</span>
+                      <span style={{ fontSize: "28px", fontWeight: "800", color: "#ffffff" }}>$4.99</span>
+                      <span style={{ fontSize: "14px", color: "rgba(255,255,255,0.8)", marginLeft: "4px" }}>/month</span>
+                    </div>
+                    <p style={{ margin: 0, color: "rgba(255,255,255,0.8)", fontSize: "12px" }}>
+                      🔥 50% OFF • Cancel anytime • 7-day free trial
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Progress dots header */}
           {index !== 2 && (
@@ -329,171 +494,6 @@ export default function OnboardingPage() {
             </div>
             </div>
           )}
-
-          {/* Content overlay */}
-          {/* Pre-mounted Step 3 grid kept decoded offscreen until shown */}
-          <div className={`${index === 2 ? 'animate' : ''} ${index === 2 ? '' : 'preload-hidden'}`} ref={step3Ref}>
-            {/* Step 3: Saints images grid above text */}
-            <>
-              {/* Saints images grid */}
-              <div className="saints-grid-container">
-                <div style={{ maxWidth: 1000, width: "100%" }}>
-                   {/* First row - 4 images */}
-                   <div className="saints-row saints-row-left">
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design.webp'] || "/covers/saitns/Untitled Design.webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 1 }} />
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (1).webp'] || "/covers/saitns/Untitled Design (1).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.9 }} />
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (2).webp'] || "/covers/saitns/Untitled Design (2).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.8 }} />
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (3).webp'] || "/covers/saitns/Untitled Design (3).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.7 }} />
-                   </div>
-                   {/* Second row - 4 images */}
-                   <div className="saints-row saints-row-right">
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (4).webp'] || "/covers/saitns/Untitled Design (4).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.6 }} />
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (5).webp'] || "/covers/saitns/Untitled Design (5).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.5 }} />
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (6).webp'] || "/covers/saitns/Untitled Design (6).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.4 }} />
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (7).webp'] || "/covers/saitns/Untitled Design (7).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.3 }} />
-                   </div>
-                   {/* Third row - 4 images */}
-                   <div className="saints-row saints-row-left-delayed">
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (8).webp'] || "/covers/saitns/Untitled Design (8).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.2 }} />
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (9).webp'] || "/covers/saitns/Untitled Design (9).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.15 }} />
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (10).webp'] || "/covers/saitns/Untitled Design (10).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.1 }} />
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (11).webp'] || "/covers/saitns/Untitled Design (11).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.05 }} />
-                   </div>
-                </div>
-              </div>
-              
-              
-              {/* Gradient overlay filling entire height - lighter top to darker bottom */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.9) 100%)",
-                  zIndex: 15,
-                }}
-              />
-              
-              {/* Content in proper order from top to bottom */}
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  padding: "calc(env(safe-area-inset-top) + 20px) 20px 140px",
-                  zIndex: 20,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "20px"
-                }}
-              >
-                <div style={{ maxWidth: 720, margin: "0 auto", width: "100%" }}>
-                  {/* 1. Title */}
-                  <h1
-                    style={{
-                      fontSize: 28,
-                      lineHeight: 1.1,
-                      letterSpacing: -0.3,
-                      margin: "0 0 5px 0",
-                      fontWeight: 800,
-                      color: "#ffffff",
-                    }}
-                  >
-                    {t(steps[index].titleKey)}
-                  </h1>
-                  
-                  {/* 2. Row with bullets + image */}
-                  <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-                    {/* Left side - Bullet points */}
-                    <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 6 }}>
-                      <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
-                        <span style={{ color: "#f0c75e", fontSize: 16, marginTop: 6 }}>•</span>
-                        <p style={{ margin: 0, color: "rgba(255,255,255,0.8)", fontSize: 15, lineHeight: 1.4 }}>
-                          <strong style={{ color: "#ffffff" }}>2-minute meditations</strong> for morning and evening practice
-                        </p>
-                      </div>
-                      <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
-                        <span style={{ color: "#f0c75e", fontSize: 16, marginTop: 6 }}>•</span>
-                        <p style={{ margin: 0, color: "rgba(255,255,255,0.8)", fontSize: 15, lineHeight: 1.4 }}>
-                          <strong style={{ color: "#ffffff" }}>Daily saint-based content</strong> with new meditation each day
-                        </p>
-                      </div>
-                      <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
-                        <span style={{ color: "#f0c75e", fontSize: 16, marginTop: 6 }}>•</span>
-                        <p style={{ margin: 0, color: "rgba(255,255,255,0.8)", fontSize: 15, lineHeight: 1.4 }}>
-                          <strong style={{ color: "#ffffff" }}>Deep cultural roots</strong> connecting you to Orthodox tradition
-                        </p>
-                      </div>
-                    </div>
-                    
-                    {/* Right side - Subscription image */}
-                    <div style={{ flexShrink: 0 }}>
-                      <img 
-                        src={preloadedUrls['/covers/subscrimage.webp'] || "/covers/subscrimage.webp"}
-                        alt="Subscription"
-                        width={120}
-                        height={120}
-                        style={{
-                          width: "120px",
-                          height: "auto",
-                          borderRadius: "8px",
-                          objectFit: "cover",
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* 3. Pricing card */}
-                  {index === 2 && (
-                    <div style={{ 
-                      textAlign: "center", 
-                      padding: "16px 20px", 
-                      background: "linear-gradient(135deg, rgba(240, 199, 94, 0.15) 0%, rgba(233, 194, 90, 0.1) 100%)",
-                      border: "1px solid rgba(240, 199, 94, 0.3)",
-                      borderRadius: "16px",
-                      backdropFilter: "blur(10px)",
-                      marginTop: "-30px"
-                    }}>
-                      <div style={{ marginBottom: "8px" }}>
-                        <span style={{
-                          fontSize: "16px",
-                          color: "rgba(255,255,255,0.6)",
-                          textDecoration: "line-through",
-                          marginRight: "8px"
-                        }}>
-                          $9.99
-                        </span>
-                        <span style={{
-                          fontSize: "28px",
-                          fontWeight: "800",
-                          color: "#ffffff"
-                        }}>
-                          $4.99
-                        </span>
-                        <span style={{
-                          fontSize: "14px",
-                          color: "rgba(255,255,255,0.8)",
-                          marginLeft: "4px"
-                        }}>
-                          /month
-                        </span>
-                      </div>
-                      <p style={{
-                        margin: 0,
-                        color: "rgba(255,255,255,0.8)",
-                        fontSize: "12px"
-                      }}>
-                        🔥 50% OFF • Cancel anytime • 7-day free trial
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </>
-          </div>
         </div>
       ) : null}
 

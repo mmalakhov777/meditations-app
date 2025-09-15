@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import Link from "next/link";
 import { useTelegram } from "@/components/TelegramProvider";
 import { useTheme } from "@/components/ThemeProvider";
 import { loadMeditationsDoc, pickToday, type MeditationItem } from "@/lib/meditations";
@@ -10,12 +11,43 @@ interface ClientHomePageProps {
   dailySaintCover: string;
 }
 
+interface SaintData {
+  name: string;
+  description: string;
+  feast_day?: string;
+}
+
+function SaintContentReplacer({ saintData, saintLoading }: { saintData: SaintData | null, saintLoading: boolean }) {
+  useEffect(() => {
+    const container = document.getElementById('saint-content-container');
+    if (!container) return;
+
+    if (!saintLoading && saintData) {
+      // Replace skeleton with real content
+      container.innerHTML = `
+        <div class="saint-content-loaded">
+          <div class="small saint-overlay-text" style="line-height: 1.3; margin-bottom: 16px;">
+            ${saintData.description}
+          </div>
+          <a href="/saint/daily" class="button-secondary" style="text-decoration: none; align-self: start;">
+            Learn more
+          </a>
+        </div>
+      `;
+    }
+  }, [saintData, saintLoading]);
+
+  return null;
+}
+
 export function ClientHomePage({ dailySaintCover }: ClientHomePageProps) {
   const { webApp, isTelegram } = useTelegram();
   const { theme, toggle } = useTheme();
   const [todayMorning, setTodayMorning] = useState<MeditationItem | null>(null);
   const [todayEvening, setTodayEvening] = useState<MeditationItem | null>(null);
   const [authLoading, setAuthLoading] = useState(false);
+  const [saintData, setSaintData] = useState<SaintData | null>(null);
+  const [saintLoading, setSaintLoading] = useState(true);
   const didAuthRef = useRef(false);
   const showDynamicTitles = false;
 
@@ -57,6 +89,37 @@ export function ClientHomePage({ dailySaintCover }: ClientHomePageProps) {
       setTodayMorning(morningItem || null);
       setTodayEvening(eveningItem || null);
     });
+  }, []);
+
+  // Load saint data dynamically
+  useEffect(() => {
+    const loadSaintData = async () => {
+      setSaintLoading(true);
+      try {
+        // Simulate API call - replace with real saint data fetching
+        await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second delay
+        
+        // Mock saint data - replace with real API call
+        const mockSaintData: SaintData = {
+          name: "Saint John the Baptist",
+          description: "Known for baptizing Jesus Christ and preparing the way for His ministry. A powerful voice in the wilderness calling for repentance.",
+          feast_day: "June 24"
+        };
+        
+        setSaintData(mockSaintData);
+      } catch (error) {
+        console.error('Failed to load saint data:', error);
+        // Fallback data
+        setSaintData({
+          name: "Saint of the Day",
+          description: "Discover the inspiring story of today's saint and their journey of faith.",
+        });
+      } finally {
+        setSaintLoading(false);
+      }
+    };
+
+    loadSaintData();
   }, []);
 
   return (
@@ -128,6 +191,11 @@ export function ClientHomePage({ dailySaintCover }: ClientHomePageProps) {
             </div>
           )}
         </>
+      )}
+
+      {/* Replace skeleton content in the saint container */}
+      {typeof window !== 'undefined' && (
+        <SaintContentReplacer saintData={saintData} saintLoading={saintLoading} />
       )}
     </>
   );
