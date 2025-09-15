@@ -310,11 +310,18 @@ export default function OnboardingPage() {
               height: '100%',
               transition: 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
               transform: 'translateX(0%)',
-              willChange: 'transform'
+              willChange: 'transform',
+              overflow: 'hidden'
             }}
           >
             {/* Slide 1 */}
-            <div style={{ width: `${100 / steps.length}%`, position: 'relative', flexShrink: 0 }}>
+            <div style={{ 
+              width: `${100 / steps.length}%`, 
+              position: 'relative', 
+              flexShrink: 0,
+              overflow: 'hidden',
+              height: '100vh'
+            }}>
               <img
                 src={resolveSrc('/covers/1stepcorrectnotfinal.webp')}
                 alt="Background"
@@ -335,7 +342,14 @@ export default function OnboardingPage() {
             </div>
 
             {/* Slide 2 */}
-            <div style={{ width: `${100 / steps.length}%`, position: 'relative', flexShrink: 0, zIndex: 100 }}>
+            <div style={{ 
+              width: `${100 / steps.length}%`, 
+              position: 'relative', 
+              flexShrink: 0, 
+              zIndex: 100,
+              overflow: 'hidden',
+              height: '100vh'
+            }}>
               <img
                 src={resolveSrc('/covers/2stepnotfinal.webp')}
                 alt="Background"
@@ -356,7 +370,13 @@ export default function OnboardingPage() {
             </div>
 
             {/* Slide 3 - Saints grid */}
-            <div style={{ width: `${100 / steps.length}%`, position: 'relative', flexShrink: 0 }}>
+            <div style={{ 
+              width: `${100 / steps.length}%`, 
+              position: 'relative', 
+              flexShrink: 0,
+              overflow: 'hidden',
+              height: '100vh'
+            }}>
               {/* Saints images grid */}
               <div className="saints-grid-container">
                 <div style={{ maxWidth: 1000, width: "100%" }}>
