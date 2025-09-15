@@ -40,25 +40,25 @@ export default function OnboardingPage() {
   // ALL assets to preload - complete onboarding and app resources
   const assetsToPreload = useMemo(() => [
     // Critical onboarding background images (highest priority)
-    '/covers/1stepcorrectnotfinal.png',
-    '/covers/2stepnotfinal.png',
-    '/covers/subscrimage.png',
+    '/covers/1stepcorrectnotfinal.webp',
+    '/covers/2stepnotfinal.webp',
+    '/covers/subscrimage.webp',
     
     // ALL saint images used in onboarding (preload all for instant step 3)
-    '/covers/saitns/Untitled Design.png',
-    '/covers/saitns/Untitled Design (1).png',
-    '/covers/saitns/Untitled Design (2).png',
-    '/covers/saitns/Untitled Design (3).png',
-    '/covers/saitns/Untitled Design (4).png',
-    '/covers/saitns/Untitled Design (5).png',
-    '/covers/saitns/Untitled Design (6).png',
-    '/covers/saitns/Untitled Design (7).png',
-    '/covers/saitns/Untitled Design (8).png',
-    '/covers/saitns/Untitled Design (9).png',
-    '/covers/saitns/Untitled Design (10).png',
-    '/covers/saitns/Untitled Design (11).png',
-    '/covers/saitns/Untitled Design (12).png',
-    '/covers/saitns/Untitled Design (13).png',
+    '/covers/saitns/Untitled Design.webp',
+    '/covers/saitns/Untitled Design (1).webp',
+    '/covers/saitns/Untitled Design (2).webp',
+    '/covers/saitns/Untitled Design (3).webp',
+    '/covers/saitns/Untitled Design (4).webp',
+    '/covers/saitns/Untitled Design (5).webp',
+    '/covers/saitns/Untitled Design (6).webp',
+    '/covers/saitns/Untitled Design (7).webp',
+    '/covers/saitns/Untitled Design (8).webp',
+    '/covers/saitns/Untitled Design (9).webp',
+    '/covers/saitns/Untitled Design (10).webp',
+    '/covers/saitns/Untitled Design (11).webp',
+    '/covers/saitns/Untitled Design (12).webp',
+    '/covers/saitns/Untitled Design (13).webp',
     
     // Main app assets (for seamless transition after onboarding)
     '/meditations/covers/1-sept-light-cover.webp',
@@ -279,8 +279,8 @@ export default function OnboardingPage() {
                {/* Background image with explicit dimensions and preloaded class */}
                <img
                  src={
-                   index === 0 ? "/covers/1stepcorrectnotfinal.png" :
-                   "/covers/2stepnotfinal.png"
+                   index === 0 ? "/covers/1stepcorrectnotfinal.webp" :
+                   "/covers/2stepnotfinal.webp"
                  }
                  alt="Background"
                  width={720}
@@ -340,24 +340,24 @@ export default function OnboardingPage() {
                 <div style={{ maxWidth: 1000, width: "100%" }}>
                    {/* First row - 4 images */}
                    <div className="saints-row saints-row-left">
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design.png'] || "/covers/saitns/Untitled Design.png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 1 }} />
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (1).png'] || "/covers/saitns/Untitled Design (1).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.9 }} />
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (2).png'] || "/covers/saitns/Untitled Design (2).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.8 }} />
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (3).png'] || "/covers/saitns/Untitled Design (3).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.7 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design.webp'] || "/covers/saitns/Untitled Design.webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 1 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (1).webp'] || "/covers/saitns/Untitled Design (1).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.9 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (2).webp'] || "/covers/saitns/Untitled Design (2).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.8 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (3).webp'] || "/covers/saitns/Untitled Design (3).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.7 }} />
                    </div>
                    {/* Second row - 4 images */}
                    <div className="saints-row saints-row-right">
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (4).png'] || "/covers/saitns/Untitled Design (4).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.6 }} />
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (5).png'] || "/covers/saitns/Untitled Design (5).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.5 }} />
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (6).png'] || "/covers/saitns/Untitled Design (6).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.4 }} />
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (7).png'] || "/covers/saitns/Untitled Design (7).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.3 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (4).webp'] || "/covers/saitns/Untitled Design (4).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.6 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (5).webp'] || "/covers/saitns/Untitled Design (5).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.5 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (6).webp'] || "/covers/saitns/Untitled Design (6).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.4 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (7).webp'] || "/covers/saitns/Untitled Design (7).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.3 }} />
                    </div>
                    {/* Third row - 4 images */}
                    <div className="saints-row saints-row-left-delayed">
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (8).png'] || "/covers/saitns/Untitled Design (8).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.2 }} />
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (9).png'] || "/covers/saitns/Untitled Design (9).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.15 }} />
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (10).png'] || "/covers/saitns/Untitled Design (10).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.1 }} />
-                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (11).png'] || "/covers/saitns/Untitled Design (11).png"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.05 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (8).webp'] || "/covers/saitns/Untitled Design (8).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.2 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (9).webp'] || "/covers/saitns/Untitled Design (9).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.15 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (10).webp'] || "/covers/saitns/Untitled Design (10).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.1 }} />
+                     <img loading="eager" decoding="sync" fetchPriority="high" src={preloadedUrls['/covers/saitns/Untitled Design (11).webp'] || "/covers/saitns/Untitled Design (11).webp"} alt="Saint" width={200} height={200} className="saint-image" style={{ opacity: 0.05 }} />
                    </div>
                 </div>
               </div>
@@ -432,7 +432,7 @@ export default function OnboardingPage() {
                     {/* Right side - Subscription image */}
                     <div style={{ flexShrink: 0 }}>
                       <img 
-                        src={preloadedUrls['/covers/subscrimage.png'] || "/covers/subscrimage.png"}
+                        src={preloadedUrls['/covers/subscrimage.webp'] || "/covers/subscrimage.webp"}
                         alt="Subscription"
                         width={120}
                         height={120}

@@ -577,25 +577,25 @@ export default function RootLayout({
         
         {/* Preload ALL onboarding images for instant rendering */}
         {/* Background images */}
-        <link rel="preload" as="image" href="/covers/1stepcorrectnotfinal.png" />
-        <link rel="preload" as="image" href="/covers/2stepnotfinal.png" />
-        <link rel="preload" as="image" href="/covers/subscrimage.png" />
+        <link rel="preload" as="image" href="/covers/1stepcorrectnotfinal.webp" />
+        <link rel="preload" as="image" href="/covers/2stepnotfinal.webp" />
+        <link rel="preload" as="image" href="/covers/subscrimage.webp" />
         
         {/* All saint images used in onboarding */}
-        <link rel="preload" as="image" href="/covers/saitns/Untitled Design.png" />
-        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (1).png" />
-        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (2).png" />
-        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (3).png" />
-        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (4).png" />
-        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (5).png" />
-        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (6).png" />
-        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (7).png" />
-        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (8).png" />
-        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (9).png" />
-        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (10).png" />
-        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (11).png" />
-        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (12).png" />
-        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (13).png" />
+        <link rel="preload" as="image" href="/covers/saitns/Untitled Design.webp" />
+        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (1).webp" />
+        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (2).webp" />
+        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (3).webp" />
+        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (4).webp" />
+        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (5).webp" />
+        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (6).webp" />
+        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (7).webp" />
+        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (8).webp" />
+        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (9).webp" />
+        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (10).webp" />
+        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (11).webp" />
+        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (12).webp" />
+        <link rel="preload" as="image" href="/covers/saitns/Untitled Design (13).webp" />
         
         {/* DNS prefetch for external resources */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />

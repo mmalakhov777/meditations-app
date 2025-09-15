@@ -11,20 +11,20 @@ export const revalidate = 3600; // Revalidate every hour
 // Deterministic daily saint cover calculation (same logic as before)
 function getDailySaintCover() {
   const saintCovers = [
-    "Untitled Design.png",
-    "Untitled Design (1).png",
-    "Untitled Design (2).png", 
-    "Untitled Design (3).png",
-    "Untitled Design (4).png",
-    "Untitled Design (5).png",
-    "Untitled Design (6).png",
-    "Untitled Design (7).png",
-    "Untitled Design (8).png",
-    "Untitled Design (9).png",
-    "Untitled Design (10).png",
-    "Untitled Design (11).png",
-    "Untitled Design (12).png",
-    "Untitled Design (13).png"
+    "Untitled Design.webp",
+    "Untitled Design (1).webp",
+    "Untitled Design (2).webp", 
+    "Untitled Design (3).webp",
+    "Untitled Design (4).webp",
+    "Untitled Design (5).webp",
+    "Untitled Design (6).webp",
+    "Untitled Design (7).webp",
+    "Untitled Design (8).webp",
+    "Untitled Design (9).webp",
+    "Untitled Design (10).webp",
+    "Untitled Design (11).webp",
+    "Untitled Design (12).webp",
+    "Untitled Design (13).webp"
   ];
   const today = new Date();
   const dayKey = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
@@ -80,7 +80,7 @@ export default function Home() {
         <div style={{ height: 8 }} />
 
         <Link href="/meditation/f1" className="card meditation-card card--morning" style={{ display: "block", textDecoration: "none", color: "inherit", position: "relative" }}>
-          <div className="meditation-card-container">
+          <div className="meditation-card-container" style={{ display: "grid", gridTemplateColumns: "30% 1fr", columnGap: 20, alignItems: "center" }}>
             <div className="meditation-image-wrapper">
               <Image 
                 src={`/covers/saitns/${dailySaintCover}`} 
@@ -104,13 +104,13 @@ export default function Home() {
                 Morning
               </div>
               <div><strong>Morning Meditation</strong></div>
-              <div className="muted small">Tap to start meditation</div>
+              <div className="muted small">Start your day with calm reflection.</div>
             </div>
           </div>
         </Link>
 
         <Link href="/meditation/s1" className="card meditation-card card--evening evening-meditation" style={{ display: "block", textDecoration: "none", color: "inherit", position: "relative" }}>
-          <div className="meditation-card-container">
+          <div className="meditation-card-container" style={{ display: "grid", gridTemplateColumns: "30% 1fr", columnGap: 20, alignItems: "center" }}>
             <div className="meditation-image-wrapper">
               <Image 
                 src={`/covers/saitns/${dailySaintCover}`} 
@@ -133,7 +133,7 @@ export default function Home() {
                 Evening
               </div>
               <div><strong>Evening Meditation</strong></div>
-              <div className="muted small">Tap to start meditation</div>
+              <div className="muted small" style={{ color: "#ffffff" }}>Unwind and reflect before rest.</div>
             </div>
           </div>
         </Link>

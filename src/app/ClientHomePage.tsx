@@ -17,6 +17,7 @@ export function ClientHomePage({ dailySaintCover }: ClientHomePageProps) {
   const [todayEvening, setTodayEvening] = useState<MeditationItem | null>(null);
   const [authLoading, setAuthLoading] = useState(false);
   const didAuthRef = useRef(false);
+  const showDynamicTitles = false;
 
   // Authorize/upsert user once per app load when Telegram data is available
   useEffect(() => {
@@ -95,8 +96,8 @@ export function ClientHomePage({ dailySaintCover }: ClientHomePageProps) {
         </button>
       </div>
 
-      {/* Dynamic meditation titles overlay - positioned over static content */}
-      {(todayMorning || todayEvening) && (
+      {/* Dynamic meditation titles overlay - positioned over static content (disabled) */}
+      {showDynamicTitles && (todayMorning || todayEvening) && (
         <>
           {/* Morning meditation title overlay */}
           {todayMorning?.title && (

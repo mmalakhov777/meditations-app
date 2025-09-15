@@ -13,7 +13,7 @@ export default function SaintPage() {
   const saintData = {
     id: saintId,
     name: "Saint of the Day",
-    image: "/covers/saitns/Untitled Design.png",
+    image: "/covers/saitns/Untitled Design.webp",
     feastDay: "January 1st",
     patronOf: "Meditation and Peace",
     description: `Saint of the Day is a revered figure in the Christian tradition, known for their profound spiritual wisdom and dedication to contemplative practices. Born in the early centuries of Christianity, this saint dedicated their life to seeking union with the divine through prayer, meditation, and acts of compassion.
