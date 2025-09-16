@@ -23,6 +23,37 @@ a {
   text-decoration: none;
 }
 
+/* Prevent image flashing and improve mobile stability */
+img {
+  image-rendering: auto;
+  image-rendering: crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* Stable image loading */
+.next-image {
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+  body {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  img {
+    will-change: auto;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+}
+
+/* Prevent layout shift */
+[style*="aspect-ratio"] {
+  contain: layout;
+}
+
 /* Skeleton loading animations */
 .skeleton-line {
   background: linear-gradient(90deg, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 75%);
