@@ -44,6 +44,9 @@ export default function OnboardingPage() {
   // Touch gesture support
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  
+  // Animation trigger system
+  const [animationKey, setAnimationKey] = useState(0);
 
   const resolveSrc = useCallback((src: string) => preloadedUrls[src] || src, [preloadedUrls]);
 
@@ -248,8 +251,12 @@ export default function OnboardingPage() {
     lastNavAtRef.current = now;
     
     setIsTransitioning(true);
-    setTimeout(() => setIsTransitioning(false), 350);
     setIndex(prev => Math.min(prev + 1, steps.length));
+    // Trigger animations after slide change
+    setTimeout(() => {
+      setAnimationKey(prev => prev + 1);
+      setIsTransitioning(false);
+    }, 50);
   }, [isTransitioning, steps.length]);
 
   const goBack = useCallback(() => {
@@ -259,8 +266,12 @@ export default function OnboardingPage() {
     lastNavAtRef.current = now;
     
     setIsTransitioning(true);
-    setTimeout(() => setIsTransitioning(false), 350);
     setIndex(prev => Math.max(prev - 1, 0));
+    // Trigger animations after slide change
+    setTimeout(() => {
+      setAnimationKey(prev => prev + 1);
+      setIsTransitioning(false);
+    }, 50);
   }, [isTransitioning]);
 
 
@@ -399,7 +410,11 @@ export default function OnboardingPage() {
               willChange: 'auto'
             }}>
               <div className="onboarding-content">
-                <div className={`stack-8 slide-text ${index === 0 ? 'slide-text-in' : 'slide-text-out'}`} style={{ maxWidth: 720, margin: "0 auto" }}>
+                <div 
+                  key={`slide-0-${animationKey}`}
+                  className={`stack-8 slide-text ${index === 0 ? 'slide-text-in' : ''}`} 
+                  style={{ maxWidth: 720, margin: "0 auto" }}
+                >
                   <h1 className="onboarding-title">{t(steps[0].titleKey)}</h1>
                   <p className="onboarding-subtitle">{t(steps[0].subtitleKey)}</p>
                 </div>
@@ -427,7 +442,11 @@ export default function OnboardingPage() {
               willChange: 'auto'
             }}>
               <div className="onboarding-content" style={{ zIndex: 101 }}>
-                <div className={`stack-8 slide-text ${index === 1 ? 'slide-text-in' : 'slide-text-out'}`} style={{ maxWidth: 720, margin: "0 auto" }}>
+                <div 
+                  key={`slide-1-${animationKey}`}
+                  className={`stack-8 slide-text ${index === 1 ? 'slide-text-in' : ''}`} 
+                  style={{ maxWidth: 720, margin: "0 auto" }}
+                >
                   <h1 className="onboarding-title">{t(steps[1].titleKey)}</h1>
                   <p className="onboarding-subtitle">{t(steps[1].subtitleKey)}</p>
                 </div>
@@ -490,7 +509,11 @@ export default function OnboardingPage() {
                   gap: "20px"
                 }}
               >
-                <div className={`slide-text ${index === 2 ? 'slide-text-in' : 'slide-text-out'}`} style={{ maxWidth: 720, margin: "0 auto", width: "100%" }}>
+                <div 
+                  key={`slide-2-${animationKey}`}
+                  className={`slide-text ${index === 2 ? 'slide-text-in' : ''}`} 
+                  style={{ maxWidth: 720, margin: "0 auto", width: "100%" }}
+                >
                   <h1 style={{ fontSize: 28, lineHeight: 1.1, letterSpacing: -0.3, margin: "0 0 5px 0", fontWeight: 800, color: "#ffffff" }}>
                     {t(steps[2].titleKey)}
                   </h1>
@@ -528,7 +551,10 @@ export default function OnboardingPage() {
                     </div>
                   </div>
 
-                  <div className={`slide-text ${index === 2 ? 'slide-text-in' : 'slide-text-out'}`} style={{ 
+                  <div 
+                    key={`pricing-${animationKey}`}
+                    className={`slide-text ${index === 2 ? 'slide-text-in' : ''}`} 
+                    style={{ 
                     textAlign: "center", 
                     padding: "16px 20px", 
                     background: "linear-gradient(135deg, rgba(240, 199, 94, 0.15) 0%, rgba(233, 194, 90, 0.1) 100%)",
