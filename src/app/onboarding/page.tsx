@@ -399,7 +399,7 @@ export default function OnboardingPage() {
               willChange: 'auto'
             }}>
               <div className="onboarding-content">
-                <div className="stack-8" style={{ maxWidth: 720, margin: "0 auto" }}>
+                <div className={`stack-8 slide-text ${index === 0 ? 'slide-text-in' : 'slide-text-out'}`} style={{ maxWidth: 720, margin: "0 auto" }}>
                   <h1 className="onboarding-title">{t(steps[0].titleKey)}</h1>
                   <p className="onboarding-subtitle">{t(steps[0].subtitleKey)}</p>
                 </div>
@@ -427,7 +427,7 @@ export default function OnboardingPage() {
               willChange: 'auto'
             }}>
               <div className="onboarding-content" style={{ zIndex: 101 }}>
-                <div className="stack-8" style={{ maxWidth: 720, margin: "0 auto" }}>
+                <div className={`stack-8 slide-text ${index === 1 ? 'slide-text-in' : 'slide-text-out'}`} style={{ maxWidth: 720, margin: "0 auto" }}>
                   <h1 className="onboarding-title">{t(steps[1].titleKey)}</h1>
                   <p className="onboarding-subtitle">{t(steps[1].subtitleKey)}</p>
                 </div>
@@ -490,26 +490,26 @@ export default function OnboardingPage() {
                   gap: "20px"
                 }}
               >
-                <div style={{ maxWidth: 720, margin: "0 auto", width: "100%" }}>
+                <div className={`slide-text ${index === 2 ? 'slide-text-in' : 'slide-text-out'}`} style={{ maxWidth: 720, margin: "0 auto", width: "100%" }}>
                   <h1 style={{ fontSize: 28, lineHeight: 1.1, letterSpacing: -0.3, margin: "0 0 5px 0", fontWeight: 800, color: "#ffffff" }}>
                     {t(steps[2].titleKey)}
                   </h1>
                   
-                  <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-                    <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 6 }}>
-                      <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                  <div className="slide-text" style={{ display: "flex", alignItems: "center", gap: 24 }}>
+                    <div className="slide-text" style={{ flex: 1, display: "flex", flexDirection: "column", gap: 6 }}>
+                      <div className="slide-text" style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
                         <span style={{ color: "#f0c75e", fontSize: 16, marginTop: 6 }}>•</span>
                         <p style={{ margin: 0, color: "rgba(255,255,255,0.8)", fontSize: 15, lineHeight: 1.4 }}>
                           <strong style={{ color: "#ffffff" }}>2-minute meditations</strong> for morning and evening practice
                         </p>
                       </div>
-                      <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                      <div className="slide-text" style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
                         <span style={{ color: "#f0c75e", fontSize: 16, marginTop: 6 }}>•</span>
                         <p style={{ margin: 0, color: "rgba(255,255,255,0.8)", fontSize: 15, lineHeight: 1.4 }}>
                           <strong style={{ color: "#ffffff" }}>Daily saint-based content</strong> with new meditation each day
                         </p>
                       </div>
-                      <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                      <div className="slide-text" style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
                         <span style={{ color: "#f0c75e", fontSize: 16, marginTop: 6 }}>•</span>
                         <p style={{ margin: 0, color: "rgba(255,255,255,0.8)", fontSize: 15, lineHeight: 1.4 }}>
                           <strong style={{ color: "#ffffff" }}>Deep cultural roots</strong> connecting you to Orthodox tradition
@@ -517,7 +517,7 @@ export default function OnboardingPage() {
                       </div>
                     </div>
                     
-                    <div style={{ flexShrink: 0 }}>
+                    <div className="slide-text" style={{ flexShrink: 0 }}>
                       <img 
                         src={resolveSrc('/covers/subscrimage.webp')}
                         alt="Subscription"
@@ -528,7 +528,7 @@ export default function OnboardingPage() {
                     </div>
                   </div>
 
-                  <div style={{ 
+                  <div className={`slide-text ${index === 2 ? 'slide-text-in' : 'slide-text-out'}`} style={{ 
                     textAlign: "center", 
                     padding: "16px 20px", 
                     background: "linear-gradient(135deg, rgba(240, 199, 94, 0.15) 0%, rgba(233, 194, 90, 0.1) 100%)",
