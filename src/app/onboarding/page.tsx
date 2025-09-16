@@ -282,7 +282,8 @@ export default function OnboardingPage() {
           style={{
             background: 'linear-gradient(135deg, #1b1406 0%, #0e0b05 100%)',
             minHeight: '100svh',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            backgroundColor: '#1b1406' // Solid fallback to prevent any flash
           }}
         >
           {/* Left click area for previous slide */}
@@ -320,7 +321,8 @@ export default function OnboardingPage() {
               position: 'relative', 
               flexShrink: 0,
               overflow: 'hidden',
-              height: '100vh'
+              height: '100vh',
+              backgroundColor: '#1b1406' // Fallback color to prevent white flash
             }}>
               <img
                 src={resolveSrc('/covers/1stepcorrectnotfinal.webp')}
@@ -331,7 +333,11 @@ export default function OnboardingPage() {
                 decoding="sync"
                 fetchPriority="high"
                 className="onboarding-background"
-                style={{ transform: "none", zIndex: 1 }}
+                style={{ 
+                  transform: "none", 
+                  zIndex: 1,
+                  transition: "opacity 0.1s ease-out"
+                }}
               />
               <div className="onboarding-content">
                 <div className="stack-8" style={{ maxWidth: 720, margin: "0 auto" }}>
@@ -348,7 +354,8 @@ export default function OnboardingPage() {
               flexShrink: 0, 
               zIndex: 100,
               overflow: 'hidden',
-              height: '100vh'
+              height: '100vh',
+              backgroundColor: '#1b1406' // Fallback color to prevent white flash
             }}>
               <img
                 src={resolveSrc('/covers/2stepnotfinal.webp')}
@@ -359,7 +366,11 @@ export default function OnboardingPage() {
                 decoding="sync"
                 fetchPriority="high"
                 className="onboarding-background"
-                style={{ transform: "none", zIndex: 100 }}
+                style={{ 
+                  transform: "none", 
+                  zIndex: 100,
+                  transition: "opacity 0.1s ease-out"
+                }}
               />
               <div className="onboarding-content" style={{ zIndex: 101 }}>
                 <div className="stack-8" style={{ maxWidth: 720, margin: "0 auto" }}>
