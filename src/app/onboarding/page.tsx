@@ -41,6 +41,7 @@ export default function OnboardingPage() {
   const didInitRef = useRef(false);
   const lastNavAtRef = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [imagesReady, setImagesReady] = useState(false);
 
   const resolveSrc = useCallback((src: string) => preloadedUrls[src] || src, [preloadedUrls]);
 
@@ -193,9 +194,28 @@ export default function OnboardingPage() {
 
     try {
       await Promise.all(loadPromises);
-      setTimeout(() => setIsLoading(false), 300);
+      
+      // Ensure critical slide images are fully ready
+      const criticalImages = [
+        resolveSrc('/covers/1stepcorrectnotfinal.webp'),
+        resolveSrc('/covers/2stepnotfinal.webp')
+      ];
+      
+      await Promise.all(criticalImages.map(src => {
+        return new Promise<void>((resolve) => {
+          const img = new Image();
+          img.onload = () => resolve();
+          img.onerror = () => resolve();
+          img.src = src;
+          if (img.complete) resolve();
+        });
+      }));
+      
+      setImagesReady(true);
+      setTimeout(() => setIsLoading(false), 100);
     } catch (error) {
       console.error('Failed to preload some assets:', error);
+      setImagesReady(true);
       setIsLoading(false);
     }
   }, [assetsToPreload]);
@@ -322,23 +342,12 @@ export default function OnboardingPage() {
               flexShrink: 0,
               overflow: 'hidden',
               height: '100vh',
-              backgroundColor: '#1b1406' // Fallback color to prevent white flash
+              backgroundImage: `url(${resolveSrc('/covers/1stepcorrectnotfinal.webp')})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              backgroundColor: '#1b1406' // Fallback color
             }}>
-              <img
-                src={resolveSrc('/covers/1stepcorrectnotfinal.webp')}
-                alt="Background"
-                width={720}
-                height={960}
-                loading="eager"
-                decoding="sync"
-                fetchPriority="high"
-                className="onboarding-background"
-                style={{ 
-                  transform: "none", 
-                  zIndex: 1,
-                  transition: "opacity 0.1s ease-out"
-                }}
-              />
               <div className="onboarding-content">
                 <div className="stack-8" style={{ maxWidth: 720, margin: "0 auto" }}>
                   <h1 className="onboarding-title">{t(steps[0].titleKey)}</h1>
@@ -355,23 +364,12 @@ export default function OnboardingPage() {
               zIndex: 100,
               overflow: 'hidden',
               height: '100vh',
-              backgroundColor: '#1b1406' // Fallback color to prevent white flash
+              backgroundImage: `url(${resolveSrc('/covers/2stepnotfinal.webp')})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              backgroundColor: '#1b1406' // Fallback color
             }}>
-              <img
-                src={resolveSrc('/covers/2stepnotfinal.webp')}
-                alt="Background"
-                width={720}
-                height={960}
-                loading="eager"
-                decoding="sync"
-                fetchPriority="high"
-                className="onboarding-background"
-                style={{ 
-                  transform: "none", 
-                  zIndex: 100,
-                  transition: "opacity 0.1s ease-out"
-                }}
-              />
               <div className="onboarding-content" style={{ zIndex: 101 }}>
                 <div className="stack-8" style={{ maxWidth: 720, margin: "0 auto" }}>
                   <h1 className="onboarding-title">{t(steps[1].titleKey)}</h1>
