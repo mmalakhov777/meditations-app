@@ -404,16 +404,18 @@ export default function OnboardingPage() {
                 </div>
               </div>
               
-              {/* Gradient overlay */}
+              {/* Stable gradient overlay */}
               <div
+                className="onboarding-gradient-overlay"
                 style={{
                   position: "absolute",
                   top: 0,
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.9) 100%)",
                   zIndex: 15,
+                  pointerEvents: "none",
+                  contain: "layout style paint"
                 }}
               />
               
