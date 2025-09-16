@@ -42,6 +42,10 @@ export default function OnboardingPage() {
   const lastNavAtRef = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [imagesReady, setImagesReady] = useState(false);
+  
+  // Touch gesture support
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   const resolveSrc = useCallback((src: string) => preloadedUrls[src] || src, [preloadedUrls]);
 
@@ -227,35 +231,39 @@ export default function OnboardingPage() {
     preloadAssets();
   }, [preloadAssets]);
 
-  // Update container transform when index changes
+  // Update container transform when index changes - mobile optimized
   useEffect(() => {
     if (!containerRef.current || isLoading) return;
     
     // Each slide is 33.33% wide, so move by 33.33% per slide
     const translateX = -index * (100 / steps.length);
-    containerRef.current.style.transform = `translateX(${translateX}%)`;
+    
+    // Apply hardware-accelerated transform
+    const transform = `translateX(${translateX}%) translateZ(0)`;
+    containerRef.current.style.transform = transform;
+    (containerRef.current.style as any).webkitTransform = transform;
   }, [index, isLoading, steps.length]);
 
-  // Smooth transition functions
+  // Mobile-optimized smooth transition functions
   const goNext = useCallback(() => {
     if (isTransitioning) return;
     const now = Date.now();
-    if (now - lastNavAtRef.current < 400) return;
+    if (now - lastNavAtRef.current < 350) return;
     lastNavAtRef.current = now;
     
     setIsTransitioning(true);
-    setTimeout(() => setIsTransitioning(false), 400);
+    setTimeout(() => setIsTransitioning(false), 350);
     setIndex(prev => Math.min(prev + 1, steps.length));
   }, [isTransitioning, steps.length]);
 
   const goBack = useCallback(() => {
     if (isTransitioning) return;
     const now = Date.now();
-    if (now - lastNavAtRef.current < 400) return;
+    if (now - lastNavAtRef.current < 350) return;
     lastNavAtRef.current = now;
     
     setIsTransitioning(true);
-    setTimeout(() => setIsTransitioning(false), 400);
+    setTimeout(() => setIsTransitioning(false), 350);
     setIndex(prev => Math.max(prev - 1, 0));
   }, [isTransitioning]);
 
@@ -263,6 +271,33 @@ export default function OnboardingPage() {
     if (isTransitioning) return;
     setIndex(steps.length);
   }, [isTransitioning, steps.length]);
+
+  // Touch gesture handlers for native mobile feel
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const minSwipeDistance = 50;
+    
+    if (Math.abs(distance) < minSwipeDistance) return;
+    
+    if (distance > 0) {
+      // Swiped left - go to next slide
+      goNext();
+    } else {
+      // Swiped right - go to previous slide
+      goBack();
+    }
+  }, [touchStart, touchEnd, goNext, goBack]);
 
   // Show loading screen while preloading - using preloaded CSS classes
   if (isLoading) {
@@ -305,6 +340,9 @@ export default function OnboardingPage() {
             overflow: 'hidden',
             backgroundColor: '#1b1406' // Solid fallback to prevent any flash
           }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
           {/* Left click area for previous slide */}
           <div
@@ -322,17 +360,31 @@ export default function OnboardingPage() {
             style={{ pointerEvents: isTransitioning ? 'none' : 'auto' }}
           />
 
-          {/* Static slides container that slides horizontally */}
+          {/* Static slides container - mobile app optimized */}
           <div 
             ref={containerRef}
             style={{
               display: 'flex',
               width: `${steps.length * 100}%`,
               height: '100%',
-              transition: 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-              transform: 'translateX(0%)',
+              // Native iOS-like spring animation with hardware acceleration
+              transition: isTransitioning 
+                ? 'transform 0.35s cubic-bezier(0.165, 0.84, 0.44, 1)' 
+                : 'none',
+              transform: 'translateX(0%) translateZ(0)', // Force hardware acceleration
               willChange: 'transform',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              // Mobile optimizations
+              WebkitTransform: 'translateX(0%) translateZ(0)',
+              WebkitBackfaceVisibility: 'hidden',
+              backfaceVisibility: 'hidden',
+              WebkitPerspective: 1000,
+              perspective: 1000,
+              // Touch optimizations
+              touchAction: 'pan-y pinch-zoom',
+              WebkitTouchCallout: 'none',
+              WebkitUserSelect: 'none',
+              userSelect: 'none'
             }}
           >
             {/* Slide 1 */}
@@ -346,7 +398,13 @@ export default function OnboardingPage() {
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
-              backgroundColor: '#1b1406' // Fallback color
+              backgroundColor: '#1b1406', // Fallback color
+              // Mobile optimizations
+              transform: 'translateZ(0)',
+              WebkitTransform: 'translateZ(0)',
+              WebkitBackfaceVisibility: 'hidden',
+              backfaceVisibility: 'hidden',
+              willChange: 'auto'
             }}>
               <div className="onboarding-content">
                 <div className="stack-8" style={{ maxWidth: 720, margin: "0 auto" }}>
@@ -368,7 +426,13 @@ export default function OnboardingPage() {
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
-              backgroundColor: '#1b1406' // Fallback color
+              backgroundColor: '#1b1406', // Fallback color
+              // Mobile optimizations
+              transform: 'translateZ(0)',
+              WebkitTransform: 'translateZ(0)',
+              WebkitBackfaceVisibility: 'hidden',
+              backfaceVisibility: 'hidden',
+              willChange: 'auto'
             }}>
               <div className="onboarding-content" style={{ zIndex: 101 }}>
                 <div className="stack-8" style={{ maxWidth: 720, margin: "0 auto" }}>
@@ -385,7 +449,13 @@ export default function OnboardingPage() {
               flexShrink: 0,
               overflow: 'hidden',
               height: '100vh',
-              background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.9) 100%)"
+              background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.9) 100%)",
+              // Mobile optimizations
+              transform: 'translateZ(0)',
+              WebkitTransform: 'translateZ(0)',
+              WebkitBackfaceVisibility: 'hidden',
+              backfaceVisibility: 'hidden',
+              willChange: 'auto'
             }}>
               {/* Saints images grid - no separate overlay needed */}
               <div className="saints-grid-container">
