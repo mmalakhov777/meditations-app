@@ -377,8 +377,21 @@ export default function OnboardingPage() {
               overflow: 'hidden',
               height: '100vh'
             }}>
-              {/* Saints images grid */}
-              <div className="saints-grid-container">
+              {/* Saints images grid with immediate gradient overlay */}
+              <div className="saints-grid-container" style={{ position: 'relative' }}>
+                {/* Gradient overlay renders immediately */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.9) 100%)",
+                    zIndex: 15,
+                  }}
+                />
+                
                 <div style={{ maxWidth: 1000, width: "100%" }}>
                    {/* First row - 4 images */}
                    <div className="saints-row saints-row-left">
@@ -403,21 +416,6 @@ export default function OnboardingPage() {
                    </div>
                 </div>
               </div>
-              
-              {/* Stable gradient overlay */}
-              <div
-                className="onboarding-gradient-overlay"
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  zIndex: 15,
-                  pointerEvents: "none",
-                  contain: "layout style paint"
-                }}
-              />
               
               {/* Content */}
               <div
