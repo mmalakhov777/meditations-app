@@ -35,13 +35,11 @@ export default function OnboardingPage() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [preloadedUrls, setPreloadedUrls] = useState<Record<string, string>>({});
   const isLastSlide = index >= steps.length;
-  const step3Ref = useRef<HTMLDivElement | null>(null);
 
   // Static approach - all slides pre-rendered
   const didInitRef = useRef(false);
   const lastNavAtRef = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [imagesReady, setImagesReady] = useState(false);
   
   // Touch gesture support
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -113,7 +111,7 @@ export default function OnboardingPage() {
       document.body.appendChild(warmupContainer);
       
       // Force reflow to ensure CSS is parsed
-      warmupContainer.offsetHeight;
+      void warmupContainer.offsetHeight;
       
       // Clean up
       document.body.removeChild(warmupContainer);
@@ -215,14 +213,12 @@ export default function OnboardingPage() {
         });
       }));
       
-      setImagesReady(true);
       setTimeout(() => setIsLoading(false), 100);
     } catch (error) {
       console.error('Failed to preload some assets:', error);
-      setImagesReady(true);
       setIsLoading(false);
     }
-  }, [assetsToPreload]);
+  }, [assetsToPreload, resolveSrc]);
 
   // Start preloading on mount (guard against StrictMode double-invoke)
   useEffect(() => {
@@ -241,7 +237,7 @@ export default function OnboardingPage() {
     // Apply hardware-accelerated transform
     const transform = `translateX(${translateX}%) translateZ(0)`;
     containerRef.current.style.transform = transform;
-    (containerRef.current.style as any).webkitTransform = transform;
+    (containerRef.current.style as CSSStyleDeclaration & { webkitTransform?: string }).webkitTransform = transform;
   }, [index, isLoading, steps.length]);
 
   // Mobile-optimized smooth transition functions
@@ -267,10 +263,6 @@ export default function OnboardingPage() {
     setIndex(prev => Math.max(prev - 1, 0));
   }, [isTransitioning]);
 
-  const skip = useCallback(() => {
-    if (isTransitioning) return;
-    setIndex(steps.length);
-  }, [isTransitioning, steps.length]);
 
   // Touch gesture handlers for native mobile feel
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
